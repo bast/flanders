@@ -1,4 +1,6 @@
-# References
+# Flanders: Nearest neighbor search
+
+## References
 
 - https://en.wikipedia.org/wiki/Nearest_neighbor_search
 - https://en.wikipedia.org/wiki/K-d_tree
