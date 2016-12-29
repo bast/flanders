@@ -69,6 +69,13 @@ def get_intersection(u1, u2):
     return (a, b, c)
 
 
+def test_get_intersection():
+    u1 = (1.0, 2.0, 3.0)
+    u2 = (-3.0, -2.0, -1.0)
+    a, b, c = get_intersection(u1, u2)
+    assert (a, b, c) == (4.0, -8.0, 4.0)
+
+
 def line_coeffs_from_two_points(p1, p2):
     """
     Find (a, b, c) in ax + bx + c = 0 from two points on that line.
