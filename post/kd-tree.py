@@ -191,14 +191,14 @@ def main():
 
     t0 = time.time()
     distances_naive = get_all_distances_naive(ref_points, points)
-    print('time used:', time.time() - t0)
+    print('time used in naive:', time.time() - t0)
 
     t0 = time.time()
     distances = []
     for point in ref_points:
         index, distance = find_neighbor(point, tree, ax, plot=plot)
         distances.append(distance)
-    print('time used:', time.time() - t0)
+    print('time used in kd-tree:', time.time() - t0)
 
     for i, distance in enumerate(distances):
         if abs(distance - distances_naive[i]) > 1.0e-7:
