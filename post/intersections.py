@@ -1,3 +1,44 @@
+def get_num_intersections(p1, p2, r, vn, angle):
+    """
+    Computes number of intersection of two rays v (vn rotated by plus/minus angle)
+    originating from r, intersecting with line between p1 and p2.
+    Returns 0, 1, or 2.
+    """
+    n = 0
+    for v in [rotate(vn, -angle), rotate(vn, angle)]:
+        if get_intersection_point(p1, p2, r, v) is not None:
+            n += 1
+    assert n in [0, 1, 2]
+    return n
+
+
+def test_get_num_intersections():
+    import random
+
+    seed = 1
+    random.seed(seed)
+
+    x0 = -1.0
+    x1 = 1.0
+    y0 = x0
+    y1 = x1
+
+    angle = 10.0
+
+    # dividing lines
+    p1 = (x0, random.uniform(y0, y1))
+    p2 = (x1, random.uniform(y0, y1))
+
+    l = []
+    for i in range(25):
+        r = (random.uniform(x0, x1), random.uniform(y0, y1))
+        vn = (random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
+        n = get_num_intersections(p1, p2, r, vn, angle)
+        l.append(n)
+
+    assert l == [0, 1, 0, 0, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 0, 2, 2, 0, 0, 2]
+
+
 def rotate(v, angle_deg):
     from math import cos, sin, pi
     (x, y) = v
