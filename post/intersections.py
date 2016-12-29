@@ -1,3 +1,12 @@
+def rotate(v, angle_deg):
+    from math import cos, sin, pi
+    (x, y) = v
+    angle_rad = angle_deg*pi/180.0
+    _x = x*cos(angle_rad) - y*sin(angle_rad)
+    _y = x*sin(angle_rad) + y*cos(angle_rad)
+    return (_x, _y)
+
+
 def normalize(v, s):
     """
     Normalize vector to length s.
@@ -83,11 +92,14 @@ def main():
     import matplotlib.pyplot as plt
     import matplotlib.patches as patches
     from draw import draw_point, draw_arrow
+    import random
 
     x0 = -1.0
     x1 = 1.0
     y0 = x0
     y1 = x1
+
+    angle = 10.0
 
     # dividing lines
     xd = 0.2
@@ -110,7 +122,6 @@ def main():
         )
     )
 
-    import random
     seed = 2
     random.seed(seed)
 
@@ -119,17 +130,20 @@ def main():
         r = (random.uniform(x0, x1), random.uniform(y0, y1))
         draw_point(r, 'r{0}'.format(i), ax)
 
-        v = (random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
-        v = normalize(v, 0.1)
-        draw_arrow(r, (r[0] + v[0], r[1] + v[1]), ax)
+        vn = (random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
+        vn = normalize(vn, 1.0)
 
-        u = get_intersection_point(p1=(xd, y0), p2=(xd, y1), r=r, v=v)
-        if u is not None:
-            draw_point(u, 'u{0}'.format(i), ax)
+        v1 = rotate(vn, -angle)
+        v2 = rotate(vn, angle)
 
-        u = get_intersection_point(p1=(x0, yd), p2=(x1, yd), r=r, v=v)
-        if u is not None:
-            draw_point(u, 'u{0}'.format(i), ax)
+        ax.plot((r[0], r[0] + v1[0]), (r[1], r[1] + v1[1]), color='blue')
+        ax.plot((r[0], r[0] + v2[0]), (r[1], r[1] + v2[1]), color='blue')
+
+        for v in [v1, v2]:
+            for (p1, p2) in [((xd, y0), (xd, y1)), ((x0, yd), (x1, yd))]:
+                u = get_intersection_point(p1, p2, r, v)
+                if u is not None:
+                    draw_point(u, 'u{0}'.format(i), ax)
 
     plt.show()
 
