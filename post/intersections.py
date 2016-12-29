@@ -14,17 +14,6 @@ def rotate(v, angle_deg):
     return (_x, _y)
 
 
-def normalize(v, s):
-    """
-    Normalize vector v to length s.
-    """
-    from math import sqrt
-
-    length = sqrt(v[0]**2 + v[1]**2)
-
-    return (s*v[0]/length, s*v[1]/length)
-
-
 def get_intersection_point(p1, p2, r, v):
     """
     From the reference point r there is a ray with vector v.
@@ -156,6 +145,7 @@ def main():
     import matplotlib.patches as patches
     from draw import draw_point, draw_arrow
     import random
+    from normalize import normalize
 
     x0 = -1.0
     x1 = 1.0
