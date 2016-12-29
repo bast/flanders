@@ -4,24 +4,6 @@ def get_points(num_points, x0, x1, y0, y1, seed):
     return [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
 
 
-def draw_point(point, text, ax):
-    x, y = point
-    ax.scatter([x], [y])
-    ax.annotate(' {0}'.format(text), (x, y))
-
-
-def draw_line(point1, point2, ax):
-    x1, y1 = point1
-    x2, y2 = point2
-    u = x2 - x1
-    v = y2 - y1
-    x1 += 0.1*u
-    y1 += 0.1*v
-    u *= 0.8
-    v *= 0.8
-    ax.arrow(x1, y1, u, v, head_width=0.03, head_length=0.05, fc='k', ec='k')
-
-
 def get_distance(p1, p2):
     import math
     return math.sqrt((p2[0] - p1[0])**2.0 + (p2[1] - p1[1])**2.0)
@@ -86,13 +68,14 @@ class BinaryTree():
 
 
 def draw_tree(tree, ax):
+    from draw import draw_point, draw_arrow
     if tree is not None:
         p = tree.get_coordinates()
         index = tree.get_index()
         draw_point(p, index, ax)
         for child in tree.get_children():
             draw_tree(child, ax)
-            draw_line(p, child.get_coordinates(), ax)
+            draw_arrow(p, child.get_coordinates(), ax)
 
 
 def traverse(node, ref_point, index, distance, indices_traversed):
