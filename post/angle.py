@@ -1,8 +1,8 @@
 def point_within_view_angle(r, v, p, angle):
     """
     Check whether point p is in view angle.
-    View angle are two rays from point r in the direction v
-    with +/- angle.
+    View angle is enclosed by two rays from point r in the direction v
+    rotated by +/- angle.
     """
     from normalize import normalize
     from math import acos, pi
