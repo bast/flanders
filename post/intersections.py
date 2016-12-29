@@ -16,7 +16,7 @@ def rotate(v, angle_deg):
 
 def normalize(v, s):
     """
-    Normalize vector to length s.
+    Normalize vector v to length s.
     """
     from math import sqrt
 
