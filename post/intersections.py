@@ -136,10 +136,8 @@ def main():
         v1 = rotate(vn, -angle)
         v2 = rotate(vn, angle)
 
-        ax.plot((r[0], r[0] + v1[0]), (r[1], r[1] + v1[1]), color='blue')
-        ax.plot((r[0], r[0] + v2[0]), (r[1], r[1] + v2[1]), color='blue')
-
         for v in [v1, v2]:
+            ax.plot((r[0], r[0] + v[0]), (r[1], r[1] + v[1]), color='blue')
             for (p1, p2) in [((xd, y0), (xd, y1)), ((x0, yd), (x1, yd))]:
                 u = get_intersection_point(p1, p2, r, v)
                 if u is not None:
