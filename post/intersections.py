@@ -24,13 +24,14 @@ def get_intersection_point(p1, p2, r, v):
     """
     from numpy import sign
 
+    TINY = 1.0e-20
+
     r2 = (r[0] + v[0], r[1] + v[1])
     ray = line_coeffs_from_two_points(r, r2)
 
     line = line_coeffs_from_two_points(p1, p2)
     (a, b, c) = get_intersection(line, ray)
 
-    TINY = 1.0e-20
     if abs(c) < TINY:
         return None
 
@@ -53,6 +54,12 @@ def get_intersection_point(p1, p2, r, v):
                 return None
 
     return u
+
+
+def test_get_intersection_point():
+    assert get_intersection_point((-4.0, -1.0), (4.0, -1.0), (1.0, 2.0), (-1.0, -1.0)) == (-2.0, -1.0)
+    assert get_intersection_point((-4.0, -1.0), (4.0, -1.0), (1.0, 2.0), ( 1.0,  1.0)) == None
+    assert get_intersection_point((-1.5, -1.0), (4.0, -1.0), (1.0, 2.0), (-1.0, -1.0)) == None
 
 
 def get_intersection(u1, u2):
