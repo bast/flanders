@@ -13,12 +13,15 @@ def point_within_view_angle(r, v, p, angle):
     a_rad = acos(vn[0]*vp[0] + vn[1]*vp[1])
     a_deg = a_rad*180.0/pi
 
-    return a_deg <= angle
+    return abs(a_deg) <= abs(angle)
 
 
 def test_point_within_view_angle():
     r = (0.0, 0.0)
     p = (100.0, 100.0)
     v = (0.0, 1.0)
+    assert point_within_view_angle(r, v, p, 45.001)
+    assert not point_within_view_angle(r, v, p, 44.999)
+    p = (-100.0, 100.0)
     assert point_within_view_angle(r, v, p, 45.001)
     assert not point_within_view_angle(r, v, p, 44.999)
