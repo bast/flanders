@@ -72,6 +72,13 @@ def line_coeffs_from_two_points(p1, p2):
     return (a, b, c)
 
 
+def test_line_coeffs_from_two_points():
+    p1 = (1.0, 2.0)
+    p2 = (3.0, -5.0)
+    a, b, c = line_coeffs_from_two_points(p1, p2)
+    assert (a, b, c) == (7.0, 2.0, -11.0)
+
+
 def main():
     import matplotlib.pyplot as plt
     import matplotlib.patches as patches
