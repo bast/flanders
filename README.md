@@ -1,4 +1,4 @@
-# Flanders: Nearest neighbor search
+# Flanders: Nearest neighbor search with a view angle.
 
 ```
                                                     `.-:://////:-.`
