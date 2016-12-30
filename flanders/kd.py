@@ -133,16 +133,16 @@ def get_neighbor_index(ref_point, tree, ax, plot):
 
 
 def get_neighbor_index_naive(point, other_points):
-    import sys
-    import math
+    from sys import float_info
+    from math import sqrt
 
-    d = sys.float_info.max
-    i_nearest = None
+    d = float_info.max
+    index = None
 
     for i, other_point in enumerate(other_points):
-            _d = math.sqrt((other_point[0] - point[0])**2.0 + (other_point[1] - point[1])**2.0)
-            if _d < d:
-                d = _d
-                i_nearest = i
+        _d = sqrt((other_point[0] - point[0])**2.0 + (other_point[1] - point[1])**2.0)
+        if _d < d:
+            d = _d
+            index = i
 
-    return i_nearest
+    return index
