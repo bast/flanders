@@ -39,8 +39,7 @@ def main():
     x1 = 1.0
     y0 = x0
     y1 = x1
-    num_points = 400
-    batch = 1
+    num_points = 250
 
     seed = 10
     random.seed(seed)
@@ -105,22 +104,22 @@ def main():
     # time naive approach
     # there is extra overhead due to function level imports
     t0 = time.time()
-    for i in range(len(points)//batch):
+    for i in range(len(points)):
         index_naive = get_neighbor_index_naive(ref_index=i,
                                                points=points,
                                                view_vector=view_vectors[i],
                                                view_angle=view_angles[i])
-    print('time used in naive:', batch*(time.time() - t0))
+    print('time used in naive:', time.time() - t0)
 
     # time tree approach
     t0 = time.time()
-    for i in range(len(points)//batch):
+    for i in range(len(points)):
         index = get_neighbor_index(ref_index=i,
                                    points=points,
                                    tree=tree,
                                    view_vector=view_vectors[i],
                                    view_angle=view_angles[i])
-    print('time used in kd-tree:', batch*(time.time() - t0))
+    print('time used in kd-tree:', time.time() - t0)
 
 
 if __name__ == '__main__':
