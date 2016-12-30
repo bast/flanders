@@ -111,7 +111,7 @@ def traverse(node, ref_point, index, distance, indices_traversed):
         return traverse(parent, ref_point, index, distance, indices_traversed)
 
 
-def find_neighbor(ref_point, tree, ax, plot):
+def get_neighbor_index(ref_point, tree, ax, plot):
     import sys
 
     node = tree.guess_node(ref_point)
@@ -127,19 +127,22 @@ def find_neighbor(ref_point, tree, ax, plot):
         ax.scatter([ref_point[0]], [ref_point[1]], color='red')
         ax.annotate(' {0}'.format(index), ref_point)
 
-    return index, distance
+    # for the moment we discard distance
+#   return index, distance
+    return index
 
 
-def get_distance_naive(point, other_points):
+def get_neighbor_index_naive(point, other_points):
     import sys
     import math
+
     d = sys.float_info.max
-    for other_point in other_points:
+    i_nearest = None
+
+    for i, other_point in enumerate(other_points):
             _d = math.sqrt((other_point[0] - point[0])**2.0 + (other_point[1] - point[1])**2.0)
             if _d < d:
                 d = _d
-    return d
+                i_nearest = i
 
-
-def get_all_distances_naive(points_a, points_b):
-    return [get_distance_naive(point, points_b) for point in points_a]
+    return i_nearest

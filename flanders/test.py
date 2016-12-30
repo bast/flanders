@@ -2,7 +2,7 @@ def main():
     import matplotlib.pyplot as plt
     import sys
     import time
-    from kd import get_points, BinaryTree, get_all_distances_naive, find_neighbor, draw_tree
+    from kd import get_points, BinaryTree, get_neighbor_index_naive, get_neighbor_index, draw_tree
 
     x0 = -1.0
     x1 = 1.0
@@ -10,7 +10,13 @@ def main():
     y1 = x1
     num_points = 50
     seed = 1
-    plot = True
+
+#   plot = True
+    plot = False
+    if plot:
+        fig, ax = plt.subplots()
+    else:
+        ax = None
 
     points = get_points(num_points, x0, x1, y0, y1, seed)
 
@@ -19,30 +25,24 @@ def main():
         if i > 0:
             tree.insert(point, i)
 
-    if plot:
-        fig, ax = plt.subplots()
-    else:
-        ax = None
-
     ref_points = get_points(num_points, x0, x1, y0, y1, seed + 1)
 
+    # first we verify results
+    for ref_point in ref_points:
+        index_naive = get_neighbor_index_naive(ref_point, points)
+        index = get_neighbor_index(ref_point, tree, ax, plot=plot)
+        assert index_naive == index
+
+    # then we run timings
     t0 = time.time()
-    distances_naive = get_all_distances_naive(ref_points, points)
+    for ref_point in ref_points:
+        index_naive = get_neighbor_index_naive(ref_point, points)
     print('time used in naive:', time.time() - t0)
 
     t0 = time.time()
-    distances = []
-    for point in ref_points:
-        index, distance = find_neighbor(point, tree, ax, plot=plot)
-        distances.append(distance)
+    for ref_point in ref_points:
+        index = get_neighbor_index(ref_point, tree, ax, plot=plot)
     print('time used in kd-tree:', time.time() - t0)
-
-    for i, distance in enumerate(distances):
-        if abs(distance - distances_naive[i]) > 1.0e-7:
-            sys.stderr.write('ERROR\n')
-            sys.exit(1)
-
-    print('all fine')
 
     if plot:
         draw_tree(tree, ax)
