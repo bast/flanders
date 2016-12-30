@@ -18,12 +18,11 @@ def point_within_view_angle(point, view_origin, view_vector, view_angle):
 def test_point_within_view_angle():
 
     view_origin = (0.0, 0.0)
-    view_vector = (0.0, 1.0)
+    view_vector = (1.0, 1.0)
 
-    point = (100.0, 100.0)
+    point = (10.0, 0.0)
     assert point_within_view_angle(point, view_origin, view_vector, 90.001)
     assert not point_within_view_angle(point, view_origin, view_vector, 89.999)
 
-    point = (-100.0, 100.0)
-    assert point_within_view_angle(point, view_origin, view_vector, 90.001)
-    assert not point_within_view_angle(point, view_origin, view_vector, 89.999)
+    point = (10.0, -0.1)
+    assert not point_within_view_angle(point, view_origin, view_vector, 90.0)
