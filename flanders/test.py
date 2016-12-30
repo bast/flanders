@@ -1,8 +1,14 @@
+def get_points(num_points, x0, x1, y0, y1, seed):
+    import random
+    random.seed(seed)
+    return [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
+
+
 def main():
     import matplotlib.pyplot as plt
     import sys
     import time
-    from kd import get_points, BinaryTree, get_neighbor_index, draw_tree
+    from kd import BinaryTree, get_neighbor_index, draw_tree
     from naive import get_neighbor_index_naive
 
     x0 = -1.0

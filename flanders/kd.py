@@ -1,9 +1,3 @@
-def get_points(num_points, x0, x1, y0, y1, seed):
-    import random
-    random.seed(seed)
-    return [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
-
-
 class BinaryTree():
 
     def __init__(self, coordinates, index, parent, split_dimension):
