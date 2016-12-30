@@ -9,10 +9,10 @@ def point_within_view_angle(point, view_origin, view_vector, view_angle):
     vn = normalize(view_vector, 1.0)
     vp = normalize((point[0] - view_origin[0], point[1] - view_origin[1]), 1.0)
 
-    a_rad = acos(vn[0]*vp[0] + vn[1]*vp[1])
-    a_deg = a_rad*180.0/pi
+    angle_rad = acos(vn[0]*vp[0] + vn[1]*vp[1])
+    angle_deg = angle_rad*180.0/pi
 
-    return abs(a_deg) <= abs(view_angle/2.0)
+    return abs(angle_deg) <= abs(view_angle/2.0)
 
 
 def test_point_within_view_angle():
