@@ -1,19 +1,3 @@
-def rotate(v, angle_deg):
-    """
-    Rotate vector v by angle_deg.
-    """
-    from math import cos, sin, pi
-
-    (x, y) = v
-
-    angle_rad = angle_deg*pi/180.0
-
-    _x = x*cos(angle_rad) - y*sin(angle_rad)
-    _y = x*sin(angle_rad) + y*cos(angle_rad)
-
-    return (_x, _y)
-
-
 def get_intersection_point(p1, p2, r, v):
     """
     From the reference point r there is a ray with vector v.
@@ -106,11 +90,14 @@ def get_num_intersections(p1, p2, view_origin, view_vector, view_angle):
     intersecting with line between p1 and p2.
     Returns 0, 1, or 2.
     """
+    from angle import rotate
+
     n = 0
     for v in [rotate(view_vector, -view_angle/2.0), rotate(view_vector, view_angle/2.0)]:
         if get_intersection_point(p1, p2, view_origin, v) is not None:
             n += 1
     assert n in [0, 1, 2]
+
     return n
 
 
@@ -146,6 +133,7 @@ def main():
     from draw import draw_point, draw_arrow
     import random
     from normalize import normalize
+    from angle import rotate
 
     x0 = -1.0
     x1 = 1.0

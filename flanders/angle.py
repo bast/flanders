@@ -26,3 +26,19 @@ def test_point_within_view_angle():
 
     point = (10.0, -0.1)
     assert not point_within_view_angle(point, view_origin, view_vector, 90.0)
+
+
+def rotate(v, angle_deg):
+    """
+    Rotate vector v by angle_deg.
+    """
+    from math import cos, sin, pi
+
+    (x, y) = v
+
+    angle_rad = angle_deg*pi/180.0
+
+    _x = x*cos(angle_rad) - y*sin(angle_rad)
+    _y = x*sin(angle_rad) + y*cos(angle_rad)
+
+    return (_x, _y)
