@@ -33,14 +33,15 @@ class BinaryTree():
         return get_distance(self.coordinates, coordinates)
 
     def get_position(self, coordinates):
-        if self.get_signed_distance_to_split(coordinates) > 0:
-            # insert "right"
-            return 1
-        else:
+        if self.get_signed_distance_to_split(coordinates) > 0.0:
             # insert "left"
             return 0
+        else:
+            # insert "right"
+            return 1
 
     def insert(self, coordinates, index):
+        from copy import copy
         position = self.get_position(coordinates)
         if self.children[position] is None:
             # child position is vacant, create child
@@ -49,11 +50,15 @@ class BinaryTree():
             else:
                 d = 0
 
-            new_bounds = list(self.bounds)
+            new_bounds = [
+                [self.bounds[0][0], self.bounds[0][1]],
+                [self.bounds[1][0], self.bounds[1][1]],
+            ]
+
             if position == 0:
-                new_bounds[d][1] = self.coordinates[d]
+                new_bounds[self.split_dimension][1] = self.coordinates[self.split_dimension]
             else:
-                new_bounds[d][0] = self.coordinates[d]
+                new_bounds[self.split_dimension][0] = self.coordinates[self.split_dimension]
 
             self.children[position] = BinaryTree(coordinates=coordinates,
                                                  index=index,
@@ -74,17 +79,6 @@ class BinaryTree():
             return self.children[position].guess_node(p, i)
 
 
-def draw_tree(tree, ax):
-    from draw import draw_point, draw_arrow
-    if tree is not None:
-        p = tree.get_coordinates()
-        index = tree.get_index()
-        draw_point(p, index, ax)
-        for child in tree.get_children():
-            draw_tree(child, ax)
-            draw_arrow(p, child.get_coordinates(), ax)
-
-
 def traverse(node,
              ref_index,
              ref_point,
@@ -94,6 +88,7 @@ def traverse(node,
              view_vector,
              view_angle):
     from angle import point_within_view_angle
+    from intersections import get_num_intersections
 
     i = node.get_index()
     if i in indices_traversed:
@@ -126,9 +121,47 @@ def traverse(node,
 
     for child in node.get_children():
         child_to_split = node.get_signed_distance_to_split(child.get_coordinates())
-        # only consider child if radius is larger than distance to split line
-        # or if it is smaller, then only consider the child on the same side as the reference point
-        if (abs(ref_to_split) < distance) or (ref_to_split*child_to_split > 0.0):
+        consider_child = False
+        if (ref_to_split*child_to_split > 0.0):
+            # child is on the same side as the reference point
+            consider_child = True
+        else:
+            # child is on the other side
+            if (abs(ref_to_split) < distance):
+                # radius is larger than distance to split line
+                if not use_angles:
+                    consider_child = True
+                else:
+                    if i == ref_index:
+                        # reference point is the node
+                        # for simplicity we will consider both children
+                        # TODO here a shortcut is possible
+                        # for this check the sign of the vector component perpendicular to
+                        # the dividing split, if both ray vector components have same sign and opposite
+                        # sign that the child, then one could skip the child
+                        consider_child = True
+                    else:
+                        # if at least one ray intersects the bounds, we consider the child
+                        for (p1, p2) in [((node.bounds[0][0], node.bounds[1][0]), (node.bounds[0][1], node.bounds[1][0])),
+                                         ((node.bounds[0][1], node.bounds[1][0]), (node.bounds[0][1], node.bounds[1][1])),
+                                         ((node.bounds[0][1], node.bounds[1][1]), (node.bounds[0][0], node.bounds[1][1])),
+                                         ((node.bounds[0][0], node.bounds[1][1]), (node.bounds[0][0], node.bounds[1][0]))]:
+                            if not consider_child:
+                                num_intersections = get_num_intersections(p1,
+                                                                          p2,
+                                                                          view_origin=ref_point,
+                                                                          view_vector=view_vector,
+                                                                          view_angle=view_angle)
+                            if num_intersections > 0:
+                                consider_child = True
+
+                        # if there is no intersection, it is possible that the ray covers entire
+                        # area, in this case all boundary points are in the view cone and
+                        # it is enough to check whether one of the boundary points is in view
+                        if not consider_child:
+                            if point_within_view_angle((node.bounds[0][0], node.bounds[1][0]), ref_point, view_vector, view_angle):
+                                consider_child = True
+        if consider_child:
             index, distance, indices_traversed = traverse(child,
                                                           ref_index,
                                                           ref_point,
