@@ -8,6 +8,7 @@ def main():
     import matplotlib.pyplot as plt
     import sys
     import time
+    import random
     from kd import BinaryTree, get_neighbor_index, draw_tree
     from naive import get_neighbor_index_naive
 
@@ -37,6 +38,17 @@ def main():
         index_naive = get_neighbor_index_naive(i, points)
         index = get_neighbor_index(i, points, tree, ax, plot=plot)
         assert index_naive == index
+
+    # experiment with angles
+    random.seed(seed)
+    for i, point in enumerate(points):
+        view_vector = (random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
+        view_angle = 40.0
+        index_naive = get_neighbor_index_naive(ref_index=i,
+                                               points=points,
+                                               view_vector=view_vector,
+                                               view_angle=view_angle)
+        print(i, index_naive)
 
     # then we run timings
     t0 = time.time()
