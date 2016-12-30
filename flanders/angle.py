@@ -1,31 +1,29 @@
-def point_within_view_angle(r, v, p, angle):
+def point_within_view_angle(point, view_origin, view_vector, view_angle):
     """
-    Check whether point p is in view angle.
-    View angle is enclosed by two rays from point r in the direction v
-    enclosing a cone enclosing an angle.
+    Check whether point is in view described by view_origin, view_vector,
+    and view_angle.
     """
     from normalize import normalize
     from math import acos, pi
 
-    vn = normalize(v, 1.0)
-    vp = normalize((p[0] - r[0], p[1] - r[1]), 1.0)
+    vn = normalize(view_vector, 1.0)
+    vp = normalize((point[0] - view_origin[0], point[1] - view_origin[1]), 1.0)
 
     a_rad = acos(vn[0]*vp[0] + vn[1]*vp[1])
     a_deg = a_rad*180.0/pi
 
-    return abs(a_deg) <= abs(angle/2.0)
+    return abs(a_deg) <= abs(view_angle/2.0)
 
 
 def test_point_within_view_angle():
 
-    r = (0.0, 0.0)
-    p = (100.0, 100.0)
-    v = (0.0, 1.0)
+    view_origin = (0.0, 0.0)
+    view_vector = (0.0, 1.0)
 
-    assert point_within_view_angle(r, v, p, 90.001)
-    assert not point_within_view_angle(r, v, p, 89.999)
+    point = (100.0, 100.0)
+    assert point_within_view_angle(point, view_origin, view_vector, 90.001)
+    assert not point_within_view_angle(point, view_origin, view_vector, 89.999)
 
-    p = (-100.0, 100.0)
-
-    assert point_within_view_angle(r, v, p, 90.001)
-    assert not point_within_view_angle(r, v, p, 89.999)
+    point = (-100.0, 100.0)
+    assert point_within_view_angle(point, view_origin, view_vector, 90.001)
+    assert not point_within_view_angle(point, view_origin, view_vector, 89.999)
