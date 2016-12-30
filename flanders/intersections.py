@@ -100,15 +100,15 @@ def test_line_coeffs_from_two_points():
     assert (a, b, c) == (7.0, 2.0, -11.0)
 
 
-def get_num_intersections(p1, p2, r, vn, angle):
+def get_num_intersections(p1, p2, view_origin, view_vector, view_angle):
     """
-    Computes number of intersection of two rays v (vn rotated by plus/minus angle)
-    originating from r, intersecting with line between p1 and p2.
+    Computes number of intersection of two rays starting from view_origin
+    intersecting with line between p1 and p2.
     Returns 0, 1, or 2.
     """
     n = 0
-    for v in [rotate(vn, -angle), rotate(vn, angle)]:
-        if get_intersection_point(p1, p2, r, v) is not None:
+    for v in [rotate(view_vector, -view_angle/2.0), rotate(view_vector, view_angle/2.0)]:
+        if get_intersection_point(p1, p2, view_origin, v) is not None:
             n += 1
     assert n in [0, 1, 2]
     return n
@@ -125,7 +125,7 @@ def test_get_num_intersections():
     y0 = x0
     y1 = x1
 
-    angle = 10.0
+    angle = 20.0
 
     # dividing lines
     p1 = (x0, random.uniform(y0, y1))
