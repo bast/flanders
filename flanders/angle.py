@@ -2,7 +2,7 @@ def point_within_view_angle(r, v, p, angle):
     """
     Check whether point p is in view angle.
     View angle is enclosed by two rays from point r in the direction v
-    enclosing a cone of 2*angle.
+    enclosing a cone enclosing an angle.
     """
     from normalize import normalize
     from math import acos, pi
@@ -13,15 +13,19 @@ def point_within_view_angle(r, v, p, angle):
     a_rad = acos(vn[0]*vp[0] + vn[1]*vp[1])
     a_deg = a_rad*180.0/pi
 
-    return abs(a_deg) <= abs(angle)
+    return abs(a_deg) <= abs(angle/2.0)
 
 
 def test_point_within_view_angle():
+
     r = (0.0, 0.0)
     p = (100.0, 100.0)
     v = (0.0, 1.0)
-    assert point_within_view_angle(r, v, p, 45.001)
-    assert not point_within_view_angle(r, v, p, 44.999)
+
+    assert point_within_view_angle(r, v, p, 90.001)
+    assert not point_within_view_angle(r, v, p, 89.999)
+
     p = (-100.0, 100.0)
-    assert point_within_view_angle(r, v, p, 45.001)
-    assert not point_within_view_angle(r, v, p, 44.999)
+
+    assert point_within_view_angle(r, v, p, 90.001)
+    assert not point_within_view_angle(r, v, p, 89.999)
