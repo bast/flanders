@@ -5,6 +5,7 @@ def main():
     import random
     from kd import BinaryTree, get_neighbor_index, draw_tree
     from naive import get_neighbor_index_naive
+    from sys import float_info
 
     x0 = -1.0
     x1 = 1.0
@@ -25,6 +26,19 @@ def main():
     points = [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
     view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
     view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
+
+    bounds = [
+        [float_info.max, float_info.min],
+        [float_info.max, float_info.min],
+    ]
+
+    for point in points:
+        bounds[0][0] = min(bounds[0][0], point[0])
+        bounds[0][1] = max(bounds[0][1], point[0])
+        bounds[1][0] = min(bounds[1][0], point[1])
+        bounds[1][1] = max(bounds[1][1], point[1])
+
+    print('bounds:', bounds)
 
     tree = BinaryTree(coordinates=points[0], index=0, parent=None, split_dimension=0)
     for i, point in enumerate(points):

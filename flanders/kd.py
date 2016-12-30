@@ -42,7 +42,10 @@ class BinaryTree():
                 d = 1
             else:
                 d = 0
-            self.children[position] = BinaryTree(coordinates=coordinates, index=index, parent=self, split_dimension=d)
+            self.children[position] = BinaryTree(coordinates=coordinates,
+                                                 index=index,
+                                                 parent=self,
+                                                 split_dimension=d)
         else:
             # child position is full, pass creation on to child
             self.children[position].insert(coordinates, index)
@@ -149,7 +152,7 @@ def get_neighbor_index(ref_index,
     In the latter case it is possible that nearest neighbor exists,
     and in this case the function returns -1.
     """
-    import sys
+    from sys import float_info
 
     ref_point = points[ref_index]
     node = tree.guess_node(ref_point, ref_index)
@@ -160,7 +163,7 @@ def get_neighbor_index(ref_index,
                                                     ref_index=ref_index,
                                                     ref_point=ref_point,
                                                     index=index,
-                                                    distance=sys.float_info.max,
+                                                    distance=float_info.max,
                                                     indices_traversed=set(),
                                                     view_vector=view_vector,
                                                     view_angle=view_angle)
