@@ -1,4 +1,4 @@
-# Flanders: 2D nearest neighbor search with an angle
+# Flanders: Fast 2D nearest neighbor search with an angle
 
 ```
                                                     `.-:://////:-.`
