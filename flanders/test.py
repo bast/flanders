@@ -25,23 +25,21 @@ def main():
         if i > 0:
             tree.insert(point, i)
 
-    ref_points = get_points(num_points, x0, x1, y0, y1, seed + 1)
-
     # first we verify results
-    for ref_point in ref_points:
-        index_naive = get_neighbor_index_naive(ref_point, points)
-        index = get_neighbor_index(ref_point, tree, ax, plot=plot)
+    for i, point in enumerate(points):
+        index_naive = get_neighbor_index_naive(i, points)
+        index = get_neighbor_index(i, points, tree, ax, plot=plot)
         assert index_naive == index
 
     # then we run timings
     t0 = time.time()
-    for ref_point in ref_points:
-        index_naive = get_neighbor_index_naive(ref_point, points)
+    for i, point in enumerate(points):
+        index_naive = get_neighbor_index_naive(i, points)
     print('time used in naive:', time.time() - t0)
 
     t0 = time.time()
-    for ref_point in ref_points:
-        index = get_neighbor_index(ref_point, tree, ax, plot=plot)
+    for i, point in enumerate(points):
+        index = get_neighbor_index(i, points, tree, ax, plot=plot)
     print('time used in kd-tree:', time.time() - t0)
 
     if plot:

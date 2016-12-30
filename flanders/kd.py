@@ -57,14 +57,14 @@ class BinaryTree():
             # child position is full, pass creation on to child
             self.children[position].insert(coordinates, index)
 
-    def guess_node(self, p):
+    def guess_node(self, p, i):
         position = self.get_position(p)
         if self.children[position] is None:
             # child position is vacant
             return self
         else:
             # child position is full
-            return self.children[position].guess_node(p)
+            return self.children[position].guess_node(p, i)
 
 
 def draw_tree(tree, ax):
@@ -78,7 +78,7 @@ def draw_tree(tree, ax):
             draw_arrow(p, child.get_coordinates(), ax)
 
 
-def traverse(node, ref_point, index, distance, indices_traversed):
+def traverse(node, ref_index, ref_point, index, distance, indices_traversed):
 
     i = node.get_index()
     if i in indices_traversed:
@@ -89,9 +89,11 @@ def traverse(node, ref_point, index, distance, indices_traversed):
 
     d = node.get_distance_to_node(ref_point)
 
-    if d < distance:
-        index = i
-        distance = d
+    # we need to make sure that we skip the node which is the reference point
+    if i != ref_index:
+        if d < distance:
+            index = i
+            distance = d
 
     ref_to_split = node.get_signed_distance_to_split(ref_point)
 
@@ -100,7 +102,7 @@ def traverse(node, ref_point, index, distance, indices_traversed):
         # only consider child if radius is larger than distance to split line
         # or if it is smaller, then only consider the child on the same side as the reference point
         if (abs(ref_to_split) < distance) or (ref_to_split*child_to_split > 0.0):
-            index, distance, indices_traversed = traverse(child, ref_point, index, distance, indices_traversed)
+            index, distance, indices_traversed = traverse(child, ref_index, ref_point, index, distance, indices_traversed)
 
     parent = node.get_parent()
     if parent is None:
@@ -108,18 +110,24 @@ def traverse(node, ref_point, index, distance, indices_traversed):
         return index, distance, indices_traversed
     else:
         # we go one level up
-        return traverse(parent, ref_point, index, distance, indices_traversed)
+        return traverse(parent, ref_index, ref_point, index, distance, indices_traversed)
 
 
-def get_neighbor_index(ref_point, tree, ax, plot):
+def get_neighbor_index(ref_index, points, tree, ax, plot):
+    """
+    Returns index of nearest point to points[ref_index].
+    """
     import sys
 
-    node = tree.guess_node(ref_point)
-    index, distance, indices_traversed = traverse(node=node,
-                                                  ref_point=ref_point,
-                                                  index=node.get_index(),
-                                                  distance=sys.float_info.max,
-                                                  indices_traversed=set())
+    ref_point = points[ref_index]
+    node = tree.guess_node(ref_point, ref_index)
+
+    index, _distance, _indices_traversed = traverse(node=node,
+                                                    ref_index=ref_index,
+                                                    ref_point=ref_point,
+                                                    index=node.get_index(),
+                                                    distance=sys.float_info.max,
+                                                    indices_traversed=set())
 
 #   print('nearest with index {0} and distance {1} after {2} steps'.format(index, distance, len(indices_traversed)))
 
@@ -127,22 +135,26 @@ def get_neighbor_index(ref_point, tree, ax, plot):
         ax.scatter([ref_point[0]], [ref_point[1]], color='red')
         ax.annotate(' {0}'.format(index), ref_point)
 
-    # for the moment we discard distance
-#   return index, distance
     return index
 
 
-def get_neighbor_index_naive(point, other_points):
+def get_neighbor_index_naive(ref_index, points):
+    """
+    Returns index of nearest point to points[ref_index].
+    """
     from sys import float_info
     from math import sqrt
 
     d = float_info.max
     index = None
 
-    for i, other_point in enumerate(other_points):
-        _d = sqrt((other_point[0] - point[0])**2.0 + (other_point[1] - point[1])**2.0)
-        if _d < d:
-            d = _d
-            index = i
+    ref_point = points[ref_index]
+
+    for i, point in enumerate(points):
+        if i != ref_index:
+            _d = sqrt((point[0] - ref_point[0])**2.0 + (point[1] - ref_point[1])**2.0)
+            if _d < d:
+                d = _d
+                index = i
 
     return index
