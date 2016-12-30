@@ -1,11 +1,17 @@
 class BinaryTree():
 
-    def __init__(self, coordinates, index, parent, split_dimension):
+    def __init__(self,
+                 coordinates,
+                 index,
+                 parent,
+                 split_dimension,
+                 bounds):
         self.children = [None, None]
         self.parent = parent
         self.coordinates = coordinates
         self.index = index
         self.split_dimension = split_dimension
+        self.bounds = bounds
 
     def get_coordinates(self):
         return self.coordinates
@@ -42,10 +48,18 @@ class BinaryTree():
                 d = 1
             else:
                 d = 0
+
+            new_bounds = list(self.bounds)
+            if position == 0:
+                new_bounds[d][1] = self.coordinates[d]
+            else:
+                new_bounds[d][0] = self.coordinates[d]
+
             self.children[position] = BinaryTree(coordinates=coordinates,
                                                  index=index,
                                                  parent=self,
-                                                 split_dimension=d)
+                                                 split_dimension=d,
+                                                 bounds=new_bounds)
         else:
             # child position is full, pass creation on to child
             self.children[position].insert(coordinates, index)

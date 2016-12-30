@@ -38,9 +38,12 @@ def main():
         bounds[1][0] = min(bounds[1][0], point[1])
         bounds[1][1] = max(bounds[1][1], point[1])
 
-    print('bounds:', bounds)
+    tree = BinaryTree(coordinates=points[0],
+                      index=0,
+                      parent=None,
+                      split_dimension=0,
+                      bounds=bounds)
 
-    tree = BinaryTree(coordinates=points[0], index=0, parent=None, split_dimension=0)
     for i, point in enumerate(points):
         if i > 0:
             tree.insert(point, i)
