@@ -140,8 +140,6 @@ def traverse(node,
 def get_neighbor_index(ref_index,
                        points,
                        tree,
-                       ax,
-                       plot,
                        view_vector=None,
                        view_angle=None):
     """
@@ -168,9 +166,5 @@ def get_neighbor_index(ref_index,
                                                     view_angle=view_angle)
 
 #   print('nearest with index {0} and distance {1} after {2} steps'.format(index, distance, len(indices_traversed)))
-
-    if plot:
-        ax.scatter([ref_point[0]], [ref_point[1]], color='red')
-        ax.annotate(' {0}'.format(index), ref_point)
 
     return index

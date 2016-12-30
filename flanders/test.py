@@ -34,7 +34,7 @@ def main():
     # verify results without angles
     for i, point in enumerate(points):
         index_naive = get_neighbor_index_naive(i, points)
-        index = get_neighbor_index(i, points, tree, ax, plot=plot)
+        index = get_neighbor_index(i, points, tree)
         assert index_naive == index
 
     # verify results with angles
@@ -43,11 +43,9 @@ def main():
                                                points=points,
                                                view_vector=view_vectors[i],
                                                view_angle=view_angles[i])
-        index = get_neighbor_index(i,
-                                   points,
-                                   tree,
-                                   ax,
-                                   plot,
+        index = get_neighbor_index(ref_index=i,
+                                   points=points,
+                                   tree=tree,
                                    view_vector=view_vectors[i],
                                    view_angle=view_angles[i])
         assert index_naive == index
@@ -65,11 +63,9 @@ def main():
     # time tree approach
     t0 = time.time()
     for i, point in enumerate(points):
-        index = get_neighbor_index(i,
-                                   points,
-                                   tree,
-                                   ax,
-                                   plot,
+        index = get_neighbor_index(ref_index=i,
+                                   points=points,
+                                   tree=tree,
                                    view_vector=view_vectors[i],
                                    view_angle=view_angles[i])
     print('time used in kd-tree:', time.time() - t0)
