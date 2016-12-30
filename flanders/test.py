@@ -2,7 +2,8 @@ def main():
     import matplotlib.pyplot as plt
     import sys
     import time
-    from kd import get_points, BinaryTree, get_neighbor_index_naive, get_neighbor_index, draw_tree
+    from kd import get_points, BinaryTree, get_neighbor_index, draw_tree
+    from naive import get_neighbor_index_naive
 
     x0 = -1.0
     x1 = 1.0

@@ -4,11 +4,6 @@ def get_points(num_points, x0, x1, y0, y1, seed):
     return [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
 
 
-def get_distance(p1, p2):
-    import math
-    return math.sqrt((p2[0] - p1[0])**2.0 + (p2[1] - p1[1])**2.0)
-
-
 class BinaryTree():
 
     def __init__(self, coordinates, index, parent, split_dimension):
@@ -34,6 +29,7 @@ class BinaryTree():
         return self.coordinates[self.split_dimension] - coordinates[self.split_dimension]
 
     def get_distance_to_node(self, coordinates):
+        from distance import get_distance
         return get_distance(self.coordinates, coordinates)
 
     def get_position(self, coordinates):
@@ -134,27 +130,5 @@ def get_neighbor_index(ref_index, points, tree, ax, plot):
     if plot:
         ax.scatter([ref_point[0]], [ref_point[1]], color='red')
         ax.annotate(' {0}'.format(index), ref_point)
-
-    return index
-
-
-def get_neighbor_index_naive(ref_index, points):
-    """
-    Returns index of nearest point to points[ref_index].
-    """
-    from sys import float_info
-    from math import sqrt
-
-    d = float_info.max
-    index = None
-
-    ref_point = points[ref_index]
-
-    for i, point in enumerate(points):
-        if i != ref_index:
-            _d = sqrt((point[0] - ref_point[0])**2.0 + (point[1] - ref_point[1])**2.0)
-            if _d < d:
-                d = _d
-                index = i
 
     return index
