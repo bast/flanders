@@ -1,5 +1,6 @@
 #include <cmath>
 #include <math.h>
+#include <stdlib.h>  /* abs */
 
 
 #include "helpers.h"
