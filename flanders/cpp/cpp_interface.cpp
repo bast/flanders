@@ -32,18 +32,18 @@ int get_neighbor_index_naive(
         if (i != ref_index)
         {
             bool is_in_view = true;
-                if (use_angles)
-                {
-                    is_in_view = point_within_view_angle(
-                                     points[2*i],
-                                     points[2*i + 1],
-                                     ref_point_x,
-                                     ref_point_y,
-                                     view_vector_x,
-                                     view_vector_y,
-                                     view_angle_deg
-                                     );
-                }
+            if (use_angles)
+            {
+                is_in_view = point_within_view_angle(
+                                 points[2*i],
+                                 points[2*i + 1],
+                                 ref_point_x,
+                                 ref_point_y,
+                                 view_vector_x,
+                                 view_vector_y,
+                                 view_angle_deg
+                                 );
+            }
             if (is_in_view)
             {
                 double d_loc = get_distance(
