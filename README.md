@@ -48,7 +48,7 @@ Nothing is stable.
 ## Testing
 
 ```
-PROJECT_BUILD_DIR=$PWD/build PROJECT_INCLUDE_DIR=$PWD/src PYTHONPATH=$PWD/src pytest -s -vv test.py
+PROJECT_BUILD_DIR=$PWD/build PROJECT_INCLUDE_DIR=$PWD/flanders/cpp PYTHONPATH=$PWD/flanders/cpp pytest -s -vv test.py
 ```
 
 
