@@ -1,3 +1,3 @@
-import cpp_interface
-
-print(cpp_interface.foo(123))
+def test_foo():
+    import cpp_interface
+    assert True
