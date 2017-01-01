@@ -90,7 +90,7 @@ def get_num_intersections(p1, p2, view_origin, view_vector, view_angle):
     intersecting with line between p1 and p2.
     Returns 0, 1, or 2.
     """
-    from angle import rotate
+    from .angle import rotate
 
     n = 0
     for v in [rotate(view_vector, -view_angle/2.0), rotate(view_vector, view_angle/2.0)]:

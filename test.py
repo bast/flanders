@@ -1,14 +1,15 @@
-def main():
+def test_foo():
     import matplotlib.pyplot as plt
-    import sys
+    from sys import float_info
     import time
     import random
-    from kd import BinaryTree, get_neighbor_index
-    from naive import get_neighbor_index_naive
-    from sys import float_info
-    from draw import draw_point, draw_dividing_line
-    from angle import rotate
-    from normalize import normalize
+    import cpp_interface
+    from flanders.draw import draw_point
+    from flanders.kd import BinaryTree, get_neighbor_index
+    from flanders.naive import get_neighbor_index_naive
+    from flanders.draw import draw_point, draw_dividing_line
+    from flanders.angle import rotate
+    from flanders.normalize import normalize
 
     x0 = -1.0
     x1 = 1.0
@@ -75,27 +76,3 @@ def main():
                                    view_vector=view_vectors[i],
                                    view_angle=view_angles[i])
         assert index_naive == index
-
-    # time naive approach
-    # there is extra overhead due to function level imports
-    t0 = time.time()
-    for i in range(len(points)):
-        index_naive = get_neighbor_index_naive(ref_index=i,
-                                               points=points,
-                                               view_vector=view_vectors[i],
-                                               view_angle=view_angles[i])
-    print('time used in naive:', time.time() - t0)
-
-    # time tree approach
-    t0 = time.time()
-    for i in range(len(points)):
-        index = get_neighbor_index(ref_index=i,
-                                   points=points,
-                                   tree=tree,
-                                   view_vector=view_vectors[i],
-                                   view_angle=view_angles[i])
-    print('time used in kd-tree:', time.time() - t0)
-
-
-if __name__ == '__main__':
-    main()

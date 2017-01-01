@@ -3,7 +3,7 @@ def point_within_view_angle(point, view_origin, view_vector, view_angle):
     Check whether point is in view described by view_origin, view_vector,
     and view_angle.
     """
-    from normalize import normalize
+    from .normalize import normalize
     from math import acos, pi
 
     vn = normalize(view_vector, 1.0)

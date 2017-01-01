@@ -29,7 +29,7 @@ class BinaryTree():
         return self.coordinates[self.split_dimension] - coordinates[self.split_dimension]
 
     def get_distance_to_node(self, coordinates):
-        from distance import get_distance
+        from .distance import get_distance
         return get_distance(self.coordinates, coordinates)
 
     def get_position(self, coordinates):
@@ -87,8 +87,8 @@ def traverse(node,
              indices_traversed,
              view_vector,
              view_angle):
-    from angle import point_within_view_angle
-    from intersections import get_num_intersections
+    from .angle import point_within_view_angle
+    from .intersections import get_num_intersections
 
     i = node.get_index()
     if i in indices_traversed:

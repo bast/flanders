@@ -10,8 +10,8 @@ def get_neighbor_index_naive(ref_index,
     and in this case the function returns -1.
     """
     from sys import float_info
-    from distance import get_distance
-    from angle import point_within_view_angle
+    from .distance import get_distance
+    from .angle import point_within_view_angle
 
     use_angles = False
     if view_vector is not None:
