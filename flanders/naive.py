@@ -6,7 +6,7 @@ def get_neighbor_index_naive(ref_index,
     Returns index of nearest point to points[ref_index].
     By default, only the distance counts. If angle and view vector
     are both not None, they are taken into account.
-    In the latter case it is possible that nearest neighbor exists,
+    In the latter case it is possible that no nearest neighbor exists,
     and in this case the function returns -1.
     """
     from sys import float_info
