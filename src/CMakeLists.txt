@@ -4,7 +4,7 @@ add_library(
     flanders
     SHARED
     foo.cpp
-    ../api/flanders.h
+    flanders.h
     )
 
 install(TARGETS flanders LIBRARY DESTINATION lib)
