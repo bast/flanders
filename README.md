@@ -48,13 +48,6 @@ Under heavy development.
 Nothing is stable.
 
 
-## Testing
-
-```
-PROJECT_BUILD_DIR=$PWD/build PROJECT_INCLUDE_DIR=$PWD/flanders/cpp PYTHONPATH=$PWD/flanders/cpp pytest -s -vv test.py
-```
-
-
 ## References
 
 - https://en.wikipedia.org/wiki/Nearest_neighbor_search

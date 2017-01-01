@@ -1,0 +1,27 @@
+language: python
+
+sudo: false
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      addons: &gcc49
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.9']
+      env:
+        - CXX='g++-4.9'
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - ./setup
+  - cd build
+  - make
+  - cd ..
+  - PROJECT_BUILD_DIR=$PWD/build PROJECT_INCLUDE_DIR=$PWD/flanders/cpp PYTHONPATH=$PWD/flanders/cpp pytest -s -vv test.py
+
+notifications:
+  email: false
