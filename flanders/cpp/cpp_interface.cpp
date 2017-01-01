@@ -25,7 +25,7 @@ int get_neighbor_index_naive(
     double ref_point_y = points[2*ref_index + 1];
 
     double d = std::numeric_limits<double>::max();
-    int index = -1;
+    int index_found = -1;
 
     for (int i = 0; i < num_points; i++)
     {
@@ -55,11 +55,11 @@ int get_neighbor_index_naive(
                 if (d_loc < d)
                 {
                     d = d_loc;
-                    index = i;
+                    index_found = i;
                 }
             }
         }
     }
 
-    return index;
+    return index_found;
 }
