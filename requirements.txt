@@ -4,3 +4,4 @@ scipy
 pep8
 pytest
 pyyaml
+cffi
