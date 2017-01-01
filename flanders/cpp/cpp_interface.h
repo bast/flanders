@@ -23,7 +23,16 @@
 extern "C" {
 #endif
 
-CPP_INTERFACE_API int foo(const int i);
+CPP_INTERFACE_API
+int get_neighbor_index_naive(
+    const int    ref_index,
+    const int    num_points,
+    const double points[],
+    const bool   use_angles,
+    const double view_vector_x,
+    const double view_vector_y,
+    const double view_angle_deg
+    );
 
 #ifdef __cplusplus
 }

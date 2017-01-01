@@ -6,7 +6,7 @@ def test_foo():
     import cpp_interface
     from flanders.draw import draw_point
     from flanders.kd import BinaryTree, get_neighbor_index
-    from flanders.naive import get_neighbor_index_naive
+    from cpp_interface import get_neighbor_index_naive
     from flanders.draw import draw_point, draw_dividing_line
     from flanders.angle import rotate
     from flanders.normalize import normalize
@@ -58,18 +58,34 @@ def test_foo():
         draw_dividing_line(tree, ax)
         plt.show()
 
+
+    points_array = []
+    for point in points:
+        points_array.append(point[0])
+        points_array.append(point[1])
+
     # verify results without angles
     for i, point in enumerate(points):
-        index_naive = get_neighbor_index_naive(i, points)
+        _not_used = 0.0
+        index_naive = get_neighbor_index_naive(i,
+                                               len(points),
+                                               points_array,
+                                               False,
+                                               _not_used,
+                                               _not_used,
+                                               _not_used)
         index = get_neighbor_index(i, points, tree)
         assert index_naive == index
 
     # verify results with angles
     for i, point in enumerate(points):
-        index_naive = get_neighbor_index_naive(ref_index=i,
-                                               points=points,
-                                               view_vector=view_vectors[i],
-                                               view_angle=view_angles[i])
+        index_naive = get_neighbor_index_naive(i,
+                                               len(points),
+                                               points_array,
+                                               True,
+                                               view_vectors[i][0],
+                                               view_vectors[i][1],
+                                               view_angles[i])
         index = get_neighbor_index(ref_index=i,
                                    points=points,
                                    tree=tree,
