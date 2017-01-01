@@ -1,10 +1,10 @@
 include_directories(${PROJECT_SOURCE_DIR}/api)
 
 add_library(
-    flanders
+    cpp_interface
     SHARED
     foo.cpp
-    flanders.h
+    cpp_interface.h
     )
 
-install(TARGETS flanders LIBRARY DESTINATION lib)
+install(TARGETS cpp_interface LIBRARY DESTINATION lib)
