@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-%20MPL--v2.0-blue.svg)](../master/LICENSE)
+
 # Flanders: Fast 2D nearest neighbor search with an angle
 
 ```
