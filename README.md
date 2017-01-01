@@ -37,6 +37,14 @@ y:-----:/+o------------------:o:       :ydddm+-----:oyyyysydMMm:::o+.
          myyyyyyyyyyyyyyyyyyNhhhyyyyyyyyyyyyddyyyyyhdyso++ddhmhmddhhyyyyddyyyyyyyhdy+.
 ```
 
+
+## Status
+
+Experimental code.
+Under heavy development.
+Nothing is stable.
+
+
 ## References
 
 - https://en.wikipedia.org/wiki/Nearest_neighbor_search
