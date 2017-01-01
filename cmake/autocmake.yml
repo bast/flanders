@@ -1,0 +1,19 @@
+name: flanders
+
+min_cmake_version: 2.8
+
+url_root: https://github.com/coderefinery/autocmake/raw/master/
+
+modules:
+- compilers:
+  - source:
+    - '%(url_root)modules/cxx.cmake'
+- flags:
+  - source:
+    - '%(url_root)compilers/GNU.CXX.cmake'
+    - '%(url_root)compilers/Intel.CXX.cmake'
+- plugins:
+  - source:
+    - '%(url_root)modules/safeguards.cmake'
+    - '%(url_root)modules/default_build_paths.cmake'
+    - '%(url_root)modules/src.cmake'
