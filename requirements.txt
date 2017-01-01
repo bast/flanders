@@ -3,3 +3,4 @@ numpy
 scipy
 pep8
 pytest
+pyyaml
