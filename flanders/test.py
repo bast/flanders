@@ -1,28 +1,3 @@
-def draw_dividing_line(node, ax):
-    if node is not None:
-        if node.split_dimension == 0:
-            p1 = (
-                node.coordinates[0],
-                node.bounds[1][0],
-            )
-            p2 = (
-                node.coordinates[0],
-                node.bounds[1][1],
-            )
-        else:
-            p1 = (
-                node.bounds[0][0],
-                node.coordinates[1],
-            )
-            p2 = (
-                node.bounds[0][1],
-                node.coordinates[1],
-            )
-        ax.plot([p1[0], p2[0]], [p1[1], p2[1]], color='red')
-    for child in node.get_children():
-        draw_dividing_line(child, ax)
-
-
 def main():
     import matplotlib.pyplot as plt
     import sys
@@ -31,7 +6,7 @@ def main():
     from kd import BinaryTree, get_neighbor_index
     from naive import get_neighbor_index_naive
     from sys import float_info
-    from draw import draw_point
+    from draw import draw_point, draw_dividing_line
     from angle import rotate
     from normalize import normalize
 
