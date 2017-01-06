@@ -48,6 +48,18 @@ Under heavy development.
 Nothing is stable.
 
 
+## Installation
+
+```shell
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+./setup
+cd build
+make
+```
+
+
 ## References
 
 - https://en.wikipedia.org/wiki/Nearest_neighbor_search
