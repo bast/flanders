@@ -40,7 +40,7 @@ class BinaryTree():
             # insert "right"
             return 1
 
-    def insert(self, coordinates, index):
+    def insert(self, coordinates, index, debug=False):
         from copy import copy
         position = self.get_position(coordinates)
         if self.children[position] is None:
@@ -60,6 +60,9 @@ class BinaryTree():
             else:
                 new_bounds[self.split_dimension][0] = self.coordinates[self.split_dimension]
 
+            if debug:
+                print('creating child coordinates={0}, index={1}, parent={2}, bounds={3}'.format(coordinates, index, self.index, new_bounds))
+
             self.children[position] = BinaryTree(coordinates=coordinates,
                                                  index=index,
                                                  parent=self,
@@ -67,7 +70,7 @@ class BinaryTree():
                                                  bounds=new_bounds)
         else:
             # child position is full, pass creation on to child
-            self.children[position].insert(coordinates, index)
+            self.children[position].insert(coordinates, index, debug)
 
     def guess_node(self, p):
         position = self.get_position(p)
