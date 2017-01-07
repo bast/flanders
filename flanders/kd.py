@@ -69,14 +69,14 @@ class BinaryTree():
             # child position is full, pass creation on to child
             self.children[position].insert(coordinates, index)
 
-    def guess_node(self, p, i):
+    def guess_node(self, p):
         position = self.get_position(p)
         if self.children[position] is None:
             # child position is vacant
             return self
         else:
             # child position is full
-            return self.children[position].guess_node(p, i)
+            return self.children[position].guess_node(p)
 
 
 def traverse(node,
@@ -202,7 +202,7 @@ def get_neighbor_index(ref_index,
     from sys import float_info
 
     ref_point = points[ref_index]
-    node = tree.guess_node(ref_point, ref_index)
+    node = tree.guess_node(ref_point)
 
     index = -1
 
