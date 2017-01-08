@@ -15,18 +15,4 @@ add_library(
     distance.cpp
     )
 
-
-add_executable(
-    kd_test.x
-    kd.h
-    kd.cpp
-    helpers.h
-    helpers.cpp
-    intersect.h
-    intersect.cpp
-    distance.h
-    distance.cpp
-    )
-
-
 install(TARGETS cpp_interface LIBRARY DESTINATION lib)
