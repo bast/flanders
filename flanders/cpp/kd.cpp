@@ -3,6 +3,7 @@
 #include <vector>  /* vector */
 #include <algorithm>  /* find */
 #include <math.h>  /* sqrt */
+#include <limits>
 
 
 #include "kd.h"
