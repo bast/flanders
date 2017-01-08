@@ -7,4 +7,17 @@ add_library(
     helpers.cpp
     )
 
+
+add_executable(
+    kd_test.x
+    kd.h
+    kd.cpp
+    helpers.h
+    helpers.cpp
+    intersect.h
+    intersect.cpp
+    distance.cpp
+    )
+
+
 install(TARGETS cpp_interface LIBRARY DESTINATION lib)
