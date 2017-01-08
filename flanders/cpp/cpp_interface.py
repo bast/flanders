@@ -44,6 +44,9 @@ _lib = _get_lib_handle(
 
 
 # outward facing API
-#new_context = _lib.new_context
-#free_context = _lib.free_context
+new_context = _lib.new_context
+free_context = _lib.free_context
+set_bounds = _lib.set_bounds
+insert = _lib.insert
+get_neighbor_index = _lib.get_neighbor_index
 get_neighbor_index_naive = _lib.get_neighbor_index_naive

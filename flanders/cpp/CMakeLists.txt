@@ -5,6 +5,14 @@ add_library(
     cpp_interface.cpp
     helpers.h
     helpers.cpp
+    kd.h
+    kd.cpp
+    helpers.h
+    helpers.cpp
+    intersect.h
+    intersect.cpp
+    distance.h
+    distance.cpp
     )
 
 
@@ -16,6 +24,7 @@ add_executable(
     helpers.cpp
     intersect.h
     intersect.cpp
+    distance.h
     distance.cpp
     )
 

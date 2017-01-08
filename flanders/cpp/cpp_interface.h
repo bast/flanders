@@ -23,6 +23,15 @@
 extern "C" {
 #endif
 
+struct context_s;
+typedef struct context_s context_t;
+
+CPP_INTERFACE_API
+context_t *new_context();
+
+CPP_INTERFACE_API
+void free_context(context_t *context);
+
 CPP_INTERFACE_API
 int get_neighbor_index_naive(
     const int    ref_index,
@@ -31,6 +40,29 @@ int get_neighbor_index_naive(
     const bool   use_angles,
     const double view_vector_x,
     const double view_vector_y,
+    const double view_angle_deg
+    );
+
+CPP_INTERFACE_API
+void set_bounds(
+    context_t *context,
+    const double bounds[2][2]
+    );
+
+CPP_INTERFACE_API
+void insert(
+    context_t *context,
+    const double coordinates[2],
+    const int    index
+    );
+
+CPP_INTERFACE_API
+int get_neighbor_index(
+    context_t *context,
+    const double coordinates[2],
+    const int    index,
+    const bool   use_angles,
+    const double view_vector[2],
     const double view_angle_deg
     );
 

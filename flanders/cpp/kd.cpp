@@ -9,21 +9,49 @@
 #include "helpers.h"
 #include "intersect.h"
 #include "distance.h"
+#include "cpp_interface.h"
 
 
-btree::btree(const double in_bounds[2][2])
+
+#define AS_TYPE(Type, Obj) reinterpret_cast<Type *>(Obj)
+#define AS_CTYPE(Type, Obj) reinterpret_cast<const Type *>(Obj)
+
+
+context_t *new_context()
+{
+    return AS_TYPE(context_t, new btree());
+}
+btree::btree()
 {
     root = NULL;
+}
+
+
+void free_context(context_t *context)
+{
+    if (!context) return;
+    delete AS_TYPE(btree, context);
+}
+btree::~btree()
+{
+    destroy_tree();
+}
+
+
+CPP_INTERFACE_API
+void set_bounds(
+    context_t *context,
+    const double bounds[2][2]
+    )
+{
+    return AS_TYPE(btree, context)->set_bounds(bounds);
+}
+void btree::set_bounds(const double in_bounds[2][2])
+{
     bounds[0][0] = in_bounds[0][0];
     bounds[0][1] = in_bounds[0][1];
     bounds[1][0] = in_bounds[1][0];
     bounds[1][1] = in_bounds[1][1];
-}
-
-
-btree::~btree()
-{
-    destroy_tree();
 }
 
 
@@ -65,6 +93,15 @@ node *btree::guess_node(const double coordinates[2], node *leaf) const
 }
 
 
+CPP_INTERFACE_API
+void insert(
+    context_t *context,
+    const double coordinates[2],
+    const int    index
+    )
+{
+    return AS_TYPE(btree, context)->insert(coordinates, index);
+}
 void btree::insert(const double coordinates[2], const int index)
 {
     if (root == NULL)
@@ -154,10 +191,6 @@ void btree::insert(const double coordinates[2], const int index, node *leaf)
 // are both not None, they are taken into account.
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
-
-// TODO int get_neighbor_index(
-
-
 int btree::traverse(
     node *leaf,
     const int ref_index,
@@ -360,7 +393,8 @@ int main()
     bounds[1][0] = -0.6795408869623607;
     bounds[1][1] = 0.647177745066891;
 
-    btree tree(bounds);
+    btree tree;
+    tree.set_bounds(bounds);
 
     double coordinates[2];
 
@@ -439,4 +473,55 @@ int main()
     printf("found: %i\n", index_best);
 
     return 0;
+}
+
+
+CPP_INTERFACE_API
+int get_neighbor_index(
+          context_t *context,
+    const double coordinates[2],
+    const int    index,
+    const bool   use_angles,
+    const double view_vector[2],
+    const double view_angle_deg
+    )
+{
+    return AS_TYPE(btree, context)->get_neighbor_index(
+                                        coordinates,
+                                        index,
+                                        use_angles,
+                                        view_vector,
+                                        view_angle_deg
+                                        );
+}
+int btree::get_neighbor_index(
+    const double coordinates[2],
+    const int    index,
+    const bool   use_angles,
+    const double view_vector[2],
+    const double view_angle_deg
+    ) // const FIXME?
+{
+    node *guess = guess_node(coordinates);
+
+    double d = std::numeric_limits<double>::max();
+
+    std::vector<int> indices_traversed;
+    indices_traversed.clear();
+
+    int index_best = -1;
+
+    index_best = traverse(
+                 guess,
+                 index,
+                 coordinates,
+                 index_best,
+                 d,
+                 indices_traversed,
+                 true,
+                 view_vector,
+                 view_angle_deg
+                 );
+
+    return index_best;
 }

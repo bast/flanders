@@ -16,9 +16,18 @@ struct node
 class btree
 {
     public:
-        btree(const double in_bounds[2][2]);
+        btree();
         ~btree();
 
+        int get_neighbor_index(
+            const double coordinates[2],
+            const int    index,
+            const bool   use_angles,
+            const double view_vector[2],
+            const double view_angle_deg
+            );
+        //  ) const;
+        void set_bounds(const double in_bounds[2][2]);
         void insert(const double coordinates[2], const int index);
         node *guess_node(const double coordinates[2]) const; // FIXME move to private
         int traverse(  // FIXME make private and rename parameters

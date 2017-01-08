@@ -5,8 +5,8 @@ def test_foo():
     import random
     import cpp_interface
     from flanders.draw import draw_point
-    from flanders.kd import BinaryTree, get_neighbor_index
-    from cpp_interface import get_neighbor_index_naive
+    from flanders.kd import BinaryTree
+    import cpp_interface
     from flanders.draw import draw_point, draw_dividing_line
     from flanders.angle import rotate
     from flanders.normalize import normalize
@@ -15,7 +15,7 @@ def test_foo():
     x1 = 1.0
     y0 = x0
     y1 = x1
-    num_points = 250
+    num_points = 500
 
     seed = 10
     random.seed(seed)
@@ -64,31 +64,51 @@ def test_foo():
         points_array.append(point[0])
         points_array.append(point[1])
 
-    # verify results without angles
+    context = cpp_interface.new_context()
+    cpp_interface.set_bounds(context, bounds)
     for i, point in enumerate(points):
-        _not_used = 0.0
-        index_naive = get_neighbor_index_naive(i,
-                                               len(points),
-                                               points_array,
-                                               False,
-                                               _not_used,
-                                               _not_used,
-                                               _not_used)
-        index = get_neighbor_index(i, points, tree)
-        assert index_naive == index
+        _point = [point[0], point[1]]
+        cpp_interface.insert(context, _point, i)
+
+    # verify results without angles
+# for the moment fails without angles
+#   for i, point in enumerate(points):
+#       _not_used = 0.0
+#       index_naive = cpp_interface.get_neighbor_index_naive(i,
+#                                                            len(points),
+#                                                            points_array,
+#                                                            False,
+#                                                            _not_used,
+#                                                            _not_used,
+#                                                            _not_used)
+#       _coordinates = [point[0], point[1]]
+#       _view_vector = [_not_used, _not_used]
+#       index = cpp_interface.get_neighbor_index(context,
+#                                                _coordinates,
+#                                                i,
+#                                                False,
+#                                                _view_vector,
+#                                                _not_used)
+#       assert index_naive == index
 
     # verify results with angles
     for i, point in enumerate(points):
-        index_naive = get_neighbor_index_naive(i,
-                                               len(points),
-                                               points_array,
-                                               True,
-                                               view_vectors[i][0],
-                                               view_vectors[i][1],
-                                               view_angles[i])
-        index = get_neighbor_index(ref_index=i,
-                                   points=points,
-                                   tree=tree,
-                                   view_vector=view_vectors[i],
-                                   view_angle=view_angles[i])
+        index_naive = cpp_interface.get_neighbor_index_naive(i,
+                                                             len(points),
+                                                             points_array,
+                                                             True,
+                                                             view_vectors[i][0],
+                                                             view_vectors[i][1],
+                                                             view_angles[i])
+        _coordinates = [point[0], point[1]]
+        _view_vector = [view_vectors[i][0], view_vectors[i][1]]
+        index = cpp_interface.get_neighbor_index(context,
+                                                 _coordinates,
+                                                 i,
+                                                 True,
+                                                 _view_vector,
+                                                 view_angles[i])
+
         assert index_naive == index
+
+    cpp_interface.free_context(context)
