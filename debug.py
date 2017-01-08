@@ -43,6 +43,18 @@ def debug():
     node = tree.guess_node((0.3, -0.8))
     print('guess:', node.index)
 
+    view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
+    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
+
+    for i in [1, 2]:
+        index = get_neighbor_index(ref_index=i,
+                                   points=points,
+                                   tree=tree,
+                                   view_vector=view_vectors[i],
+                                   view_angle=view_angles[i])
+        print()
+        print('vector={0} angle={1}'.format(view_vectors[i], view_angles[i]))
+        print('point={0} nearest={1}'.format(i, index))
 
 if __name__ == '__main__':
     debug()

@@ -93,12 +93,16 @@ def traverse(node,
     from .angle import point_within_view_angle
     from .intersections import get_num_intersections
 
+    print('visiting node {}:'.format(node.get_index()))
+    print('traversed:', indices_traversed)
+    print()
+
     i = node.get_index()
     if i in indices_traversed:
         # in case we have already checked this node, we return
         return index, distance, indices_traversed
     else:
-        indices_traversed.add(i)
+        indices_traversed.append(i)
 
     d = node.get_distance_to_node(ref_point)
 
@@ -214,7 +218,7 @@ def get_neighbor_index(ref_index,
                                                     ref_point=ref_point,
                                                     index=index,
                                                     distance=float_info.max,
-                                                    indices_traversed=set(),
+                                                    indices_traversed=[],
                                                     view_vector=view_vector,
                                                     view_angle=view_angle)
 
