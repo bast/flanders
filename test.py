@@ -6,7 +6,6 @@ def test_foo():
     import cpp_interface
     from flanders.draw import draw_point
     from flanders.kd import BinaryTree
-    import cpp_interface
     from flanders.draw import draw_point, draw_dividing_line
     from flanders.angle import rotate
     from flanders.normalize import normalize
