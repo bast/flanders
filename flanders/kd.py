@@ -93,10 +93,6 @@ def traverse(node,
     from .angle import point_within_view_angle
     from .intersections import get_num_intersections
 
-    print('visiting node {}:'.format(node.get_index()))
-    print('traversed:', indices_traversed)
-    print()
-
     i = node.get_index()
     if i in indices_traversed:
         # in case we have already checked this node, we return
