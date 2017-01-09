@@ -2,7 +2,7 @@ add_library(
     cpp_interface
     SHARED
     cpp_interface.h
-    cpp_interface.cpp
+    naive.cpp
     helpers.h
     helpers.cpp
     btree.h

@@ -1,6 +1,4 @@
-#include <math.h>
 #include <limits>
-
 
 #include "cpp_interface.h"
 #include "helpers.h"
@@ -14,15 +12,14 @@
 int get_neighbor_index_naive(
     const int    ref_index,
     const int    num_points,
-    const double points[],
+    const double x_coordinates[],
+    const double y_coordinates[],
     const bool   use_angles,
-    const double view_vector_x,
-    const double view_vector_y,
+    const double view_vector[2],
     const double view_angle_deg
     )
 {
-    double ref_point_x = points[2*ref_index];
-    double ref_point_y = points[2*ref_index + 1];
+    double ref_point[2] = {x_coordinates[ref_index], y_coordinates[ref_index]};
 
     double d = std::numeric_limits<double>::max();
     int index_found = -1;
@@ -31,26 +28,22 @@ int get_neighbor_index_naive(
     {
         if (i != ref_index)
         {
+            double point[2] = {x_coordinates[i], y_coordinates[i]};
             bool is_in_view = true;
             if (use_angles)
             {
                 is_in_view = point_within_view_angle(
-                                 points[2*i],
-                                 points[2*i + 1],
-                                 ref_point_x,
-                                 ref_point_y,
-                                 view_vector_x,
-                                 view_vector_y,
+                                 point,
+                                 ref_point,
+                                 view_vector,
                                  view_angle_deg
                                  );
             }
             if (is_in_view)
             {
                 double d_loc = get_distance(
-                                   points[2*i],
-                                   points[2*i + 1],
-                                   ref_point_x,
-                                   ref_point_y
+                                   point,
+                                   ref_point
                                    );
                 if (d_loc < d)
                 {

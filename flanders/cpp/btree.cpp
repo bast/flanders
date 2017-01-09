@@ -228,12 +228,9 @@ int btree::traverse(
         if (use_angles)
         {
             is_in_view = point_within_view_angle(
-                             leaf->coordinates[0],
-                             leaf->coordinates[1],
-                             ref_point[0],
-                             ref_point[1],
-                             view_vector[0],
-                             view_vector[1],
+                             leaf->coordinates,
+                             ref_point,
+                             view_vector,
                              view_angle_deg
                              );
         }
@@ -329,13 +326,11 @@ int btree::traverse(
                             // it is enough to check whether one of the boundary points is in view
                             if (not consider_child)
                             {
+                                double corner_point[2] = {leaf->bounds[0][0], leaf->bounds[1][0]};
                                 consider_child = point_within_view_angle(
-                                                     leaf->bounds[0][0],
-                                                     leaf->bounds[1][0],
-                                                     ref_point[0],
-                                                     ref_point[1],
-                                                     view_vector[0],
-                                                     view_vector[1],
+                                                     corner_point,
+                                                     ref_point,
+                                                     view_vector,
                                                      view_angle_deg
                                                      );
                             }

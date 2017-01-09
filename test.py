@@ -15,6 +15,9 @@ def test_library():
 
     points = [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
 
+    x_coordinates = [point[0] for point in points]
+    y_coordinates = [point[1] for point in points]
+
     bounds = [
         [float_info.max, float_info.min],
         [float_info.max, float_info.min],
@@ -25,11 +28,6 @@ def test_library():
         bounds[0][1] = max(bounds[0][1], point[0])
         bounds[1][0] = min(bounds[1][0], point[1])
         bounds[1][1] = max(bounds[1][1], point[1])
-
-    points_array = []
-    for point in points:
-        points_array.append(point[0])
-        points_array.append(point[1])
 
     context = cpp_interface.new_context()
     cpp_interface.set_bounds(context, bounds)
@@ -42,10 +40,10 @@ def test_library():
         _not_used = 0.0
         index_naive = cpp_interface.get_neighbor_index_naive(i,
                                                              len(points),
-                                                             points_array,
+                                                             x_coordinates,
+                                                             y_coordinates,
                                                              False,
-                                                             _not_used,
-                                                             _not_used,
+                                                             [_not_used, _not_used],
                                                              _not_used)
         index = cpp_interface.get_neighbor_index(context,
                                                  [point[0], point[1]],
@@ -62,10 +60,10 @@ def test_library():
     for i, point in enumerate(points):
         index_naive = cpp_interface.get_neighbor_index_naive(i,
                                                              len(points),
-                                                             points_array,
+                                                             x_coordinates,
+                                                             y_coordinates,
                                                              True,
-                                                             view_vectors[i][0],
-                                                             view_vectors[i][1],
+                                                             [view_vectors[i][0], view_vectors[i][1]],
                                                              view_angles[i])
         index = cpp_interface.get_neighbor_index(context,
                                                  [point[0], point[1]],
