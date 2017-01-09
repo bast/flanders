@@ -27,6 +27,12 @@ def test_library():
     for use_angles in [False, True]:
         t0 = time.time()
         for i in range(num_points):
+            index = cpp_interface.find_neighbor(context,
+                                                i,
+                                                use_angles,
+                                                [view_vectors[i][0], view_vectors[i][1]],
+                                                view_angles[i])
+
             if not do_timing:
                 index_naive = cpp_interface.find_neighbor_naive(i,
                                                                 num_points,
@@ -35,13 +41,6 @@ def test_library():
                                                                 use_angles,
                                                                 [view_vectors[i][0], view_vectors[i][1]],
                                                                 view_angles[i])
-            index = cpp_interface.find_neighbor(context,
-                                                i,
-                                                use_angles,
-                                                [view_vectors[i][0], view_vectors[i][1]],
-                                                view_angles[i])
-
-            if not do_timing:
                 assert index_naive == index
 
         if do_timing:
