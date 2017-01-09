@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <algorithm>
+#include <limits>
 #include <math.h>
 
 #include "btree.h"
