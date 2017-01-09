@@ -1,5 +1,4 @@
-def test_foo():
-    import matplotlib.pyplot as plt
+def test_library():
     from sys import float_info
     import time
     import random
@@ -15,8 +14,6 @@ def test_foo():
     random.seed(seed)
 
     points = [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
-    view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
-    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
 
     bounds = [
         [float_info.max, float_info.min],
@@ -50,15 +47,16 @@ def test_foo():
                                                              _not_used,
                                                              _not_used,
                                                              _not_used)
-        _coordinates = [point[0], point[1]]
-        _view_vector = [_not_used, _not_used]
         index = cpp_interface.get_neighbor_index(context,
-                                                 _coordinates,
+                                                 [point[0], point[1]],
                                                  i,
                                                  False,
-                                                 _view_vector,
+                                                 [_not_used, _not_used],
                                                  _not_used)
         assert index_naive == index
+
+    view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
+    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
 
     # verify results with angles
     for i, point in enumerate(points):
@@ -69,13 +67,11 @@ def test_foo():
                                                              view_vectors[i][0],
                                                              view_vectors[i][1],
                                                              view_angles[i])
-        _coordinates = [point[0], point[1]]
-        _view_vector = [view_vectors[i][0], view_vectors[i][1]]
         index = cpp_interface.get_neighbor_index(context,
-                                                 _coordinates,
+                                                 [point[0], point[1]],
                                                  i,
                                                  True,
-                                                 _view_vector,
+                                                 [view_vectors[i][0], view_vectors[i][1]],
                                                  view_angles[i])
 
         assert index_naive == index
