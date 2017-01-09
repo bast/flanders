@@ -38,14 +38,14 @@ def test_library():
     # verify results without angles
     for i, point in enumerate(points):
         _not_used = 0.0
-        index_naive = cpp_interface.get_neighbor_index_naive(i,
+        index_naive = cpp_interface.find_neighbor_naive(i,
                                                              len(points),
                                                              x_coordinates,
                                                              y_coordinates,
                                                              False,
                                                              [_not_used, _not_used],
                                                              _not_used)
-        index = cpp_interface.get_neighbor_index(context,
+        index = cpp_interface.find_neighbor(context,
                                                  [point[0], point[1]],
                                                  i,
                                                  False,
@@ -58,14 +58,14 @@ def test_library():
 
     # verify results with angles
     for i, point in enumerate(points):
-        index_naive = cpp_interface.get_neighbor_index_naive(i,
+        index_naive = cpp_interface.find_neighbor_naive(i,
                                                              len(points),
                                                              x_coordinates,
                                                              y_coordinates,
                                                              True,
                                                              [view_vectors[i][0], view_vectors[i][1]],
                                                              view_angles[i])
-        index = cpp_interface.get_neighbor_index(context,
+        index = cpp_interface.find_neighbor(context,
                                                  [point[0], point[1]],
                                                  i,
                                                  True,

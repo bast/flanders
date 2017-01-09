@@ -9,7 +9,7 @@
 // then the view vector and angle are taken into account.
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
-int get_neighbor_index_naive(
+int find_neighbor_naive(
     const int    ref_index,
     const int    num_points,
     const double x_coordinates[],

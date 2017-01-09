@@ -46,7 +46,7 @@ void insert(
     );
 
 CPP_INTERFACE_API
-int get_neighbor_index(
+int find_neighbor(
     const context_t *context,
     const double coordinates[2],
     const int    index,
@@ -56,7 +56,7 @@ int get_neighbor_index(
     );
 
 CPP_INTERFACE_API
-int get_neighbor_index_naive(
+int find_neighbor_naive(
     const int    ref_index,
     const int    num_points,
     const double x_coordinates[],

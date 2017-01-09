@@ -48,5 +48,5 @@ new_context = _lib.new_context
 free_context = _lib.free_context
 set_bounds = _lib.set_bounds
 insert = _lib.insert
-get_neighbor_index = _lib.get_neighbor_index
-get_neighbor_index_naive = _lib.get_neighbor_index_naive
+find_neighbor = _lib.find_neighbor
+find_neighbor_naive = _lib.find_neighbor_naive

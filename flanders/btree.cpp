@@ -377,7 +377,7 @@ int btree::traverse(
 
 
 CPP_INTERFACE_API
-int get_neighbor_index(
+int find_neighbor(
     const context_t *context,
     const double coordinates[2],
     const int    index,
@@ -386,7 +386,7 @@ int get_neighbor_index(
     const double view_angle_deg
     )
 {
-    return AS_CTYPE(btree, context)->get_neighbor_index(
+    return AS_CTYPE(btree, context)->find_neighbor(
                                          coordinates,
                                          index,
                                          use_angles,
@@ -394,7 +394,7 @@ int get_neighbor_index(
                                          view_angle_deg
                                          );
 }
-int btree::get_neighbor_index(
+int btree::find_neighbor(
     const double coordinates[2],
     const int    index,
     const bool   use_angles,

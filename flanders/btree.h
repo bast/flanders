@@ -23,7 +23,7 @@ class btree
 
         void insert(const double coordinates[2], const int index);
 
-        int get_neighbor_index(
+        int find_neighbor(
             const double coordinates[2],
             const int    index,
             const bool   use_angles,
