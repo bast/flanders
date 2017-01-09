@@ -47,7 +47,7 @@ void insert(
 
 CPP_INTERFACE_API
 int get_neighbor_index(
-    context_t *context,
+    const context_t *context,
     const double coordinates[2],
     const int    index,
     const bool   use_angles,

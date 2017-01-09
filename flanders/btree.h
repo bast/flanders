@@ -19,28 +19,17 @@ class btree
         btree();
         ~btree();
 
+        void set_bounds(const double in_bounds[2][2]);
+
+        void insert(const double coordinates[2], const int index);
+
         int get_neighbor_index(
             const double coordinates[2],
             const int    index,
             const bool   use_angles,
             const double view_vector[2],
             const double view_angle_deg
-            );
-        //  ) const;
-        void set_bounds(const double in_bounds[2][2]);
-        void insert(const double coordinates[2], const int index);
-        node *guess_node(const double coordinates[2]) const; // FIXME move to private
-        int traverse(  // FIXME make private and rename parameters
-            node *leaf,
-            const int ref_index,
-            const double ref_point[2],
-            const int index,
-                  double &distance,
-                  std::vector<int> &indices_traversed,
-            const bool use_angles,
-            const double view_vector[2],
-            const double view_angle_deg
-            );
+            ) const;
 
     private:
         btree(const btree &rhs);            // not implemented
@@ -50,9 +39,24 @@ class btree
         void destroy_tree(node *leaf);
 
         void insert(const double coordinates[2], const int index, node *leaf);
+
+        node *guess_node(const double coordinates[2]) const;
         node *guess_node(const double coordinates[2], node *leaf) const;
 
+        int traverse(
+            node *leaf,
+            const int ref_index,
+            const double ref_point[2],
+            const int index,
+                  double &distance,
+                  std::vector<int> &indices_traversed,
+            const bool use_angles,
+            const double view_vector[2],
+            const double view_angle_deg
+            ) const;
+
         node *root;
+
         double bounds[2][2];
 };
 
