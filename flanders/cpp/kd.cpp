@@ -428,7 +428,7 @@ int btree::get_neighbor_index(
                  index_best,
                  d,
                  indices_traversed,
-                 true,
+                 use_angles,
                  view_vector,
                  view_angle_deg
                  );

@@ -70,25 +70,24 @@ def test_foo():
         cpp_interface.insert(context, _point, i)
 
     # verify results without angles
-# for the moment fails without angles
-#   for i, point in enumerate(points):
-#       _not_used = 0.0
-#       index_naive = cpp_interface.get_neighbor_index_naive(i,
-#                                                            len(points),
-#                                                            points_array,
-#                                                            False,
-#                                                            _not_used,
-#                                                            _not_used,
-#                                                            _not_used)
-#       _coordinates = [point[0], point[1]]
-#       _view_vector = [_not_used, _not_used]
-#       index = cpp_interface.get_neighbor_index(context,
-#                                                _coordinates,
-#                                                i,
-#                                                False,
-#                                                _view_vector,
-#                                                _not_used)
-#       assert index_naive == index
+    for i, point in enumerate(points):
+        _not_used = 0.0
+        index_naive = cpp_interface.get_neighbor_index_naive(i,
+                                                             len(points),
+                                                             points_array,
+                                                             False,
+                                                             _not_used,
+                                                             _not_used,
+                                                             _not_used)
+        _coordinates = [point[0], point[1]]
+        _view_vector = [_not_used, _not_used]
+        index = cpp_interface.get_neighbor_index(context,
+                                                 _coordinates,
+                                                 i,
+                                                 False,
+                                                 _view_vector,
+                                                 _not_used)
+        assert index_naive == index
 
     # verify results with angles
     for i, point in enumerate(points):
