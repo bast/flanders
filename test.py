@@ -10,16 +10,15 @@ def test_library():
     y1 = x1
     num_points = 500
 
+    # generate random but reproducible data
     seed = 10
     random.seed(seed)
-
     points = [(random.uniform(x0, x1), random.uniform(y0, y1)) for _ in range(num_points)]
+    view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
+    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
 
     x_coordinates = [point[0] for point in points]
     y_coordinates = [point[1] for point in points]
-
-    view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
-    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
 
     bounds = [
         [float_info.max, float_info.min],
