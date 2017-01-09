@@ -1,6 +1,6 @@
 #include <cmath>
 #include <math.h>
-#include <stdlib.h>  /* abs */
+#include <stdlib.h>  /* fabs */
 
 
 #include "helpers.h"
@@ -48,5 +48,5 @@ bool point_within_view_angle(
 
     double angle_deg = angle_rad*180.0/M_PI;
 
-    return (abs(angle_deg) <= abs(view_angle_deg/2.0));
+    return (fabs(angle_deg) <= fabs(view_angle_deg/2.0));
 }

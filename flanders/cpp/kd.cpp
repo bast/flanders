@@ -267,7 +267,7 @@ int btree::traverse(
             else
             {
                 // child is on the other side
-                if (abs(ref_to_split) < distance)
+                if (fabs(ref_to_split) < distance)
                 {
                     // radius is larger than distance to split line
                     if (not use_angles)

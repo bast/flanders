@@ -80,7 +80,7 @@ bool intersection_point_exists(
     double *line = line_coeffs_from_two_points(p1, p2);
     double *coef = get_intersection(line, ray);
 
-    if (abs(coef[2]) < TINY) return false;
+    if (fabs(coef[2]) < TINY) return false;
 
     double u[2] = {coef[0]/coef[2], coef[1]/coef[2]};
 
@@ -93,7 +93,7 @@ bool intersection_point_exists(
     {
         double min_loc = std::min(p1[dim], p2[dim]);
         double max_loc = std::max(p1[dim], p2[dim]);
-        if (abs(max_loc - min_loc) > TINY)
+        if (fabs(max_loc - min_loc) > TINY)
         {
             if (std::min(u[dim], min_loc) == u[dim]) return false;
             if (std::max(u[dim], max_loc) == u[dim]) return false;
