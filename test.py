@@ -18,6 +18,9 @@ def test_library():
     x_coordinates = [point[0] for point in points]
     y_coordinates = [point[1] for point in points]
 
+    view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
+    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
+
     bounds = [
         [float_info.max, float_info.min],
         [float_info.max, float_info.min],
@@ -34,41 +37,22 @@ def test_library():
         _point = [point[0], point[1]]
         cpp_interface.insert(context, _point, i)
 
-    # verify results without angles
-    for i, point in enumerate(points):
-        _not_used = 0.0
-        index_naive = cpp_interface.find_neighbor_naive(i,
-                                                        len(points),
-                                                        x_coordinates,
-                                                        y_coordinates,
-                                                        False,
-                                                        [_not_used, _not_used],
-                                                        _not_used)
-        index = cpp_interface.find_neighbor(context,
-                                            i,
-                                            False,
-                                            [_not_used, _not_used],
-                                            _not_used)
-        assert index_naive == index
+    # verify results without and with angles
+    for use_angles in [False, True]:
+        for i, point in enumerate(points):
+            index_naive = cpp_interface.find_neighbor_naive(i,
+                                                            len(points),
+                                                            x_coordinates,
+                                                            y_coordinates,
+                                                            use_angles,
+                                                            [view_vectors[i][0], view_vectors[i][1]],
+                                                            view_angles[i])
+            index = cpp_interface.find_neighbor(context,
+                                                i,
+                                                use_angles,
+                                                [view_vectors[i][0], view_vectors[i][1]],
+                                                view_angles[i])
 
-    view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
-    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
-
-    # verify results with angles
-    for i, point in enumerate(points):
-        index_naive = cpp_interface.find_neighbor_naive(i,
-                                                        len(points),
-                                                        x_coordinates,
-                                                        y_coordinates,
-                                                        True,
-                                                        [view_vectors[i][0], view_vectors[i][1]],
-                                                        view_angles[i])
-        index = cpp_interface.find_neighbor(context,
-                                            i,
-                                            True,
-                                            [view_vectors[i][0], view_vectors[i][1]],
-                                            view_angles[i])
-
-        assert index_naive == index
+            assert index_naive == index
 
     cpp_interface.free_context(context)
