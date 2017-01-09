@@ -16,15 +16,12 @@ struct node
 class btree
 {
     public:
-        btree();
+        btree(const int num_points, const double in_bounds[2][2]);
         ~btree();
-
-        void set_bounds(const double in_bounds[2][2]);
 
         void insert(const double coordinates[2], const int index);
 
         int find_neighbor(
-            const double coordinates[2],
             const int    index,
             const bool   use_angles,
             const double view_vector[2],
@@ -58,6 +55,8 @@ class btree
         node *root;
 
         double bounds[2][2];
+        double *x_coordinates;
+        double *y_coordinates;
 };
 
 #endif /* BTREE_H_INCLUDED */

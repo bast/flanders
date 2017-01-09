@@ -29,8 +29,7 @@ def test_library():
         bounds[1][0] = min(bounds[1][0], point[1])
         bounds[1][1] = max(bounds[1][1], point[1])
 
-    context = cpp_interface.new_context()
-    cpp_interface.set_bounds(context, bounds)
+    context = cpp_interface.new_context(num_points, bounds)
     for i, point in enumerate(points):
         _point = [point[0], point[1]]
         cpp_interface.insert(context, _point, i)
@@ -39,18 +38,17 @@ def test_library():
     for i, point in enumerate(points):
         _not_used = 0.0
         index_naive = cpp_interface.find_neighbor_naive(i,
-                                                             len(points),
-                                                             x_coordinates,
-                                                             y_coordinates,
-                                                             False,
-                                                             [_not_used, _not_used],
-                                                             _not_used)
+                                                        len(points),
+                                                        x_coordinates,
+                                                        y_coordinates,
+                                                        False,
+                                                        [_not_used, _not_used],
+                                                        _not_used)
         index = cpp_interface.find_neighbor(context,
-                                                 [point[0], point[1]],
-                                                 i,
-                                                 False,
-                                                 [_not_used, _not_used],
-                                                 _not_used)
+                                            i,
+                                            False,
+                                            [_not_used, _not_used],
+                                            _not_used)
         assert index_naive == index
 
     view_vectors = [(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) for _ in range(num_points)]
@@ -59,18 +57,17 @@ def test_library():
     # verify results with angles
     for i, point in enumerate(points):
         index_naive = cpp_interface.find_neighbor_naive(i,
-                                                             len(points),
-                                                             x_coordinates,
-                                                             y_coordinates,
-                                                             True,
-                                                             [view_vectors[i][0], view_vectors[i][1]],
-                                                             view_angles[i])
+                                                        len(points),
+                                                        x_coordinates,
+                                                        y_coordinates,
+                                                        True,
+                                                        [view_vectors[i][0], view_vectors[i][1]],
+                                                        view_angles[i])
         index = cpp_interface.find_neighbor(context,
-                                                 [point[0], point[1]],
-                                                 i,
-                                                 True,
-                                                 [view_vectors[i][0], view_vectors[i][1]],
-                                                 view_angles[i])
+                                            i,
+                                            True,
+                                            [view_vectors[i][0], view_vectors[i][1]],
+                                            view_angles[i])
 
         assert index_naive == index
 

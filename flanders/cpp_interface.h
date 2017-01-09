@@ -27,16 +27,13 @@ struct context_s;
 typedef struct context_s context_t;
 
 CPP_INTERFACE_API
-context_t *new_context();
+context_t *new_context(
+    const int    num_points,
+    const double bounds[2][2]
+    );
 
 CPP_INTERFACE_API
 void free_context(context_t *context);
-
-CPP_INTERFACE_API
-void set_bounds(
-    context_t *context,
-    const double bounds[2][2]
-    );
 
 CPP_INTERFACE_API
 void insert(
@@ -48,7 +45,6 @@ void insert(
 CPP_INTERFACE_API
 int find_neighbor(
     const context_t *context,
-    const double coordinates[2],
     const int    index,
     const bool   use_angles,
     const double view_vector[2],

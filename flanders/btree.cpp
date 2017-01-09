@@ -13,13 +13,21 @@
 #define AS_CTYPE(Type, Obj) reinterpret_cast<const Type *>(Obj)
 
 
-context_t *new_context()
+context_t *new_context(const int num_points, const double in_bounds[2][2])
 {
-    return AS_TYPE(context_t, new btree());
+    return AS_TYPE(context_t, new btree(num_points, in_bounds));
 }
-btree::btree()
+btree::btree(const int num_points, const double in_bounds[2][2])
 {
     root = NULL;
+
+    x_coordinates = new double[num_points];
+    y_coordinates = new double[num_points];
+
+    bounds[0][0] = in_bounds[0][0];
+    bounds[0][1] = in_bounds[0][1];
+    bounds[1][0] = in_bounds[1][0];
+    bounds[1][1] = in_bounds[1][1];
 }
 
 
@@ -31,23 +39,8 @@ void free_context(context_t *context)
 btree::~btree()
 {
     destroy_tree();
-}
-
-
-CPP_INTERFACE_API
-void set_bounds(
-    context_t *context,
-    const double bounds[2][2]
-    )
-{
-    return AS_TYPE(btree, context)->set_bounds(bounds);
-}
-void btree::set_bounds(const double in_bounds[2][2])
-{
-    bounds[0][0] = in_bounds[0][0];
-    bounds[0][1] = in_bounds[0][1];
-    bounds[1][0] = in_bounds[1][0];
-    bounds[1][1] = in_bounds[1][1];
+    delete[] x_coordinates;
+    delete[] y_coordinates;
 }
 
 
@@ -115,6 +108,8 @@ void btree::insert(const double coordinates[2], const int index)
         root->bounds[1][1] = bounds[1][1];
         root->coordinates[0] = coordinates[0];
         root->coordinates[1] = coordinates[1];
+        x_coordinates[index] = coordinates[0];
+        y_coordinates[index] = coordinates[1];
     }
     else
     {
@@ -173,6 +168,8 @@ void btree::insert(const double coordinates[2], const int index, node *leaf)
         child->coordinates[0] = coordinates[0];
         child->coordinates[1] = coordinates[1];
         leaf->children[position] = child;
+        x_coordinates[index] = coordinates[0];
+        y_coordinates[index] = coordinates[1];
     }
     else
     {
@@ -379,7 +376,6 @@ int btree::traverse(
 CPP_INTERFACE_API
 int find_neighbor(
     const context_t *context,
-    const double coordinates[2],
     const int    index,
     const bool   use_angles,
     const double view_vector[2],
@@ -387,7 +383,6 @@ int find_neighbor(
     )
 {
     return AS_CTYPE(btree, context)->find_neighbor(
-                                         coordinates,
                                          index,
                                          use_angles,
                                          view_vector,
@@ -395,13 +390,13 @@ int find_neighbor(
                                          );
 }
 int btree::find_neighbor(
-    const double coordinates[2],
     const int    index,
     const bool   use_angles,
     const double view_vector[2],
     const double view_angle_deg
     ) const
 {
+    double coordinates[2] = {x_coordinates[index], y_coordinates[index]};
     node *guess = guess_node(coordinates);
 
     double d = std::numeric_limits<double>::max();
