@@ -13,21 +13,29 @@
 #define AS_CTYPE(Type, Obj) reinterpret_cast<const Type *>(Obj)
 
 
-context_t *new_context(const int num_points, const double in_bounds[2][2])
+context_t *new_context(const int num_points, const double x[], const double y[])
 {
-    return AS_TYPE(context_t, new btree(num_points, in_bounds));
+    return AS_TYPE(context_t, new btree(num_points, x, y));
 }
-btree::btree(const int num_points, const double in_bounds[2][2])
+btree::btree(const int num_points, const double x[], const double y[])
 {
     root = NULL;
 
     x_coordinates = new double[num_points];
     y_coordinates = new double[num_points];
 
-    bounds[0][0] = in_bounds[0][0];
-    bounds[0][1] = in_bounds[0][1];
-    bounds[1][0] = in_bounds[1][0];
-    bounds[1][1] = in_bounds[1][1];
+    bounds[0][0] = std::numeric_limits<double>::max();
+    bounds[0][1] = std::numeric_limits<double>::min();
+    bounds[1][0] = std::numeric_limits<double>::max();
+    bounds[1][1] = std::numeric_limits<double>::min();
+
+    for (int i = 0; i < num_points; i++)
+    {
+        bounds[0][0] = std::min(bounds[0][0], x[i]);
+        bounds[0][1] = std::max(bounds[0][1], x[i]);
+        bounds[1][0] = std::min(bounds[1][0], y[i]);
+        bounds[1][1] = std::max(bounds[1][1], y[i]);
+    }
 }
 
 
@@ -85,13 +93,18 @@ node *btree::guess_node(const double coordinates[2], node *leaf) const
 CPP_INTERFACE_API
 void insert(
     context_t *context,
-    const double coordinates[2],
+    const double x,
+    const double y,
     const int    index
     )
 {
-    return AS_TYPE(btree, context)->insert(coordinates, index);
+    return AS_TYPE(btree, context)->insert(x, y, index);
 }
-void btree::insert(const double coordinates[2], const int index)
+void btree::insert(
+    const double x,
+    const double y,
+    const int    index
+    )
 {
     if (root == NULL)
     {
@@ -106,22 +119,27 @@ void btree::insert(const double coordinates[2], const int index)
         root->bounds[0][1] = bounds[0][1];
         root->bounds[1][0] = bounds[1][0];
         root->bounds[1][1] = bounds[1][1];
-        root->coordinates[0] = coordinates[0];
-        root->coordinates[1] = coordinates[1];
-        x_coordinates[index] = coordinates[0];
-        y_coordinates[index] = coordinates[1];
+        root->coordinates[0] = x;
+        root->coordinates[1] = y;
+        x_coordinates[index] = x;
+        y_coordinates[index] = y;
     }
     else
     {
         // root exists, we insert to the root node
-        insert(coordinates, index, root);
+        insert(x, y, index, root);
     }
 }
 
 
-void btree::insert(const double coordinates[2], const int index, node *leaf)
+void btree::insert(
+    const double x,
+    const double y,
+    const int index,
+    node *leaf)
 {
     // figure out whether we insert "left" or "right"
+    double coordinates[2] = {x, y};
     int position = get_position(leaf, coordinates);
 
     if (leaf->children[position] == NULL)
@@ -174,7 +192,7 @@ void btree::insert(const double coordinates[2], const int index, node *leaf)
     else
     {
         // child position is full, delegate insertion to the child node
-        insert(coordinates, index, leaf->children[position]);
+        insert(x, y, index, leaf->children[position]);
     }
 }
 

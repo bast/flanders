@@ -29,7 +29,8 @@ typedef struct context_s context_t;
 CPP_INTERFACE_API
 context_t *new_context(
     const int    num_points,
-    const double bounds[2][2]
+    const double x_coordinates[],
+    const double y_coordinates[]
     );
 
 CPP_INTERFACE_API
@@ -38,7 +39,8 @@ void free_context(context_t *context);
 CPP_INTERFACE_API
 void insert(
     context_t *context,
-    const double coordinates[2],
+    const double x,
+    const double y,
     const int    index
     );
 

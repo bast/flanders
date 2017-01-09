@@ -16,10 +16,14 @@ struct node
 class btree
 {
     public:
-        btree(const int num_points, const double in_bounds[2][2]);
+        btree(const int num_points, const double x[], const double y[]);
         ~btree();
 
-        void insert(const double coordinates[2], const int index);
+        void insert(
+            const double x,
+            const double y,
+            const int index
+            );
 
         int find_neighbor(
             const int    index,
@@ -35,7 +39,12 @@ class btree
         void destroy_tree();
         void destroy_tree(node *leaf);
 
-        void insert(const double coordinates[2], const int index, node *leaf);
+        void insert(
+            const double x,
+            const double y,
+            const int index,
+            node *leaf
+            );
 
         node *guess_node(const double coordinates[2]) const;
         node *guess_node(const double coordinates[2], node *leaf) const;
