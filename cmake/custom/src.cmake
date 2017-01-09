@@ -1,1 +1,1 @@
-add_subdirectory(${PROJECT_SOURCE_DIR}/flanders/cpp)
+add_subdirectory(${PROJECT_SOURCE_DIR}/flanders)
