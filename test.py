@@ -15,13 +15,15 @@ def test_library():
     view_vectors = [(random.uniform(bounds[0], bounds[1]), random.uniform(bounds[0], bounds[1])) for _ in range(num_points)]
     view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
 
+    t0 = time.time()
     context = cpp_interface.new_context(num_points, x_coordinates, y_coordinates)
-
     for i in range(num_points):
         cpp_interface.insert(context,
                              x_coordinates[i],
                              y_coordinates[i],
                              i)
+    if do_timing:
+        print('\ntime used building tree: {0}'.format(time.time() - t0))
 
     # verify results without and with angles
     for use_angles in [False, True]:
@@ -45,6 +47,6 @@ def test_library():
 
         if do_timing:
             print('\nuse_angles: {0}'.format(use_angles))
-            print('time used: {0}'.format(time.time() - t0))
+            print('time used in search: {0}'.format(time.time() - t0))
 
     cpp_interface.free_context(context)
