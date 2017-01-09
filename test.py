@@ -4,11 +4,6 @@ def test_foo():
     import time
     import random
     import cpp_interface
-    from flanders.draw import draw_point
-    from flanders.kd import BinaryTree
-    from flanders.draw import draw_point, draw_dividing_line
-    from flanders.angle import rotate
-    from flanders.normalize import normalize
 
     x0 = -1.0
     x1 = 1.0
@@ -33,30 +28,6 @@ def test_foo():
         bounds[0][1] = max(bounds[0][1], point[0])
         bounds[1][0] = min(bounds[1][0], point[1])
         bounds[1][1] = max(bounds[1][1], point[1])
-
-    tree = BinaryTree(coordinates=points[0],
-                      index=0,
-                      parent=None,
-                      split_dimension=0,
-                      bounds=bounds)
-
-    for i, point in enumerate(points):
-        if i > 0:
-            tree.insert(point, i)
-
-    plot = False
-    if plot:
-        fig, ax = plt.subplots()
-        for i, point in enumerate(points):
-            draw_point(point, 'r{0}'.format(i), ax)
-            vn = view_vectors[i]
-            vn = normalize(vn, 0.2)
-            angle = view_angles[i]
-            for v in [rotate(vn, angle/2.0), rotate(vn, -angle/2.0)]:
-                ax.plot((point[0], point[0] + v[0]), (point[1], point[1] + v[1]), color='blue')
-        draw_dividing_line(tree, ax)
-        plt.show()
-
 
     points_array = []
     for point in points:
