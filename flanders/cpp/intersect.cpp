@@ -1,11 +1,5 @@
-//#include <cstddef>  /* NULL */
-//#include <stdio.h>  /* printf */
-//#include <vector>  /* vector */
 #include <algorithm>
 #include <math.h>
-
-
-//#include "helpers.h"
 
 
 // rotate vector v by angle_deg

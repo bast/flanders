@@ -1,5 +1,5 @@
-#ifndef KD_H_INCLUDED
-#define KD_H_INCLUDED
+#ifndef BTREE_H_INCLUDED
+#define BTREE_H_INCLUDED
 
 #include <vector>  /* vector */
 
@@ -56,4 +56,4 @@ class btree
         double bounds[2][2];
 };
 
-#endif /* KD_H_INCLUDED */
+#endif /* BTREE_H_INCLUDED */

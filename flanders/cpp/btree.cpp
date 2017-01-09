@@ -1,17 +1,16 @@
-#include <cstddef>  /* NULL */
-#include <stdio.h>  /* printf */
-#include <vector>  /* vector */
-#include <algorithm>  /* find */
-#include <math.h>  /* sqrt */
+#include <cstddef>
+#include <stdio.h>
+#include <vector>
+#include <algorithm>
+#include <math.h>
 #include <limits>
 
 
-#include "kd.h"
+#include "btree.h"
 #include "helpers.h"
 #include "intersect.h"
 #include "distance.h"
 #include "cpp_interface.h"
-
 
 
 #define AS_TYPE(Type, Obj) reinterpret_cast<Type *>(Obj)

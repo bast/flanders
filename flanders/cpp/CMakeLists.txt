@@ -5,8 +5,8 @@ add_library(
     cpp_interface.cpp
     helpers.h
     helpers.cpp
-    kd.h
-    kd.cpp
+    btree.h
+    btree.cpp
     helpers.h
     helpers.cpp
     intersect.h
