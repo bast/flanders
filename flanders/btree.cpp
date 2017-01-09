@@ -1,17 +1,12 @@
-#include <cstddef>
 #include <stdio.h>
-#include <vector>
 #include <algorithm>
 #include <math.h>
-#include <limits>
-
 
 #include "btree.h"
 #include "helpers.h"
 #include "intersect.h"
 #include "distance.h"
 #include "cpp_interface.h"
-
 
 #define AS_TYPE(Type, Obj) reinterpret_cast<Type *>(Obj)
 #define AS_CTYPE(Type, Obj) reinterpret_cast<const Type *>(Obj)
