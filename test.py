@@ -32,7 +32,7 @@ def test_library():
         print('\ntime used building tree: {0}'.format(time.time() - t0))
 
     view_vectors = [(random.uniform(bounds[0], bounds[1]), random.uniform(bounds[0], bounds[1])) for _ in range(num_points)]
-    view_angles = [random.uniform(30.0, 80.0) for _ in range(num_points)]
+    view_angles = [random.uniform(10.0, 20.0) for _ in range(num_points)]
 
     # verify results without and with angles
     for use_angles in [False, True]:
