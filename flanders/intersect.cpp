@@ -3,34 +3,32 @@
 
 
 // rotate vector v by angle_deg
-double *rotate(
+void rotate(
     const double v[2],
-    const double angle_deg
+    const double angle_deg,
+          double v_rotated_x,
+          double v_rotated_y
     )
 {
     double angle_rad = angle_deg*M_PI/180.0;
-    double *v_rotated = new double[2];
 
-    v_rotated[0] = v[0]*cos(angle_rad) - v[1]*sin(angle_rad);
-    v_rotated[1] = v[0]*sin(angle_rad) + v[1]*cos(angle_rad);
-
-    return v_rotated;
+    v_rotated_x = v[0]*cos(angle_rad) - v[1]*sin(angle_rad);
+    v_rotated_y = v[0]*sin(angle_rad) + v[1]*cos(angle_rad);
 }
 
 
-// return line-line intersection using homogeneous coordinates
-double *get_intersection(
+// return line-line intersection coefficients using homogeneous coordinates
+void get_intersection(
     const double u1[3],
-    const double u2[3]
+    const double u2[3],
+          double &a,
+          double &b,
+          double &c
     )
 {
-    double *res = new double[3];
-
-    res[0] = u1[1]*u2[2] - u2[1]*u1[2];
-    res[1] = u1[2]*u2[0] - u2[2]*u1[0];
-    res[2] = u1[0]*u2[1] - u2[0]*u1[1];
-
-    return res;
+    a = u1[1]*u2[2] - u2[1]*u1[2];
+    b = u1[2]*u2[0] - u2[2]*u1[0];
+    c = u1[0]*u2[1] - u2[0]*u1[1];
 }
 
 
@@ -41,18 +39,17 @@ template <typename T> int sgn(T val) {
 
 
 // find (a, b, c) in ax + bx + c = 0 from two points on that line
-double *line_coeffs_from_two_points(
+void line_coeffs_from_two_points(
     const double p1[2],
-    const double p2[2]
+    const double p2[2],
+          double &a,
+          double &b,
+          double &c
     )
 {
-    double *res = new double[3];
-
-    res[0] = p1[1] - p2[1];
-    res[1] = p2[0] - p1[0];
-    res[2] = (p1[0] - p2[0])*p1[1] + (p2[1] - p1[1])*p1[0];
-
-    return res;
+    a = p1[1] - p2[1];
+    b = p2[0] - p1[0];
+    c = (p1[0] - p2[0])*p1[1] + (p2[1] - p1[1])*p1[0];
 }
 
 
@@ -69,14 +66,19 @@ bool intersection_point_exists(
     const double TINY = 1.0e-20;
 
     double r2[2] = {r[0] + v[0], r[1] + v[1]};
-    double *ray = line_coeffs_from_two_points(r, r2);
 
-    double *line = line_coeffs_from_two_points(p1, p2);
-    double *coef = get_intersection(line, ray);
+    double ray[3];
+    line_coeffs_from_two_points(r, r2, ray[0], ray[1], ray[2]);
 
-    if (fabs(coef[2]) < TINY) return false;
+    double line[3];
+    line_coeffs_from_two_points(p1, p2, line[0], line[1], line[2]);
 
-    double u[2] = {coef[0]/coef[2], coef[1]/coef[2]};
+    double a, b, c;
+    get_intersection(line, ray, a, b, c);
+
+    if (fabs(c) < TINY) return false;
+
+    double u[2] = {a/c, b/c};
 
     // check whether intersection is in the direction of the ray
     if (sgn(u[0] - r[0]) != sgn(v[0])) return false;
@@ -111,12 +113,13 @@ int get_num_intersections(
     )
 {
     int n = 0;
+    double v_rotated[2];
 
-    double *v_left = rotate(view_vector, -view_angle_deg/2.0);
-    if (intersection_point_exists(p1, p2, view_origin, v_left)) n++;
+    rotate(view_vector, -view_angle_deg/2.0, v_rotated[0], v_rotated[1]);
+    if (intersection_point_exists(p1, p2, view_origin, v_rotated)) n++;
 
-    double *v_right = rotate(view_vector, +view_angle_deg/2.0);
-    if (intersection_point_exists(p1, p2, view_origin, v_right)) n++;
+    rotate(view_vector, +view_angle_deg/2.0, v_rotated[0], v_rotated[1]);
+    if (intersection_point_exists(p1, p2, view_origin, v_rotated)) n++;
 
     return n;
 }
