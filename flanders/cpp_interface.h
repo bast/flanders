@@ -37,14 +37,6 @@ CPP_INTERFACE_API
 void free_context(context_t *context);
 
 CPP_INTERFACE_API
-void insert(
-    context_t *context,
-    const double x,
-    const double y,
-    const int    index
-    );
-
-CPP_INTERFACE_API
 int find_neighbor(
     const context_t *context,
     const int    index,

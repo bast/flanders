@@ -46,6 +46,5 @@ _lib = _get_lib_handle(
 # outward facing API
 new_context = _lib.new_context
 free_context = _lib.free_context
-insert = _lib.insert
 find_neighbor = _lib.find_neighbor
 find_neighbor_naive = _lib.find_neighbor_naive

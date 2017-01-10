@@ -22,11 +22,6 @@ int main()
 
     btree tree(num_points, x, y);
 
-    for (int i = 0; i < num_points; i++)
-    {
-        tree.insert(x[i], y[i], i);
-    }
-
     delete[] x;
     delete[] y;
 

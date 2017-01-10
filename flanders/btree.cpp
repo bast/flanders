@@ -36,6 +36,11 @@ btree::btree(const int num_points, const double x[], const double y[])
         bounds[1][0] = std::min(bounds[1][0], y[i]);
         bounds[1][1] = std::max(bounds[1][1], y[i]);
     }
+
+    for (int i = 0; i < num_points; i++)
+    {
+        insert(x[i], y[i], i);
+    }
 }
 
 
@@ -90,16 +95,6 @@ node *btree::guess_node(const double coordinates[2], node *leaf) const
 }
 
 
-CPP_INTERFACE_API
-void insert(
-    context_t *context,
-    const double x,
-    const double y,
-    const int    index
-    )
-{
-    return AS_TYPE(btree, context)->insert(x, y, index);
-}
 void btree::insert(
     const double x,
     const double y,

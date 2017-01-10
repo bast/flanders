@@ -19,12 +19,6 @@ class btree
         btree(const int num_points, const double x[], const double y[]);
         ~btree();
 
-        void insert(
-            const double x,
-            const double y,
-            const int index
-            );
-
         int find_neighbor(
             const int    index,
             const bool   use_angles,
@@ -39,6 +33,11 @@ class btree
         void destroy_tree();
         void destroy_tree(node *leaf);
 
+        void insert(
+            const double x,
+            const double y,
+            const int index
+            );
         void insert(
             const double x,
             const double y,
