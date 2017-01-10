@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import glob
 
 
 def extract_data(file_name):
@@ -18,8 +19,7 @@ def add_plot(file_name, style):
     plt.plot(xs, ys, style)
 
 
-add_plot('test1.txt', 'ro-')
-add_plot('test2.txt', 'go-')
-add_plot('test3.txt', 'bo-')
+for f in glob.glob('data/*.txt'):
+    add_plot(f, 'r-')
 
 plt.show()
