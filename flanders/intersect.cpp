@@ -6,8 +6,8 @@
 void rotate(
     const double v[2],
     const double angle_deg,
-          double v_rotated_x,
-          double v_rotated_y
+          double &v_rotated_x,
+          double &v_rotated_y
     )
 {
     double angle_rad = angle_deg*M_PI/180.0;
