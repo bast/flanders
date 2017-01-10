@@ -15,4 +15,14 @@ add_library(
     distance.cpp
     )
 
+add_executable(
+    test.x
+    test.cpp
+    )
+
+target_link_libraries(
+    test.x
+    cpp_interface
+    )
+
 install(TARGETS cpp_interface LIBRARY DESTINATION lib)
