@@ -26,20 +26,36 @@ def get_normal_vectors(points):
         i_before = i - 1
         i_after = (i + 1)%num_points
         vector = (points[i_after][1] - points[i_before][1], -(points[i_after][0] - points[i_before][0]))
-        vector = normalize(vector, 5000.0)
+        vector = normalize(vector, 1.0)
         vectors.append(vector)
     return vectors
 
 
 def add_plot(file_name, style):
     points = extract_data(file_name)
-    if len(points) > 3:  # for the moment cannot handle linear islands
-        ax = plt.axes()
+
+    # we remove the last point since it repeats the first
+    # we assume clock-wise closed loops
+    points.pop()
+
+    ax = plt.axes()
+    if len(points) > 2:
         vectors = get_normal_vectors(points)
-        for i in range(len(points)):
-            ax.arrow(points[i][0], points[i][1], vectors[i][0], vectors[i][1], head_width=0.1, head_length=0.1, fc='k', ec='k')
-        (xs, ys) = zip(*points)
-        plt.plot(xs, ys, style)
+    else:
+        # this is a "linear" island consisting of two points
+        vectors = []
+        vector = (points[1][0] - points[0][0], points[1][1] - points[0][1])
+        vectors.append(normalize(vector, -1.0))
+        vectors.append(normalize(vector, 1.0))
+    for i in range(len(points)):
+        ax.arrow(points[i][0], points[i][1], vectors[i][0], vectors[i][1], head_width=0.1, head_length=0.1, fc='k', ec='k')
+
+    (xs, ys) = zip(*points)
+
+    xs = list(xs) + [xs[0]]  # we do this to close the loop in the plot
+    ys = list(ys) + [ys[0]]
+
+    plt.plot(xs, ys, style)
 
 
 for f in glob.glob('*.txt'):
@@ -47,6 +63,6 @@ for f in glob.glob('*.txt'):
 
 
 #axes = plt.gca()
-#axes.set_xlim([-20.0, 0.0])
-#axes.set_ylim([40.0, 60.0])
+#axes.set_xlim([-15.0, 0.0])
+#axes.set_ylim([45.0, 60.0])
 plt.show()
