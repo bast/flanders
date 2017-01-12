@@ -3,7 +3,6 @@ def test_library():
     import random
     import flanders
     import numpy as np
-    from cffi import FFI
 
     bounds = [-1.0, 1.0]
     num_points = 1000
@@ -19,15 +18,8 @@ def test_library():
         x_coordinates[i] = random.uniform(bounds[0], bounds[1])
         y_coordinates[i] = random.uniform(bounds[0], bounds[1])
 
-    # cast a pointer which points to the numpy array data
-    # we work with numpy because tree initialization with normal lists segfault
-    # for lists longer than ca. 0.5 million points
-    ffi = FFI()
-    x_coordinates_p = ffi.cast("double *", x_coordinates.ctypes.data)
-    y_coordinates_p = ffi.cast("double *", y_coordinates.ctypes.data)
-
     t0 = time.time()
-    context = flanders.new_context(num_points, x_coordinates_p, y_coordinates_p)
+    context = flanders.new_context(num_points, x_coordinates, y_coordinates)
     if do_timing:
         print('\ntime used building tree: {0}'.format(time.time() - t0))
 
@@ -47,8 +39,8 @@ def test_library():
             if not do_timing:
                 index_naive = flanders.find_neighbor_naive(i,
                                                            num_points,
-                                                           x_coordinates_p,
-                                                           y_coordinates_p,
+                                                           x_coordinates,
+                                                           y_coordinates,
                                                            use_angles,
                                                            [view_vectors[i][0], view_vectors[i][1]],
                                                            view_angles[i])
