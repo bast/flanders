@@ -21,7 +21,7 @@ script:
   - cd build
   - make
   - cd ..
-  - PROJECT_BUILD_DIR=$PWD/build PROJECT_INCLUDE_DIR=$PWD/flanders PYTHONPATH=$PWD/flanders py.test -s -vv test.py
+  - PROJECT_BUILD_DIR=$PWD/build PROJECT_INCLUDE_DIR=$PWD/src PYTHONPATH=$PWD/src py.test -s -vv test.py
 
 notifications:
   email: false
