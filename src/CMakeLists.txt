@@ -1,7 +1,7 @@
 add_library(
-    cpp_interface
+    flanders
     SHARED
-    cpp_interface.h
+    flanders.h
     naive.cpp
     helpers.h
     helpers.cpp
@@ -22,7 +22,7 @@ add_executable(
 
 target_link_libraries(
     test.x
-    cpp_interface
+    flanders
     )
 
-install(TARGETS cpp_interface LIBRARY DESTINATION lib)
+install(TARGETS flanders LIBRARY DESTINATION lib)

@@ -7,7 +7,7 @@
 #include "helpers.h"
 #include "intersect.h"
 #include "distance.h"
-#include "cpp_interface.h"
+#include "flanders.h"
 
 #define AS_TYPE(Type, Obj) reinterpret_cast<Type *>(Obj)
 #define AS_CTYPE(Type, Obj) reinterpret_cast<const Type *>(Obj)

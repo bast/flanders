@@ -1,7 +1,7 @@
 def test_library():
     import time
     import random
-    import cpp_interface
+    import flanders
     import numpy as np
     from cffi import FFI
 
@@ -27,7 +27,7 @@ def test_library():
     y_coordinates_p = ffi.cast("double *", y_coordinates.ctypes.data)
 
     t0 = time.time()
-    context = cpp_interface.new_context(num_points, x_coordinates_p, y_coordinates_p)
+    context = flanders.new_context(num_points, x_coordinates_p, y_coordinates_p)
     if do_timing:
         print('\ntime used building tree: {0}'.format(time.time() - t0))
 
@@ -38,24 +38,24 @@ def test_library():
     for use_angles in [False, True]:
         t0 = time.time()
         for i in range(num_points):
-            index = cpp_interface.find_neighbor(context,
-                                                i,
-                                                use_angles,
-                                                [view_vectors[i][0], view_vectors[i][1]],
-                                                view_angles[i])
+            index = flanders.find_neighbor(context,
+                                           i,
+                                           use_angles,
+                                           [view_vectors[i][0], view_vectors[i][1]],
+                                           view_angles[i])
 
             if not do_timing:
-                index_naive = cpp_interface.find_neighbor_naive(i,
-                                                                num_points,
-                                                                x_coordinates_p,
-                                                                y_coordinates_p,
-                                                                use_angles,
-                                                                [view_vectors[i][0], view_vectors[i][1]],
-                                                                view_angles[i])
+                index_naive = flanders.find_neighbor_naive(i,
+                                                           num_points,
+                                                           x_coordinates_p,
+                                                           y_coordinates_p,
+                                                           use_angles,
+                                                           [view_vectors[i][0], view_vectors[i][1]],
+                                                           view_angles[i])
                 assert index_naive == index
 
         if do_timing:
             print('\nuse_angles: {0}'.format(use_angles))
             print('time used in search: {0}'.format(time.time() - t0))
 
-    cpp_interface.free_context(context)
+    flanders.free_context(context)

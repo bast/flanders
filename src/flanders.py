@@ -36,8 +36,8 @@ _include_dir = _get_env('PROJECT_INCLUDE_DIR')
 
 _lib = _get_lib_handle(
     ['-DCPP_INTERFACE_API=', '-DCPP_INTERFACE_NOINCLUDE'],
-    'cpp_interface.h',
-    'cpp_interface',
+    'flanders.h',
+    'flanders',
     _build_dir,
     _include_dir
 )
