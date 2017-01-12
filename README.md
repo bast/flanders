@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/uit-no/flanders.svg?branch=master)](https://travis-ci.org/uit-no/flanders/builds)
+[![Build Status](https://travis-ci.org/bast/flanders.svg?branch=master)](https://travis-ci.org/bast/flanders/builds)
 [![License](https://img.shields.io/badge/license-%20MPL--v2.0-blue.svg)](../master/LICENSE)
 
 # Flanders: Fast 2D nearest neighbor search with an angle
