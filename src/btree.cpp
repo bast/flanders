@@ -25,9 +25,9 @@ btree::btree(const int num_points, const double x[], const double y[])
     y_coordinates = new double[num_points];
 
     bounds[0][0] = std::numeric_limits<double>::max();
-    bounds[0][1] = std::numeric_limits<double>::min();
-    bounds[1][0] = std::numeric_limits<double>::max();
-    bounds[1][1] = std::numeric_limits<double>::min();
+    bounds[0][1] = -bounds[0][0];
+    bounds[1][0] =  bounds[0][0];
+    bounds[1][1] = -bounds[0][0];
 
     for (int i = 0; i < num_points; i++)
     {
