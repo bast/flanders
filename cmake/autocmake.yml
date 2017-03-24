@@ -18,4 +18,4 @@ modules:
   - source:
     - '%(url_root)modules/safeguards.cmake'
     - '%(url_root)modules/default_build_paths.cmake'
-    - '%(url_root)modules/src.cmake'
+    - 'custom/src.cmake'

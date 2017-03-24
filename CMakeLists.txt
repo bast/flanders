@@ -16,6 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # directories which hold included cmake modules
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/custom)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/downloaded)
 
 # included cmake modules
@@ -24,5 +25,4 @@ include(autocmake_GNU.CXX)
 include(autocmake_Intel.CXX)
 include(autocmake_safeguards)
 include(autocmake_default_build_paths)
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/flanders)
+include(src)
