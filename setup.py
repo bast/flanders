@@ -8,7 +8,7 @@ import setuptools.command.install as _install
 import os
 import sys
 from distutils.sysconfig import get_python_lib
-import shutil
+from shutil import copy2
 
 
 def run_cmake():
@@ -55,7 +55,7 @@ class install(_install.install):
 
         for f in [os.path.join('build', 'lib', 'libflanders.so'),
                   os.path.join('flanders', 'flanders.h')]:
-            shutil.copy2(os.path.join(cwd, f), _target_path)
+            copy2(os.path.join(cwd, f), _target_path)
 
 
 setup(name='flanders',
