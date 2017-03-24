@@ -50,9 +50,7 @@ class build(_build.build):
 class install(_install.install):
     def run(self):
         cwd = os.getcwd()
-
         _install.install.run(self)
-
         _target_path = os.path.join(get_python_lib(), 'flanders')
 
         for f in [os.path.join('build', 'lib', 'libflanders.so'),
