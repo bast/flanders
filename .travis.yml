@@ -5,23 +5,40 @@ sudo: false
 matrix:
   include:
     - os: linux
-      compiler: gcc
-      addons: &gcc49
+      python: 2.7
+      addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++']
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++
       env:
-        - CXX='g++'
+        - CC=gcc
+        - CXX=g++
+    - os: linux
+      python: 3.6
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - clang
+      env:
+        - CC=clang
+        - CXX=clang
 
 install:
   - pip install -r requirements.txt
 
 script:
-  - ./setup
+  - ./setup --cxx=$CXX
   - cd build
   - make
   - cd ..
   - FLANDERS_BUILD_DIR=$PWD/build PYTHONPATH=$PWD/src py.test -s -vv test.py
+
+after_success:
+  - pip install git+https://github.com/bast/flanders.git
 
 notifications:
   email: false

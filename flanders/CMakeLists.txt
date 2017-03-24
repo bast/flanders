@@ -15,5 +15,11 @@ add_library(
     distance.cpp
     )
 
+# clang seems to need this
+target_link_libraries(
+    flanders
+    stdc++
+    )
+
 install(TARGETS flanders LIBRARY DESTINATION "lib")
 install(FILES flanders.h DESTINATION "include")
