@@ -1,12 +1,10 @@
 def test_library():
-    import time
     import random
     import flanders
     import numpy as np
 
     bounds = [-1.0, 1.0]
     num_points = 1000
-    do_timing = False
 
     x_coordinates = np.zeros(num_points, dtype=np.float64)
     y_coordinates = np.zeros(num_points, dtype=np.float64)
@@ -18,17 +16,13 @@ def test_library():
         x_coordinates[i] = random.uniform(bounds[0], bounds[1])
         y_coordinates[i] = random.uniform(bounds[0], bounds[1])
 
-    t0 = time.time()
     context = flanders.new_context(num_points, x_coordinates, y_coordinates)
-    if do_timing:
-        print('\ntime used building tree: {0}'.format(time.time() - t0))
 
     view_vectors = [(random.uniform(bounds[0], bounds[1]), random.uniform(bounds[0], bounds[1])) for _ in range(num_points)]
     view_angles = [random.uniform(10.0, 20.0) for _ in range(num_points)]
 
     # verify results without and with angles
     for use_angles in [False, True]:
-        t0 = time.time()
         for i in range(num_points):
             index = flanders.find_neighbor(context,
                                            i,
@@ -36,18 +30,13 @@ def test_library():
                                            [view_vectors[i][0], view_vectors[i][1]],
                                            view_angles[i])
 
-            if not do_timing:
-                index_naive = flanders.find_neighbor_naive(i,
-                                                           num_points,
-                                                           x_coordinates,
-                                                           y_coordinates,
-                                                           use_angles,
-                                                           [view_vectors[i][0], view_vectors[i][1]],
-                                                           view_angles[i])
-                assert index_naive == index
-
-        if do_timing:
-            print('\nuse_angles: {0}'.format(use_angles))
-            print('time used in search: {0}'.format(time.time() - t0))
+            index_naive = flanders.find_neighbor_naive(i,
+                                                       num_points,
+                                                       x_coordinates,
+                                                       y_coordinates,
+                                                       use_angles,
+                                                       [view_vectors[i][0], view_vectors[i][1]],
+                                                       view_angles[i])
+            assert index_naive == index
 
     flanders.free_context(context)
