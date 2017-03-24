@@ -15,4 +15,5 @@ add_library(
     distance.cpp
     )
 
-install(TARGETS flanders LIBRARY DESTINATION lib)
+install(TARGETS flanders LIBRARY DESTINATION "lib")
+install(FILES flanders.h DESTINATION "include")
