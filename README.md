@@ -48,7 +48,14 @@ Under heavy development.
 Nothing is stable.
 
 
-## Installation
+## Installation using pip
+
+```shell
+pip install git+https://github.com/bast/flanders.git
+```
+
+
+## Installation from sources
 
 ```shell
 virtualenv venv

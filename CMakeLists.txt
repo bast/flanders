@@ -24,4 +24,5 @@ include(autocmake_GNU.CXX)
 include(autocmake_Intel.CXX)
 include(autocmake_safeguards)
 include(autocmake_default_build_paths)
-include(autocmake_src)
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/flanders)
