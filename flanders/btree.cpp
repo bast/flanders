@@ -1,17 +1,16 @@
-#include <stdio.h>
 #include <algorithm>
 #include <limits>
 #include <math.h>
+#include <stdio.h>
 
 #include "btree.h"
-#include "helpers.h"
-#include "intersect.h"
 #include "distance.h"
 #include "flanders.h"
+#include "helpers.h"
+#include "intersect.h"
 
 #define AS_TYPE(Type, Obj) reinterpret_cast<Type *>(Obj)
 #define AS_CTYPE(Type, Obj) reinterpret_cast<const Type *>(Obj)
-
 
 context_t *new_context(const int num_points, const double x[], const double y[])
 {
@@ -26,7 +25,7 @@ btree::btree(const int num_points, const double x[], const double y[])
 
     bounds[0][0] = std::numeric_limits<double>::max();
     bounds[0][1] = -bounds[0][0];
-    bounds[1][0] =  bounds[0][0];
+    bounds[1][0] = bounds[0][0];
     bounds[1][1] = -bounds[0][0];
 
     for (int i = 0; i < num_points; i++)
@@ -43,10 +42,10 @@ btree::btree(const int num_points, const double x[], const double y[])
     }
 }
 
-
 void free_context(context_t *context)
 {
-    if (!context) return;
+    if (!context)
+        return;
     delete AS_TYPE(btree, context);
 }
 btree::~btree()
@@ -56,12 +55,7 @@ btree::~btree()
     delete[] y_coordinates;
 }
 
-
-void btree::destroy_tree()
-{
-    destroy_tree(root);
-}
-
+void btree::destroy_tree() { destroy_tree(root); }
 
 void btree::destroy_tree(node *leaf)
 {
@@ -73,12 +67,10 @@ void btree::destroy_tree(node *leaf)
     }
 }
 
-
 node *btree::guess_node(const double coordinates[2]) const
 {
     return guess_node(coordinates, root);
 }
-
 
 node *btree::guess_node(const double coordinates[2], node *leaf) const
 {
@@ -94,12 +86,7 @@ node *btree::guess_node(const double coordinates[2], node *leaf) const
     }
 }
 
-
-void btree::insert(
-    const double x,
-    const double y,
-    const int    index
-    )
+void btree::insert(const double x, const double y, const int index)
 {
     if (root == NULL)
     {
@@ -126,12 +113,7 @@ void btree::insert(
     }
 }
 
-
-void btree::insert(
-    const double x,
-    const double y,
-    const int index,
-    node *leaf)
+void btree::insert(const double x, const double y, const int index, node *leaf)
 {
     // figure out whether we insert "left" or "right"
     double coordinates[2] = {x, y};
@@ -160,11 +142,13 @@ void btree::insert(
         new_bounds[1][1] = leaf->bounds[1][1];
         if (position == 0)
         {
-            new_bounds[leaf->split_dimension][1] = leaf->coordinates[leaf->split_dimension];
+            new_bounds[leaf->split_dimension][1] =
+                leaf->coordinates[leaf->split_dimension];
         }
         else
         {
-            new_bounds[leaf->split_dimension][0] = leaf->coordinates[leaf->split_dimension];
+            new_bounds[leaf->split_dimension][0] =
+                leaf->coordinates[leaf->split_dimension];
         }
 
         // create the child node
@@ -191,26 +175,25 @@ void btree::insert(
     }
 }
 
-
 // Returns index of nearest point to points[ref_index].
 // By default, only the distance counts. If angle and view vector
 // are both not None, they are taken into account.
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
-int btree::traverse(
-    node *leaf,
-    const int ref_index,
-    const double ref_point[2],
-    const int index,
-          double &distance,
-          std::vector<int> &indices_traversed,
-    const bool use_angles,
-    const double view_vector[2],
-    const double view_angle_deg
-    ) const
+int btree::traverse(node *leaf,
+                    const int ref_index,
+                    const double ref_point[2],
+                    const int index,
+                    double &distance,
+                    std::vector<int> &indices_traversed,
+                    const bool use_angles,
+                    const double view_vector[2],
+                    const double view_angle_deg) const
 {
     int i = leaf->index;
-    bool this_node_already_verified = (std::find(indices_traversed.begin(), indices_traversed.end(), i) != indices_traversed.end());
+    bool this_node_already_verified =
+        (std::find(indices_traversed.begin(), indices_traversed.end(), i) !=
+         indices_traversed.end());
 
     if (this_node_already_verified)
     {
@@ -234,11 +217,7 @@ int btree::traverse(
         if (use_angles)
         {
             is_in_view = point_within_view_angle(
-                             leaf->coordinates,
-                             ref_point,
-                             view_vector,
-                             view_angle_deg
-                             );
+                leaf->coordinates, ref_point, view_vector, view_angle_deg);
         }
         if (is_in_view)
         {
@@ -257,11 +236,12 @@ int btree::traverse(
         node *child = leaf->children[child_index];
         if (child != NULL)
         {
-            double child_to_split = signed_distance_to_split(leaf, child->coordinates);
+            double child_to_split =
+                signed_distance_to_split(leaf, child->coordinates);
 
             bool consider_child = false;
 
-            if (ref_to_split*child_to_split > 0.0)
+            if (ref_to_split * child_to_split > 0.0)
             {
                 // child is on the same side as the reference point
                 consider_child = true;
@@ -283,15 +263,20 @@ int btree::traverse(
                             // reference point is the node
                             // for simplicity we will consider both children
                             // TODO here a shortcut is possible
-                            // for this check the sign of the vector component perpendicular to
-                            // the dividing split, if both ray vector components have same sign and opposite
-                            // sign that the child, then one could skip the child
+                            // for this check the sign of the vector component
+                            // perpendicular to
+                            // the dividing split, if both ray vector components
+                            // have same sign and opposite
+                            // sign that the child, then one could skip the
+                            // child
                             consider_child = true;
                         }
                         else
                         {
-                            // if at least one ray intersects the bounds, we consider the child
-                            // to check this we go around the four corners clock-wise
+                            // if at least one ray intersects the bounds, we
+                            // consider the child
+                            // to check this we go around the four corners
+                            // clock-wise
                             // starting from bottom left
                             //  corner2 -----.  corner1 --corner2
                             //    |          |    |          |
@@ -316,29 +301,31 @@ int btree::traverse(
                                 int num_intersections;
                                 if (not consider_child)
                                 {
-                                    num_intersections = get_num_intersections(
-                                                            p1,
-                                                            p2,
-                                                            ref_point,
-                                                            view_vector,
-                                                            view_angle_deg
-                                                            );
+                                    num_intersections =
+                                        get_num_intersections(p1,
+                                                              p2,
+                                                              ref_point,
+                                                              view_vector,
+                                                              view_angle_deg);
                                 }
                                 consider_child = (num_intersections > 0);
                             }
 
-                            // if there is no intersection, it is possible that the ray covers entire
-                            // area, in this case all boundary points are in the view cone and
-                            // it is enough to check whether one of the boundary points is in view
+                            // if there is no intersection, it is possible that
+                            // the ray covers entire
+                            // area, in this case all boundary points are in the
+                            // view cone and
+                            // it is enough to check whether one of the boundary
+                            // points is in view
                             if (not consider_child)
                             {
-                                double corner_point[2] = {leaf->bounds[0][0], leaf->bounds[1][0]};
-                                consider_child = point_within_view_angle(
-                                                     corner_point,
-                                                     ref_point,
-                                                     view_vector,
-                                                     view_angle_deg
-                                                     );
+                                double corner_point[2] = {leaf->bounds[0][0],
+                                                          leaf->bounds[1][0]};
+                                consider_child =
+                                    point_within_view_angle(corner_point,
+                                                            ref_point,
+                                                            view_vector,
+                                                            view_angle_deg);
                             }
                         }
                     }
@@ -346,17 +333,15 @@ int btree::traverse(
             }
             if (consider_child)
             {
-                new_index = traverse(
-                                child,
-                                ref_index,
-                                ref_point,
-                                new_index,
-                                distance,
-                                indices_traversed,
-                                use_angles,
-                                view_vector,
-                                view_angle_deg
-                                );
+                new_index = traverse(child,
+                                     ref_index,
+                                     ref_point,
+                                     new_index,
+                                     distance,
+                                     indices_traversed,
+                                     use_angles,
+                                     view_vector,
+                                     view_angle_deg);
             }
         }
     }
@@ -371,45 +356,35 @@ int btree::traverse(
         // we have changed both child nodes
         // and we are not yet at the root
         // so we go one level up
-        return traverse(
-                   leaf->parent,
-                   ref_index,
-                   ref_point,
-                   new_index,
-                   distance,
-                   indices_traversed,
-                   use_angles,
-                   view_vector,
-                   view_angle_deg
-                   );
+        return traverse(leaf->parent,
+                        ref_index,
+                        ref_point,
+                        new_index,
+                        distance,
+                        indices_traversed,
+                        use_angles,
+                        view_vector,
+                        view_angle_deg);
     }
 }
 
-
 CPP_INTERFACE_API
-int find_neighbor(
-    const context_t *context,
-    const int    ref_index,
-    const bool   use_angles,
-    const double view_vector[2],
-    const double view_angle_deg
-    )
+int find_neighbor(const context_t *context,
+                  const int ref_index,
+                  const bool use_angles,
+                  const double view_vector[2],
+                  const double view_angle_deg)
 {
-    return AS_CTYPE(btree, context)->find_neighbor(
-                                         ref_index,
-                                         use_angles,
-                                         view_vector,
-                                         view_angle_deg
-                                         );
+    return AS_CTYPE(btree, context)
+        ->find_neighbor(ref_index, use_angles, view_vector, view_angle_deg);
 }
-int btree::find_neighbor(
-    const int    ref_index,
-    const bool   use_angles,
-    const double view_vector[2],
-    const double view_angle_deg
-    ) const
+int btree::find_neighbor(const int ref_index,
+                         const bool use_angles,
+                         const double view_vector[2],
+                         const double view_angle_deg) const
 {
-    double coordinates[2] = {x_coordinates[ref_index], y_coordinates[ref_index]};
+    double coordinates[2] = {x_coordinates[ref_index],
+                             y_coordinates[ref_index]};
     node *guess = guess_node(coordinates);
 
     double d = std::numeric_limits<double>::max();
@@ -419,17 +394,15 @@ int btree::find_neighbor(
 
     int index_best = -1;
 
-    index_best = traverse(
-                 guess,
-                 ref_index,
-                 coordinates,
-                 index_best,
-                 d,
-                 indices_traversed,
-                 use_angles,
-                 view_vector,
-                 view_angle_deg
-                 );
+    index_best = traverse(guess,
+                          ref_index,
+                          coordinates,
+                          index_best,
+                          d,
+                          indices_traversed,
+                          use_angles,
+                          view_vector,
+                          view_angle_deg);
 
     return index_best;
 }
