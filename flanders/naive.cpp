@@ -29,6 +29,7 @@ int find_neighbor_naive(
         if (i != ref_index)
         {
             double point[2] = {x_coordinates[i], y_coordinates[i]};
+
             bool is_in_view = true;
             if (use_angles)
             {
@@ -39,6 +40,7 @@ int find_neighbor_naive(
                                  view_angle_deg
                                  );
             }
+
             if (is_in_view)
             {
                 double d_loc = get_distance(
