@@ -45,12 +45,12 @@ find_neighbor = _lib.find_neighbor
 
 
 def search_neighbor_naive(ref_index,
-                        num_points,
-                        x_coordinates,
-                        y_coordinates,
-                        use_angles,
-                        view_vector,
-                        view_angle_deg):
+                          num_points,
+                          x_coordinates,
+                          y_coordinates,
+                          use_angles,
+                          view_vector,
+                          view_angle_deg):
 
     # cast a pointer which points to the numpy array data
     # we work with numpy because tree initialization with normal lists segfault
@@ -59,10 +59,13 @@ def search_neighbor_naive(ref_index,
     x_coordinates_p = ffi.cast("double *", x_coordinates.ctypes.data)
     y_coordinates_p = ffi.cast("double *", y_coordinates.ctypes.data)
 
-    return _lib.search_neighbor_naive(ref_index,
-                                    num_points,
-                                    x_coordinates_p,
-                                    y_coordinates_p,
-                                    use_angles,
-                                    view_vector,
-                                    view_angle_deg)
+    return _lib.search_neighbor_naive(True,
+                                      ref_index,
+                                      x_coordinates[ref_index],
+                                      y_coordinates[ref_index],
+                                      num_points,
+                                      x_coordinates_p,
+                                      y_coordinates_p,
+                                      use_angles,
+                                      view_vector,
+                                      view_angle_deg)

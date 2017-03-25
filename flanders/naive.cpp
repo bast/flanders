@@ -8,7 +8,10 @@
 // then the view vector and angle are taken into account.
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
-int search_neighbor_naive(const int ref_index,
+int search_neighbor_naive(const bool skip_ref_index,
+                          const int ref_index,  // not used if skip_ref_index is false
+                          const double x,
+                          const double y,
                           const int num_points,
                           const double x_coordinates[],
                           const double y_coordinates[],
@@ -16,14 +19,14 @@ int search_neighbor_naive(const int ref_index,
                           const double view_vector[2],
                           const double view_angle_deg)
 {
-    double ref_point[2] = {x_coordinates[ref_index], y_coordinates[ref_index]};
+    double ref_point[2] = {x, y};
 
     double d = std::numeric_limits<double>::max();
     int index_found = -1;
 
     for (int i = 0; i < num_points; i++)
     {
-        if (i == ref_index)
+        if (skip_ref_index and (i == ref_index))
             continue;
 
         double point[2] = {x_coordinates[i], y_coordinates[i]};
