@@ -8,13 +8,13 @@
 // then the view vector and angle are taken into account.
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
-int find_neighbor_naive(const int ref_index,
-                        const int num_points,
-                        const double x_coordinates[],
-                        const double y_coordinates[],
-                        const bool use_angles,
-                        const double view_vector[2],
-                        const double view_angle_deg)
+int search_neighbor_naive(const int ref_index,
+                          const int num_points,
+                          const double x_coordinates[],
+                          const double y_coordinates[],
+                          const bool use_angles,
+                          const double view_vector[2],
+                          const double view_angle_deg)
 {
     double ref_point[2] = {x_coordinates[ref_index], y_coordinates[ref_index]};
 
@@ -23,7 +23,8 @@ int find_neighbor_naive(const int ref_index,
 
     for (int i = 0; i < num_points; i++)
     {
-        if (i == ref_index) continue;
+        if (i == ref_index)
+            continue;
 
         double point[2] = {x_coordinates[i], y_coordinates[i]};
 

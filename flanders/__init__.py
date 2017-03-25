@@ -44,7 +44,7 @@ free_context = _lib.free_context
 find_neighbor = _lib.find_neighbor
 
 
-def find_neighbor_naive(ref_index,
+def search_neighbor_naive(ref_index,
                         num_points,
                         x_coordinates,
                         y_coordinates,
@@ -59,7 +59,7 @@ def find_neighbor_naive(ref_index,
     x_coordinates_p = ffi.cast("double *", x_coordinates.ctypes.data)
     y_coordinates_p = ffi.cast("double *", y_coordinates.ctypes.data)
 
-    return _lib.find_neighbor_naive(ref_index,
+    return _lib.search_neighbor_naive(ref_index,
                                     num_points,
                                     x_coordinates_p,
                                     y_coordinates_p,

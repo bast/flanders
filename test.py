@@ -31,7 +31,7 @@ def test_library():
                                            [view_vectors[i][0], view_vectors[i][1]],
                                            view_angles[i])
 
-            index_naive = flanders.find_neighbor_naive(i,
+            index_naive = flanders.search_neighbor_naive(i,
                                                        num_points,
                                                        x_coordinates,
                                                        y_coordinates,

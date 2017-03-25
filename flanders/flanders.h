@@ -27,34 +27,28 @@ struct context_s;
 typedef struct context_s context_t;
 
 CPP_INTERFACE_API
-context_t *new_context(
-    const int    num_points,
-    const double x_coordinates[],
-    const double y_coordinates[]
-    );
+context_t *new_context(const int num_points,
+                       const double x_coordinates[],
+                       const double y_coordinates[]);
 
 CPP_INTERFACE_API
 void free_context(context_t *context);
 
 CPP_INTERFACE_API
-int find_neighbor(
-    const context_t *context,
-    const int    index,
-    const bool   use_angles,
-    const double view_vector[2],
-    const double view_angle_deg
-    );
+int find_neighbor(const context_t *context,
+                  const int index,
+                  const bool use_angles,
+                  const double view_vector[2],
+                  const double view_angle_deg);
 
 CPP_INTERFACE_API
-int find_neighbor_naive(
-    const int    ref_index,
-    const int    num_points,
-    const double x_coordinates[],
-    const double y_coordinates[],
-    const bool   use_angles,
-    const double view_vector[2],
-    const double view_angle_deg
-    );
+int search_neighbor_naive(const int ref_index,
+                          const int num_points,
+                          const double x_coordinates[],
+                          const double y_coordinates[],
+                          const bool use_angles,
+                          const double view_vector[2],
+                          const double view_angle_deg);
 
 #ifdef __cplusplus
 }
