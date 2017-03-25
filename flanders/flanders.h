@@ -42,17 +42,14 @@ int search_neighbor(const context_t *context,
                     const double view_angle_deg);
 
 CPP_INTERFACE_API
-int search_neighbor_naive(
-    const bool skip_ref_index,
-    const int ref_index, // not used if skip_ref_index is false
-    const double x,
-    const double y,
-    const int num_points,
-    const double x_coordinates[],
-    const double y_coordinates[],
-    const bool use_angles,
-    const double view_vector[2],
-    const double view_angle_deg);
+int search_neighbor_naive(const context_t *context,
+                          const bool skip_ref_index,
+                          const int ref_index,
+                          const double x,
+                          const double y,
+                          const bool use_angles,
+                          const double view_vector[2],
+                          const double view_angle_deg);
 
 #ifdef __cplusplus
 }

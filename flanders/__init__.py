@@ -44,28 +44,18 @@ free_context = _lib.free_context
 search_neighbor = _lib.search_neighbor
 
 
-def search_neighbor_naive(ref_index,
-                          num_points,
-                          x_coordinates,
-                          y_coordinates,
+def search_neighbor_naive(context,
+                          ref_index,
+                          x,
+                          y,
                           use_angles,
                           view_vector,
                           view_angle_deg):
-
-    # cast a pointer which points to the numpy array data
-    # we work with numpy because tree initialization with normal lists segfault
-    # for lists longer than ca. 0.5 million points
-    ffi = FFI()
-    x_coordinates_p = ffi.cast("double *", x_coordinates.ctypes.data)
-    y_coordinates_p = ffi.cast("double *", y_coordinates.ctypes.data)
-
-    return _lib.search_neighbor_naive(True,
+    return _lib.search_neighbor_naive(context,
+                                      True,
                                       ref_index,
-                                      x_coordinates[ref_index],
-                                      y_coordinates[ref_index],
-                                      num_points,
-                                      x_coordinates_p,
-                                      y_coordinates_p,
+                                      x,
+                                      y,
                                       use_angles,
                                       view_vector,
                                       view_angle_deg)

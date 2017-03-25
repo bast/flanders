@@ -24,6 +24,14 @@ class btree
                         const double view_vector[2],
                         const double view_angle_deg) const;
 
+    int search_neighbor_naive(const bool skip_ref_index,
+                              const int ref_index,
+                              const double x,
+                              const double y,
+                              const bool use_angles,
+                              const double view_vector[2],
+                              const double view_angle_deg) const;
+
   private:
     btree(const btree &rhs);            // not implemented
     btree &operator=(const btree &rhs); // not implemented
@@ -52,6 +60,7 @@ class btree
     double bounds[2][2];
     double *x_coordinates;
     double *y_coordinates;
+    int num_points;
 };
 
 #endif /* BTREE_H_INCLUDED */

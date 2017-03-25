@@ -2,7 +2,6 @@ add_library(
     flanders
     SHARED
     flanders.h
-    naive.cpp
     helpers.h
     helpers.cpp
     btree.h

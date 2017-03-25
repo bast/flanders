@@ -16,12 +16,14 @@ context_t *new_context(const int num_points, const double x[], const double y[])
 {
     return AS_TYPE(context_t, new btree(num_points, x, y));
 }
-btree::btree(const int num_points, const double x[], const double y[])
+btree::btree(const int num_points_in, const double x[], const double y[])
 {
     root = NULL;
 
-    x_coordinates = new double[num_points];
-    y_coordinates = new double[num_points];
+    x_coordinates = new double[num_points_in];
+    y_coordinates = new double[num_points_in];
+
+    num_points = num_points_in;
 
     bounds[0][0] = std::numeric_limits<double>::max();
     bounds[0][1] = -bounds[0][0];
@@ -53,6 +55,7 @@ btree::~btree()
     destroy_tree();
     delete[] x_coordinates;
     delete[] y_coordinates;
+    num_points = -1;
 }
 
 void btree::destroy_tree() { destroy_tree(root); }
@@ -405,4 +408,70 @@ int btree::search_neighbor(const int ref_index,
                           view_angle_deg);
 
     return index_best;
+}
+
+// Returns index of nearest point to the point number ref_index.
+// By default, only the distance counts. If use_angles is true,
+// then the view vector and angle are taken into account.
+// In the latter case it is possible that no nearest neighbor exists,
+// and in this case the function returns -1.
+CPP_INTERFACE_API
+int search_neighbor_naive(const context_t *context,
+                          const bool skip_ref_index,
+                          const int ref_index,
+                          const double x,
+                          const double y,
+                          const bool use_angles,
+                          const double view_vector[2],
+                          const double view_angle_deg)
+{
+    return AS_CTYPE(btree, context)
+        ->search_neighbor_naive(skip_ref_index,
+                                ref_index,
+                                x,
+                                y,
+                                use_angles,
+                                view_vector,
+                                view_angle_deg);
+}
+int btree::search_neighbor_naive(
+    const bool skip_ref_index,
+    const int ref_index, // not used if skip_ref_index is false
+    const double x,
+    const double y,
+    const bool use_angles,
+    const double view_vector[2],
+    const double view_angle_deg) const
+{
+    double ref_point[2] = {x, y};
+
+    double d = std::numeric_limits<double>::max();
+    int index_found = -1;
+
+    for (int i = 0; i < num_points; i++)
+    {
+        if (skip_ref_index and (i == ref_index))
+            continue;
+
+        double point[2] = {x_coordinates[i], y_coordinates[i]};
+
+        bool is_in_view = true;
+        if (use_angles)
+        {
+            is_in_view = point_within_view_angle(
+                point, ref_point, view_vector, view_angle_deg);
+        }
+
+        if (is_in_view)
+        {
+            double d_loc = get_distance(point, ref_point);
+            if (d_loc < d)
+            {
+                d = d_loc;
+                index_found = i;
+            }
+        }
+    }
+
+    return index_found;
 }
