@@ -78,6 +78,9 @@ class btree
     double *x_coordinates;
     double *y_coordinates;
     int num_points;
+
+    void check_that_context_is_initialized() const;
+    bool is_initialized = false;
 };
 
 #endif /* BTREE_H_INCLUDED */

@@ -2,6 +2,7 @@
 #include <limits>
 #include <math.h>
 #include <stdio.h>
+#include <fstream>
 
 #include "btree.h"
 #include "distance.h"
@@ -42,6 +43,8 @@ btree::btree(const int num_points_in, const double x[], const double y[])
     {
         insert(x[i], y[i], i);
     }
+
+    is_initialized = true;
 }
 
 void free_context(context_t *context)
@@ -56,6 +59,16 @@ btree::~btree()
     delete[] x_coordinates;
     delete[] y_coordinates;
     num_points = -1;
+    is_initialized = false;
+}
+
+void btree::check_that_context_is_initialized() const
+{
+    if (not is_initialized)
+    {
+        fprintf(stderr, "ERROR: context is not initialized\n");
+        exit(-1);
+    }
 }
 
 void btree::destroy_tree() { destroy_tree(root); }
@@ -395,6 +408,8 @@ int btree::search_neighbor(const double x,
                            const double view_angle_deg,
                            const bool naive) const
 {
+    check_that_context_is_initialized();
+
     bool skip_ref_index = false;
     int ref_index = -1; // unused
     if (naive)
@@ -437,6 +452,8 @@ int btree::search_neighbor_by_index(const int ref_index,
                                     const double view_angle_deg,
                                     const bool naive) const
 {
+    check_that_context_is_initialized();
+
     bool skip_ref_index = true;
     double x = x_coordinates[ref_index];
     double y = y_coordinates[ref_index];
