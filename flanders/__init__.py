@@ -41,7 +41,7 @@ def new_context(num_points,
 
 
 free_context = _lib.free_context
-find_neighbor = _lib.find_neighbor
+search_neighbor = _lib.search_neighbor
 
 
 def search_neighbor_naive(ref_index,

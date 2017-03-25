@@ -25,19 +25,19 @@ def test_library():
     # verify results without and with angles
     for use_angles in [False, True]:
         for i in range(num_points):
-            index = flanders.find_neighbor(context,
-                                           i,
-                                           use_angles,
-                                           [view_vectors[i][0], view_vectors[i][1]],
-                                           view_angles[i])
+            index = flanders.search_neighbor(context,
+                                             i,
+                                             use_angles,
+                                             [view_vectors[i][0], view_vectors[i][1]],
+                                             view_angles[i])
 
             index_naive = flanders.search_neighbor_naive(i,
-                                                       num_points,
-                                                       x_coordinates,
-                                                       y_coordinates,
-                                                       use_angles,
-                                                       [view_vectors[i][0], view_vectors[i][1]],
-                                                       view_angles[i])
+                                                         num_points,
+                                                         x_coordinates,
+                                                         y_coordinates,
+                                                         use_angles,
+                                                         [view_vectors[i][0], view_vectors[i][1]],
+                                                         view_angles[i])
             assert index_naive == index
 
     flanders.free_context(context)

@@ -19,10 +19,10 @@ class btree
     btree(const int num_points, const double x[], const double y[]);
     ~btree();
 
-    int find_neighbor(const int ref_index,
-                      const bool use_angles,
-                      const double view_vector[2],
-                      const double view_angle_deg) const;
+    int search_neighbor(const int ref_index,
+                        const bool use_angles,
+                        const double view_vector[2],
+                        const double view_angle_deg) const;
 
   private:
     btree(const btree &rhs);            // not implemented
