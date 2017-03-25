@@ -35,7 +35,7 @@ script:
   - cd build
   - make
   - cd ..
-  - FLANDERS_BUILD_DIR=$PWD/build PYTHONPATH=$PWD/src py.test -s -vv test.py
+  - FLANDERS_BUILD_DIR=$PWD/build py.test -s -vv test.py
 
 after_success:
   - pip install git+https://github.com/bast/flanders.git
