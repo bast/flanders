@@ -36,20 +36,14 @@ void free_context(context_t *context);
 
 CPP_INTERFACE_API
 int search_neighbor(const context_t *context,
+                    const bool naive,
+                    const bool skip_ref_index,
                     const int ref_index,
+                    const double x,
+                    const double y,
                     const bool use_angles,
                     const double view_vector[2],
                     const double view_angle_deg);
-
-CPP_INTERFACE_API
-int search_neighbor_naive(const context_t *context,
-                          const bool skip_ref_index,
-                          const int ref_index,
-                          const double x,
-                          const double y,
-                          const bool use_angles,
-                          const double view_vector[2],
-                          const double view_angle_deg);
 
 #ifdef __cplusplus
 }

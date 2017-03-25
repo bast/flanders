@@ -19,18 +19,14 @@ class btree
     btree(const int num_points, const double x[], const double y[]);
     ~btree();
 
-    int search_neighbor(const int ref_index,
+    int search_neighbor(const bool naive,
+                        const bool skip_ref_index,
+                        const int ref_index,
+                        const double x,
+                        const double y,
                         const bool use_angles,
                         const double view_vector[2],
                         const double view_angle_deg) const;
-
-    int search_neighbor_naive(const bool skip_ref_index,
-                              const int ref_index,
-                              const double x,
-                              const double y,
-                              const bool use_angles,
-                              const double view_vector[2],
-                              const double view_angle_deg) const;
 
   private:
     btree(const btree &rhs);            // not implemented
@@ -54,6 +50,22 @@ class btree
                  const bool use_angles,
                  const double view_vector[2],
                  const double view_angle_deg) const;
+
+    int search_neighbor_naive(const bool skip_ref_index,
+                              const int ref_index,
+                              const double x,
+                              const double y,
+                              const bool use_angles,
+                              const double view_vector[2],
+                              const double view_angle_deg) const;
+
+    int search_neighbor_fast(const bool skip_ref_index,
+                             const int ref_index,
+                             const double x,
+                             const double y,
+                             const bool use_angles,
+                             const double view_vector[2],
+                             const double view_angle_deg) const;
 
     node *root;
 

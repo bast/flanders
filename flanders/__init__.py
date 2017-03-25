@@ -41,21 +41,23 @@ def new_context(num_points,
 
 
 free_context = _lib.free_context
-search_neighbor = _lib.search_neighbor
 
 
-def search_neighbor_naive(context,
-                          ref_index,
-                          x,
-                          y,
-                          use_angles,
-                          view_vector,
-                          view_angle_deg):
-    return _lib.search_neighbor_naive(context,
-                                      True,
-                                      ref_index,
-                                      x,
-                                      y,
-                                      use_angles,
-                                      view_vector,
-                                      view_angle_deg)
+def search_neighbor(context,
+                    naive,
+                    ref_index,
+                    x,
+                    y,
+                    use_angles,
+                    view_vector,
+                    view_angle_deg):
+    skip_ref_index = True
+    return _lib.search_neighbor(context,
+                                naive,
+                                skip_ref_index,
+                                ref_index,
+                                x,
+                                y,
+                                use_angles,
+                                view_vector,
+                                view_angle_deg)
