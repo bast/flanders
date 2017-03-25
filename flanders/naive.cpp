@@ -23,25 +23,24 @@ int find_neighbor_naive(const int ref_index,
 
     for (int i = 0; i < num_points; i++)
     {
-        if (i != ref_index)
+        if (i == ref_index) continue;
+
+        double point[2] = {x_coordinates[i], y_coordinates[i]};
+
+        bool is_in_view = true;
+        if (use_angles)
         {
-            double point[2] = {x_coordinates[i], y_coordinates[i]};
+            is_in_view = point_within_view_angle(
+                point, ref_point, view_vector, view_angle_deg);
+        }
 
-            bool is_in_view = true;
-            if (use_angles)
+        if (is_in_view)
+        {
+            double d_loc = get_distance(point, ref_point);
+            if (d_loc < d)
             {
-                is_in_view = point_within_view_angle(
-                    point, ref_point, view_vector, view_angle_deg);
-            }
-
-            if (is_in_view)
-            {
-                double d_loc = get_distance(point, ref_point);
-                if (d_loc < d)
-                {
-                    d = d_loc;
-                    index_found = i;
-                }
+                d = d_loc;
+                index_found = i;
             }
         }
     }
