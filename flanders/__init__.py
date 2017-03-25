@@ -44,20 +44,40 @@ free_context = _lib.free_context
 
 
 def search_neighbor(context,
-                    naive,
-                    ref_index,
                     x,
                     y,
-                    use_angles,
-                    view_vector,
-                    view_angle_deg):
-    skip_ref_index = True
+                    view_vector=None,
+                    view_angle_deg=None,
+                    naive=False):
+    if (view_vector is not None and view_angle_deg is not None):
+        use_angles = True
+    else:
+        use_angles = False
+        view_vector = [0.0, 0.0]
+        view_angle_deg = 0.0
     return _lib.search_neighbor(context,
-                                naive,
-                                skip_ref_index,
-                                ref_index,
                                 x,
                                 y,
                                 use_angles,
                                 view_vector,
-                                view_angle_deg)
+                                view_angle_deg,
+                                naive)
+
+
+def search_neighbor_by_index(context,
+                             ref_index,
+                             view_vector=None,
+                             view_angle_deg=None,
+                             naive=False):
+    if (view_vector is not None and view_angle_deg is not None):
+        use_angles = True
+    else:
+        use_angles = False
+        view_vector = [0.0, 0.0]
+        view_angle_deg = 0.0
+    return _lib.search_neighbor_by_index(context,
+                                         ref_index,
+                                         use_angles,
+                                         view_vector,
+                                         view_angle_deg,
+                                         naive)

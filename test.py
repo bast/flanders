@@ -1,5 +1,5 @@
 import random
-import flanders
+from flanders import new_context, free_context, search_neighbor_by_index, search_neighbor
 import numpy as np
 
 
@@ -17,31 +17,48 @@ def test_library():
         x_coordinates[i] = random.uniform(bounds[0], bounds[1])
         y_coordinates[i] = random.uniform(bounds[0], bounds[1])
 
-    context = flanders.new_context(num_points, x_coordinates, y_coordinates)
+    context = new_context(num_points, x_coordinates, y_coordinates)
 
     view_vectors = [(random.uniform(bounds[0], bounds[1]), random.uniform(bounds[0], bounds[1])) for _ in range(num_points)]
     view_angles = [random.uniform(10.0, 20.0) for _ in range(num_points)]
 
-    # verify results without and with angles
-    for use_angles in [False, True]:
-        for i in range(num_points):
-            index = flanders.search_neighbor(context,
-                                             False,
-                                             i,
-                                             x_coordinates[i],
-                                             y_coordinates[i],
-                                             use_angles,
-                                             [view_vectors[i][0], view_vectors[i][1]],
-                                             view_angles[i])
+    # verify results without angles
+    for i in range(num_points):
+        i_f = search_neighbor_by_index(context,
+                                       ref_index=i)
+        i_n = search_neighbor_by_index(context,
+                                       ref_index=i,
+                                       naive=True)
+        assert i_f == i_n
 
-            index_naive = flanders.search_neighbor(context,
-                                                   True,
-                                                   i,
-                                                   x_coordinates[i],
-                                                   y_coordinates[i],
-                                                   use_angles,
-                                                   [view_vectors[i][0], view_vectors[i][1]],
-                                                   view_angles[i])
-            assert index_naive == index
+    # verify results with angles
+    for i in range(num_points):
+        i_f = search_neighbor_by_index(context,
+                                       ref_index=i,
+                                       view_vector=[view_vectors[i][0], view_vectors[i][1]],
+                                       view_angle_deg=view_angles[i])
+        i_n = search_neighbor_by_index(context,
+                                       ref_index=i,
+                                       view_vector=[view_vectors[i][0], view_vectors[i][1]],
+                                       view_angle_deg=view_angles[i],
+                                       naive=True)
+        assert i_f == i_n
 
-    flanders.free_context(context)
+    # verify results with and free-style points
+    for i in range(num_points):
+        x = random.uniform(bounds[0], bounds[1])
+        y = random.uniform(bounds[0], bounds[1])
+        i_f = search_neighbor(context,
+                              x=x,
+                              y=y,
+                              view_vector=[view_vectors[i][0], view_vectors[i][1]],
+                              view_angle_deg=view_angles[i])
+        i_n = search_neighbor(context,
+                              x=x,
+                              y=y,
+                              view_vector=[view_vectors[i][0], view_vectors[i][1]],
+                              view_angle_deg=view_angles[i],
+                              naive=True)
+        assert i_f == i_n
+
+    free_context(context)

@@ -184,6 +184,7 @@ void btree::insert(const double x, const double y, const int index, node *leaf)
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
 int btree::traverse(node *leaf,
+                    const bool skip_ref_index,
                     const int ref_index,
                     const double ref_point[2],
                     const int index,
@@ -214,7 +215,9 @@ int btree::traverse(node *leaf,
     double d = get_distance(leaf, ref_point);
 
     // we need to make sure that we skip the node which is the reference point
-    if (i != ref_index)
+    bool skip_node = (skip_ref_index and (i == ref_index));
+
+    if (not skip_node)
     {
         bool is_in_view = true;
         if (use_angles)
@@ -261,7 +264,7 @@ int btree::traverse(node *leaf,
                     }
                     else
                     {
-                        if (i == ref_index)
+                        if (skip_ref_index and (i == ref_index))
                         {
                             // reference point is the node
                             // for simplicity we will consider both children
@@ -337,6 +340,7 @@ int btree::traverse(node *leaf,
             if (consider_child)
             {
                 new_index = traverse(child,
+                                     skip_ref_index,
                                      ref_index,
                                      ref_point,
                                      new_index,
@@ -360,6 +364,7 @@ int btree::traverse(node *leaf,
         // and we are not yet at the root
         // so we go one level up
         return traverse(leaf->parent,
+                        skip_ref_index,
                         ref_index,
                         ref_point,
                         new_index,
@@ -371,42 +376,70 @@ int btree::traverse(node *leaf,
     }
 }
 
-// Returns index of nearest point to the point number ref_index.
-// By default, only the distance counts. If use_angles is true,
-// then the view vector and angle are taken into account.
-// In the latter case it is possible that no nearest neighbor exists,
-// and in this case the function returns -1.
 CPP_INTERFACE_API
 int search_neighbor(const context_t *context,
-                    const bool naive,
-                    const bool skip_ref_index,
-                    const int ref_index,
                     const double x,
                     const double y,
                     const bool use_angles,
                     const double view_vector[2],
-                    const double view_angle_deg)
+                    const double view_angle_deg,
+                    const bool naive)
 {
     return AS_CTYPE(btree, context)
-        ->search_neighbor(naive,
-                          skip_ref_index,
-                          ref_index,
-                          x,
-                          y,
-                          use_angles,
-                          view_vector,
-                          view_angle_deg);
+        ->search_neighbor(x, y, use_angles, view_vector, view_angle_deg, naive);
 }
-int btree::search_neighbor(
-    const bool naive,
-    const bool skip_ref_index,
-    const int ref_index, // not used if skip_ref_index is false
-    const double x,
-    const double y,
-    const bool use_angles,
-    const double view_vector[2],
-    const double view_angle_deg) const
+int btree::search_neighbor(const double x,
+                           const double y,
+                           const bool use_angles,
+                           const double view_vector[2],
+                           const double view_angle_deg,
+                           const bool naive) const
 {
+    bool skip_ref_index = false;
+    int ref_index = -1; // unused
+    if (naive)
+    {
+        return search_neighbor_naive(skip_ref_index,
+                                     ref_index,
+                                     x,
+                                     y,
+                                     use_angles,
+                                     view_vector,
+                                     view_angle_deg);
+    }
+    else
+    {
+        return search_neighbor_fast(skip_ref_index,
+                                    ref_index,
+                                    x,
+                                    y,
+                                    use_angles,
+                                    view_vector,
+                                    view_angle_deg);
+    }
+}
+
+CPP_INTERFACE_API
+int search_neighbor_by_index(const context_t *context,
+                             const int ref_index,
+                             const bool use_angles,
+                             const double view_vector[2],
+                             const double view_angle_deg,
+                             const bool naive)
+{
+    return AS_CTYPE(btree, context)
+        ->search_neighbor_by_index(
+            ref_index, use_angles, view_vector, view_angle_deg, naive);
+}
+int btree::search_neighbor_by_index(const int ref_index,
+                                    const bool use_angles,
+                                    const double view_vector[2],
+                                    const double view_angle_deg,
+                                    const bool naive) const
+{
+    bool skip_ref_index = true;
+    double x = x_coordinates[ref_index];
+    double y = y_coordinates[ref_index];
     if (naive)
     {
         return search_neighbor_naive(skip_ref_index,
@@ -478,8 +511,8 @@ int btree::search_neighbor_fast(const bool skip_ref_index,
                                 const double view_vector[2],
                                 const double view_angle_deg) const
 {
-    double coordinates[2] = {x_coordinates[ref_index],
-                             y_coordinates[ref_index]};
+    double coordinates[2] = {x, y};
+
     node *guess = guess_node(coordinates);
 
     double d = std::numeric_limits<double>::max();
@@ -490,6 +523,7 @@ int btree::search_neighbor_fast(const bool skip_ref_index,
     int index_best = -1;
 
     index_best = traverse(guess,
+                          skip_ref_index,
                           ref_index,
                           coordinates,
                           index_best,
