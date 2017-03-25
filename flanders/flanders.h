@@ -36,7 +36,7 @@ void free_context(context_t *context);
 
 CPP_INTERFACE_API
 int search_neighbor(const context_t *context,
-                    const int index,
+                    const int ref_index,
                     const bool use_angles,
                     const double view_vector[2],
                     const double view_angle_deg);
