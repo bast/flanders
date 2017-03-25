@@ -20,7 +20,7 @@ class btree
         ~btree();
 
         int find_neighbor(
-            const int    index,
+            const int    ref_index,
             const bool   use_angles,
             const double view_vector[2],
             const double view_angle_deg

@@ -389,27 +389,27 @@ int btree::traverse(
 CPP_INTERFACE_API
 int find_neighbor(
     const context_t *context,
-    const int    index,
+    const int    ref_index,
     const bool   use_angles,
     const double view_vector[2],
     const double view_angle_deg
     )
 {
     return AS_CTYPE(btree, context)->find_neighbor(
-                                         index,
+                                         ref_index,
                                          use_angles,
                                          view_vector,
                                          view_angle_deg
                                          );
 }
 int btree::find_neighbor(
-    const int    index,
+    const int    ref_index,
     const bool   use_angles,
     const double view_vector[2],
     const double view_angle_deg
     ) const
 {
-    double coordinates[2] = {x_coordinates[index], y_coordinates[index]};
+    double coordinates[2] = {x_coordinates[ref_index], y_coordinates[ref_index]};
     node *guess = guess_node(coordinates);
 
     double d = std::numeric_limits<double>::max();
@@ -421,7 +421,7 @@ int btree::find_neighbor(
 
     index_best = traverse(
                  guess,
-                 index,
+                 ref_index,
                  coordinates,
                  index_best,
                  d,
