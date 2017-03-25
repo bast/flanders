@@ -1,8 +1,9 @@
-def test_library():
-    import random
-    import flanders
-    import numpy as np
+import random
+import flanders
+import numpy as np
 
+
+def test_library():
     bounds = [-1.0, 1.0]
     num_points = 1000
 
