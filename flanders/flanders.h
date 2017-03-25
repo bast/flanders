@@ -1,22 +1,9 @@
 #ifndef CPP_INTERFACE_H_INCLUDED
 #define CPP_INTERFACE_H_INCLUDED
 
-#ifndef CPP_INTERFACE_API
-#  ifdef _WIN32
-#    if defined(CPP_INTERFACE_BUILD_SHARED) /* build dll */
-#      define CPP_INTERFACE_API __declspec(dllexport)
-#    elif !defined(CPP_INTERFACE_BUILD_STATIC) /* use dll */
-#      define CPP_INTERFACE_API __declspec(dllimport)
-#    else /* static library */
-#      define CPP_INTERFACE_API
-#    endif
-#  else
-#    if __GNUC__ >= 4
-#      define CPP_INTERFACE_API __attribute__((visibility("default")))
-#    else
-#      define CPP_INTERFACE_API
-#    endif
-#  endif
+#ifndef FLANDERS_API
+#include "flanders_export.h"
+#define FLANDERS_API flanders_EXPORT
 #endif
 
 #ifdef __cplusplus
@@ -26,12 +13,12 @@ extern "C" {
 struct context_s;
 typedef struct context_s context_t;
 
-CPP_INTERFACE_API
+FLANDERS_API
 context_t *new_context(const int num_points,
                        const double x_coordinates[],
                        const double y_coordinates[]);
 
-CPP_INTERFACE_API
+FLANDERS_API
 void free_context(context_t *context);
 
 // Returns index of nearest point to the point number ref_index.
@@ -39,7 +26,7 @@ void free_context(context_t *context);
 // then the view vector and angle are taken into account.
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
-CPP_INTERFACE_API
+FLANDERS_API
 int search_neighbor(const context_t *context,
                     const double x,
                     const double y,
@@ -48,7 +35,7 @@ int search_neighbor(const context_t *context,
                     const double view_angle_deg,
                     const bool naive);
 
-CPP_INTERFACE_API
+FLANDERS_API
 int search_neighbor_by_index(const context_t *context,
                              const int ref_index,
                              const bool use_angles,

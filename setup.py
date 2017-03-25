@@ -54,6 +54,7 @@ class install(_install.install):
         _target_path = os.path.join(get_python_lib(), 'flanders')
 
         for f in [os.path.join('build', 'lib', 'libflanders.so'),
+                  os.path.join('build', 'flanders_export.h'),
                   os.path.join('flanders', 'flanders.h')]:
             copy2(os.path.join(cwd, f), _target_path)
 

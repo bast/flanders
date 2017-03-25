@@ -1,3 +1,7 @@
+include_directories(
+    ${PROJECT_BINARY_DIR}/include
+    )
+
 add_library(
     flanders
     SHARED
@@ -22,3 +26,4 @@ target_link_libraries(
 
 install(TARGETS flanders LIBRARY DESTINATION "lib")
 install(FILES flanders.h DESTINATION "include")
+install(FILES ${PROJECT_BINARY_DIR}/include/flanders_export.h DESTINATION "include")

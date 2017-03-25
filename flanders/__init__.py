@@ -14,7 +14,7 @@ else:
 _include_dir = _this_path
 
 _lib = get_lib_handle(
-    ['-DCPP_INTERFACE_API=', '-DCPP_INTERFACE_NOINCLUDE'],
+    ['-DFLANDERS_API=', '-DCPP_INTERFACE_NOINCLUDE'],
     'flanders.h',
     'flanders',
     _build_dir,

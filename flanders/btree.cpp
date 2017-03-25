@@ -376,7 +376,7 @@ int btree::traverse(node *leaf,
     }
 }
 
-CPP_INTERFACE_API
+FLANDERS_API
 int search_neighbor(const context_t *context,
                     const double x,
                     const double y,
@@ -419,7 +419,7 @@ int btree::search_neighbor(const double x,
     }
 }
 
-CPP_INTERFACE_API
+FLANDERS_API
 int search_neighbor_by_index(const context_t *context,
                              const int ref_index,
                              const bool use_angles,
