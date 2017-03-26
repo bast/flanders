@@ -1,8 +1,8 @@
 #include <algorithm>
+#include <fstream>
 #include <limits>
 #include <math.h>
 #include <stdio.h>
-#include <fstream>
 
 #include "btree.h"
 #include "distance.h"
@@ -204,8 +204,9 @@ int btree::traverse(node *leaf,
                     double &distance,
                     std::vector<int> &indices_traversed,
                     const bool use_angles,
-                    const double view_vector[2],
-                    const double view_angle_deg) const
+                    const double vx,
+                    const double vy,
+                    const double angle_deg) const
 {
     int i = leaf->index;
     bool this_node_already_verified =
@@ -235,8 +236,8 @@ int btree::traverse(node *leaf,
         bool is_in_view = true;
         if (use_angles)
         {
-            is_in_view = point_within_view_angle(
-                leaf->coordinates, ref_point, view_vector, view_angle_deg);
+            is_in_view = point_within_angle(
+                leaf->coordinates, ref_point, vx, vy, angle_deg);
         }
         if (is_in_view)
         {
@@ -320,12 +321,8 @@ int btree::traverse(node *leaf,
                                 int num_intersections;
                                 if (not consider_child)
                                 {
-                                    num_intersections =
-                                        get_num_intersections(p1,
-                                                              p2,
-                                                              ref_point,
-                                                              view_vector,
-                                                              view_angle_deg);
+                                    num_intersections = get_num_intersections(
+                                        p1, p2, ref_point, vx, vy, angle_deg);
                                 }
                                 consider_child = (num_intersections > 0);
                             }
@@ -340,11 +337,8 @@ int btree::traverse(node *leaf,
                             {
                                 double corner_point[2] = {leaf->bounds[0][0],
                                                           leaf->bounds[1][0]};
-                                consider_child =
-                                    point_within_view_angle(corner_point,
-                                                            ref_point,
-                                                            view_vector,
-                                                            view_angle_deg);
+                                consider_child = point_within_angle(
+                                    corner_point, ref_point, vx, vy, angle_deg);
                             }
                         }
                     }
@@ -360,8 +354,9 @@ int btree::traverse(node *leaf,
                                      distance,
                                      indices_traversed,
                                      use_angles,
-                                     view_vector,
-                                     view_angle_deg);
+                                     vx,
+                                     vy,
+                                     angle_deg);
             }
         }
     }
@@ -384,98 +379,130 @@ int btree::traverse(node *leaf,
                         distance,
                         indices_traversed,
                         use_angles,
-                        view_vector,
-                        view_angle_deg);
+                        vx,
+                        vy,
+                        angle_deg);
     }
 }
 
 FLANDERS_API
-int search_neighbor(const context_t *context,
-                    const double x,
-                    const double y,
-                    const bool use_angles,
-                    const double view_vector[2],
-                    const double view_angle_deg,
-                    const bool naive)
+void search_neighbor_xy(const context_t *context,
+                        const int num_indices,
+                        int indices[],
+                        const double x[],
+                        const double y[],
+                        const bool use_angles,
+                        const double vx[],
+                        const double vy[],
+                        const double angles_deg[],
+                        const bool naive)
 {
-    return AS_CTYPE(btree, context)
-        ->search_neighbor(x, y, use_angles, view_vector, view_angle_deg, naive);
+    AS_CTYPE(btree, context)
+        ->search_neighbor_xy(
+            num_indices, indices, x, y, use_angles, vx, vy, angles_deg, naive);
 }
-int btree::search_neighbor(const double x,
-                           const double y,
-                           const bool use_angles,
-                           const double view_vector[2],
-                           const double view_angle_deg,
-                           const bool naive) const
+void btree::search_neighbor_xy(const int num_indices,
+                               int indices[],
+                               const double x[],
+                               const double y[],
+                               const bool use_angles,
+                               const double vx[],
+                               const double vy[],
+                               const double angles_deg[],
+                               const bool naive) const
 {
     check_that_context_is_initialized();
 
     bool skip_ref_index = false;
     int ref_index = -1; // unused
-    if (naive)
+
+    for (int i = 0; i < num_indices; i++)
     {
-        return search_neighbor_naive(skip_ref_index,
-                                     ref_index,
-                                     x,
-                                     y,
-                                     use_angles,
-                                     view_vector,
-                                     view_angle_deg);
-    }
-    else
-    {
-        return search_neighbor_fast(skip_ref_index,
-                                    ref_index,
-                                    x,
-                                    y,
-                                    use_angles,
-                                    view_vector,
-                                    view_angle_deg);
+        if (naive)
+        {
+            indices[i] = search_neighbor_naive(skip_ref_index,
+                                               ref_index,
+                                               x[i],
+                                               y[i],
+                                               use_angles,
+                                               vx[i],
+                                               vy[i],
+                                               angles_deg[i]);
+        }
+        else
+        {
+            indices[i] = search_neighbor_fast(skip_ref_index,
+                                              ref_index,
+                                              x[i],
+                                              y[i],
+                                              use_angles,
+                                              vx[i],
+                                              vy[i],
+                                              angles_deg[i]);
+        }
     }
 }
 
 FLANDERS_API
-int search_neighbor_by_index(const context_t *context,
-                             const int ref_index,
-                             const bool use_angles,
-                             const double view_vector[2],
-                             const double view_angle_deg,
-                             const bool naive)
+void search_neighbor_index(const context_t *context,
+                           const int num_indices,
+                           int indices[],
+                           const int ref_indices[],
+                           const bool use_angles,
+                           const double vx[],
+                           const double vy[],
+                           const double angles_deg[],
+                           const bool naive)
 {
-    return AS_CTYPE(btree, context)
-        ->search_neighbor_by_index(
-            ref_index, use_angles, view_vector, view_angle_deg, naive);
+    AS_CTYPE(btree, context)
+        ->search_neighbor_index(num_indices,
+                                indices,
+                                ref_indices,
+                                use_angles,
+                                vx,
+                                vy,
+                                angles_deg,
+                                naive);
 }
-int btree::search_neighbor_by_index(const int ref_index,
-                                    const bool use_angles,
-                                    const double view_vector[2],
-                                    const double view_angle_deg,
-                                    const bool naive) const
+void btree::search_neighbor_index(const int num_indices,
+                                  int indices[],
+                                  const int ref_indices[],
+                                  const bool use_angles,
+                                  const double vx[],
+                                  const double vy[],
+                                  const double angles_deg[],
+                                  const bool naive) const
 {
     check_that_context_is_initialized();
 
     bool skip_ref_index = true;
-    double x = x_coordinates[ref_index];
-    double y = y_coordinates[ref_index];
-    if (naive)
+
+    for (int i = 0; i < num_indices; i++)
     {
-        return search_neighbor_naive(skip_ref_index,
-                                     ref_index,
-                                     x,
-                                     y,
-                                     use_angles,
-                                     view_vector,
-                                     view_angle_deg);
-    }
-    else
-    {
-        return search_neighbor_fast(skip_ref_index,
-                                    ref_index,
-                                    x,
-                                    y,
-                                    use_angles,
-                                    view_vector,
-                                    view_angle_deg);
+        double x = x_coordinates[ref_indices[i]];
+        double y = y_coordinates[ref_indices[i]];
+        if (naive)
+        {
+            indices[i] = search_neighbor_naive(skip_ref_index,
+                                               ref_indices[i],
+                                               x,
+                                               y,
+                                               use_angles,
+                                               vx[i],
+                                               vy[i],
+                                               angles_deg[i]);
+        }
+        else
+        {
+            indices[i] = search_neighbor_fast(skip_ref_index,
+                                              ref_indices[i],
+                                              x,
+                                              y,
+                                              use_angles,
+                                              vx[i],
+                                              vy[i],
+                                              angles_deg[i]);
+        }
     }
 }
 
@@ -484,8 +511,9 @@ int btree::search_neighbor_naive(const bool skip_ref_index,
                                  const double x,
                                  const double y,
                                  const bool use_angles,
-                                 const double view_vector[2],
-                                 const double view_angle_deg) const
+                                 const double vx,
+                                 const double vy,
+                                 const double angle_deg) const
 {
     double ref_point[2] = {x, y};
 
@@ -502,8 +530,8 @@ int btree::search_neighbor_naive(const bool skip_ref_index,
         bool is_in_view = true;
         if (use_angles)
         {
-            is_in_view = point_within_view_angle(
-                point, ref_point, view_vector, view_angle_deg);
+            is_in_view =
+                point_within_angle(point, ref_point, vx, vy, angle_deg);
         }
 
         if (is_in_view)
@@ -525,8 +553,9 @@ int btree::search_neighbor_fast(const bool skip_ref_index,
                                 const double x,
                                 const double y,
                                 const bool use_angles,
-                                const double view_vector[2],
-                                const double view_angle_deg) const
+                                const double vx,
+                                const double vy,
+                                const double angle_deg) const
 {
     double coordinates[2] = {x, y};
 
@@ -547,8 +576,9 @@ int btree::search_neighbor_fast(const bool skip_ref_index,
                           d,
                           indices_traversed,
                           use_angles,
-                          view_vector,
-                          view_angle_deg);
+                          vx,
+                          vy,
+                          angle_deg);
 
     return index_best;
 }

@@ -8,19 +8,19 @@ double get_distance(const double p1[2], const double p2[2])
 
 // Check whether point is in view described by view_origin, view_vector,
 // and view_angle.
-bool point_within_view_angle(const double point[2],
-                             const double view_origin[2],
-                             const double view_vector[2],
-                             const double view_angle_deg)
+bool point_within_angle(const double point[2],
+                        const double view_origin[2],
+                        const double vx,
+                        const double vy,
+                        const double view_angle_deg)
 {
     double origin_point_vector[2] = {point[0] - view_origin[0],
                                      point[1] - view_origin[1]};
 
-    double rec_view_vector_length =
-        1.0 / sqrt(pow(view_vector[0], 2.0) + pow(view_vector[1], 2.0));
+    double rec_view_vector_length = 1.0 / sqrt(pow(vx, 2.0) + pow(vy, 2.0));
 
-    double norm_view_vector[2] = {view_vector[0] * rec_view_vector_length,
-                                  view_vector[1] * rec_view_vector_length};
+    double norm_view_vector[2] = {vx * rec_view_vector_length,
+                                  vy * rec_view_vector_length};
 
     double rec_origin_point_vector_length =
         1.0 / sqrt(pow(origin_point_vector[0], 2.0) +

@@ -2,15 +2,16 @@
 #include <math.h>
 
 // rotate vector v by angle_deg
-void rotate(const double v[2],
+void rotate(const double vx,
+            const double vy,
             const double angle_deg,
             double &v_rotated_x,
             double &v_rotated_y)
 {
     double angle_rad = angle_deg * M_PI / 180.0;
 
-    v_rotated_x = v[0] * cos(angle_rad) - v[1] * sin(angle_rad);
-    v_rotated_y = v[0] * sin(angle_rad) + v[1] * cos(angle_rad);
+    v_rotated_x = vx * cos(angle_rad) - vy * sin(angle_rad);
+    v_rotated_y = vx * sin(angle_rad) + vy * cos(angle_rad);
 }
 
 // return line-line intersection coefficients using homogeneous coordinates
@@ -90,17 +91,18 @@ bool intersection_point_exists(const double p1[2],
 int get_num_intersections(const double p1[2],
                           const double p2[2],
                           const double view_origin[2],
-                          const double view_vector[2],
+                          const double vx,
+                          const double vy,
                           const double view_angle_deg)
 {
     int n = 0;
     double v_rotated[2];
 
-    rotate(view_vector, -view_angle_deg / 2.0, v_rotated[0], v_rotated[1]);
+    rotate(vx, vy, -view_angle_deg / 2.0, v_rotated[0], v_rotated[1]);
     if (intersection_point_exists(p1, p2, view_origin, v_rotated))
         n++;
 
-    rotate(view_vector, +view_angle_deg / 2.0, v_rotated[0], v_rotated[1]);
+    rotate(vx, vy, +view_angle_deg / 2.0, v_rotated[0], v_rotated[1]);
     if (intersection_point_exists(p1, p2, view_origin, v_rotated))
         n++;
 

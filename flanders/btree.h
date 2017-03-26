@@ -19,18 +19,24 @@ class btree
     btree(const int num_points, const double x[], const double y[]);
     ~btree();
 
-    int search_neighbor(const double x,
-                        const double y,
-                        const bool use_angles,
-                        const double view_vector[2],
-                        const double view_angle_deg,
-                        const bool naive) const;
+    void search_neighbor_xy(const int num_indices,
+                            int indices[],
+                            const double x[],
+                            const double y[],
+                            const bool use_angles,
+                            const double vx[],
+                            const double vy[],
+                            const double angles_deg[],
+                            const bool naive) const;
 
-    int search_neighbor_by_index(const int ref_index,
-                                 const bool use_angles,
-                                 const double view_vector[2],
-                                 const double view_angle_deg,
-                                 const bool naive) const;
+    void search_neighbor_index(const int num_indices,
+                               int indices[],
+                               const int ref_indices[],
+                               const bool use_angles,
+                               const double vx[],
+                               const double vy[],
+                               const double angles_deg[],
+                               const bool naive) const;
 
   private:
     btree(const btree &rhs);            // not implemented
@@ -53,24 +59,27 @@ class btree
                  double &distance,
                  std::vector<int> &indices_traversed,
                  const bool use_angles,
-                 const double view_vector[2],
-                 const double view_angle_deg) const;
+                 const double vx,
+                 const double vy,
+                 const double angle_deg) const;
 
     int search_neighbor_naive(const bool skip_ref_index,
                               const int ref_index,
                               const double x,
                               const double y,
                               const bool use_angles,
-                              const double view_vector[2],
-                              const double view_angle_deg) const;
+                              const double vx,
+                              const double vy,
+                              const double angle_deg) const;
 
     int search_neighbor_fast(const bool skip_ref_index,
                              const int ref_index,
                              const double x,
                              const double y,
                              const bool use_angles,
-                             const double view_vector[2],
-                             const double view_angle_deg) const;
+                             const double vx,
+                             const double vy,
+                             const double angle_deg) const;
 
     node *root;
 
