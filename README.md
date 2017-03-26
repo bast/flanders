@@ -57,7 +57,7 @@ pip install git+https://github.com/bast/flanders.git
 
 ## Example
 
-![alt text](https://github.com/bast/flanders/raw/master/example/flanders.png "example points")
+<img src="https://github.com/bast/flanders/raw/master/example/flanders.png" width="300">
 
 ```python
 from flanders import new_context, free_context, search_neighbor
