@@ -20,6 +20,7 @@ Usage:
 Options:
   --cxx=<CXX>                            C++ compiler [default: g++].
   --extra-cxx-flags=<EXTRA_CXXFLAGS>     Extra C++ compiler flags [default: ''].
+  --omp                                  Enable OpenMP parallelization [default: False].
   --type=<TYPE>                          Set the CMake build type (debug, release, relwithdebinfo, minsizerel) [default: release].
   --generator=<STRING>                   Set the CMake build system generator [default: Unix Makefiles].
   --show                                 Show CMake command and exit.
@@ -39,6 +40,7 @@ def gen_cmake_command(options, arguments):
     command.append('CXX={0}'.format(arguments['--cxx']))
     command.append(arguments['--cmake-executable'])
     command.append('-DEXTRA_CXXFLAGS="{0}"'.format(arguments['--extra-cxx-flags']))
+    command.append('-DENABLE_OPENMP={0}'.format(arguments['--omp']))
     command.append('-DCMAKE_BUILD_TYPE={0}'.format(arguments['--type']))
     command.append('-G "{0}"'.format(arguments['--generator']))
     if arguments['--cmake-options'] != "''":

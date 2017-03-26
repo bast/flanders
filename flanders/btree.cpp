@@ -416,6 +416,9 @@ void btree::search_neighbor_xy(const int num_indices,
     bool skip_ref_index = false;
     int ref_index = -1; // unused
 
+#ifdef HAVE_OPENMP
+    #pragma omp parallel for
+#endif
     for (int i = 0; i < num_indices; i++)
     {
         if (naive)
@@ -477,6 +480,9 @@ void btree::search_neighbor_index(const int num_indices,
 
     bool skip_ref_index = true;
 
+#ifdef HAVE_OPENMP
+    #pragma omp parallel for
+#endif
     for (int i = 0; i < num_indices; i++)
     {
         double x = x_coordinates[ref_indices[i]];

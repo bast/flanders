@@ -25,7 +25,7 @@ def run_cmake():
     os.chdir(_build_dir)
 
     try:
-        _spawn.spawn(['cmake', '-DCMAKE_BUILD_TYPE=release', '..'])
+        _spawn.spawn(['cmake', '-DCMAKE_BUILD_TYPE=release', '-DENABLE_OPENMP=True', '..'])
     except _spawn.DistutilsExecError:
         print("Error while running CMake")
         sys.exit(-1)
