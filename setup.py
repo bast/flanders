@@ -67,5 +67,5 @@ setup(name='flanders',
       url='https://github.com/bast/flanders',
       packages=['flanders'],
       license='MPL-v2.0',
-      install_requires=['cffi'],
+      install_requires=['cffi', 'numpy'],
       cmdclass={'install': install, 'build': build})
