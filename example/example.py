@@ -14,13 +14,13 @@ vx = [0.0, -1.0]
 vy = [1.0, -1.0]
 angles_deg = [90.0, 90.0]
 
-indices_fast = search_neighbor(context,
-                               x=x,
-                               y=y,
-                               vx=vx,
-                               vy=vy,
-                               angles_deg=angles_deg)
+indices = search_neighbor(context,
+                          x=x,
+                          y=y,
+                          vx=vx,
+                          vy=vy,
+                          angles_deg=angles_deg)
 
-assert indices_fast == [2, -1]
+assert indices == [2, -1]
 
 free_context(context)

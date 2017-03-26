@@ -57,6 +57,9 @@ pip install git+https://github.com/bast/flanders.git
 
 ## Example
 
+In this example the first reference point finds point 2.  The second reference
+point does not find any neighbor within the view angle and returns -1.
+
 <img src="https://github.com/bast/flanders/raw/master/example/flanders.png" width="300">
 
 ```python
@@ -76,14 +79,14 @@ vx = [0.0, -1.0]
 vy = [1.0, -1.0]
 angles_deg = [90.0, 90.0]
 
-indices_fast = search_neighbor(context,
-                               x=x,
-                               y=y,
-                               vx=vx,
-                               vy=vy,
-                               angles_deg=angles_deg)
+indices = search_neighbor(context,
+                          x=x,
+                          y=y,
+                          vx=vx,
+                          vy=vy,
+                          angles_deg=angles_deg)
 
-assert indices_fast == [2, -1]
+assert indices == [2, -1]
 
 free_context(context)
 ```
