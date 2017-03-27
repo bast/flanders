@@ -44,7 +44,7 @@ y:-----:/+o------------------:o:       :ydddm+-----:oyyyysydMMm:::o+.
 ## Installation using pip
 
 ```shell
-pip install git+https://github.com/bast/flanders.git
+$ pip install git+https://github.com/bast/flanders.git
 ```
 
 
@@ -96,6 +96,12 @@ indices = flanders.search_neighbor(context,
                                    angles_deg=[90.0, 90.0],
                                    naive=True)
 ```
+
+## Efficiency considerations
+
+If you compute nearest neighbors for many points it is a good idea to send in an entire
+batch of points instead of computing point by point. If you send in an entire batch,
+the code will shared-memory parallelize the loop over the points.
 
 
 ## References
