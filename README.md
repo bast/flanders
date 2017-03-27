@@ -81,8 +81,8 @@ Instead of searching nearest neighbors of coordinates, you can also search by ne
 ```python
 indices = flanders.search_neighbor(context,
                                    ref_indices=range(num_points),
-                                   view_vectors=[(1.0, 1.0) for _ in xrange(num_points)],
-                                   angles_deg=[90.0 for _ in xrange(num_points)])
+                                   view_vectors=[(1.0, 1.0) for _ in range(num_points)],
+                                   angles_deg=[90.0 for _ in range(num_points)])
 
 assert indices == [2, 2, -1, 2, 1, 2]
 ```
