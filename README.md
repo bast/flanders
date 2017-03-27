@@ -50,8 +50,10 @@ pip install git+https://github.com/bast/flanders.git
 
 ## Example
 
-In this example the first reference point finds point 2. The second reference
-point does not find any neighbor within the view angle and returns -1.
+In this example we have 6 points (numbered 0 to 5) and two reference points
+with a certain view vector and view angle. The first reference point finds
+point 2. The second reference point does not find any neighbor within the view
+angle and returns -1.
 
 <img src="https://github.com/bast/flanders/raw/master/example/flanders.png" width="300">
 
@@ -83,6 +85,16 @@ indices = flanders.search_neighbor(context,
                                    angles_deg=[90.0 for _ in xrange(num_points)])
 
 assert indices == [2, 2, -1, 2, 1, 2]
+```
+
+For debugging you can employ the naive implementation:
+
+```python
+indices = flanders.search_neighbor(context,
+                                   coordinates=[(119.2, 59.7), (155.2, 30.2)],
+                                   view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
+                                   angles_deg=[90.0, 90.0],
+                                   naive=True)
 ```
 
 
