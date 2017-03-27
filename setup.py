@@ -17,7 +17,7 @@ def run_cmake():
     """
     if _spawn.find_executable('cmake') is None:
         print("CMake is required to build this package.")
-        print("Please install CMake and re-run setup")
+        print("Please install/load CMake and re-run setup.")
         sys.exit(-1)
 
     _build_dir = os.path.join(os.path.split(__file__)[0], 'build')
