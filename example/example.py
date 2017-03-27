@@ -1,26 +1,23 @@
-from flanders import new_context, free_context, search_neighbor
-import numpy as np
+import flanders
 
-x_coordinates = [60.4, 173.9, 132.9, 19.5, 196.5, 143.3]
-y_coordinates = [51.3, 143.8, 124.9, 108.9, 9.9, 53.3]
+points = [(60.4, 51.3), (173.9, 143.8), (132.9, 124.9), (19.5, 108.9), (196.5, 9.9), (143.3, 53.3)]
 
-num_points = len(x_coordinates)
+num_points = len(points)
 
-context = new_context(num_points, np.array(x_coordinates), np.array(y_coordinates))
+context = flanders.new_context(num_points, points)
 
-x = [119.2, 155.2]
-y = [59.7, 30.2]
-vx = [0.0, -1.0]
-vy = [1.0, -1.0]
-angles_deg = [90.0, 90.0]
-
-indices = search_neighbor(context,
-                          x=x,
-                          y=y,
-                          vx=vx,
-                          vy=vy,
-                          angles_deg=angles_deg)
+indices = flanders.search_neighbor(context,
+                                   coordinates=[(119.2, 59.7), (155.2, 30.2)],
+                                   view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
+                                   angles_deg=[90.0, 90.0])
 
 assert indices == [2, -1]
 
-free_context(context)
+indices = flanders.search_neighbor(context,
+                                   ref_indices=range(num_points),
+                                   view_vectors=[(1.0, 1.0) for _ in xrange(num_points)],
+                                   angles_deg=[90.0 for _ in xrange(num_points)])
+
+assert indices == [2, 2, -1, 2, 1, 2]
+
+flanders.free_context(context)
