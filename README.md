@@ -76,6 +76,16 @@ assert indices == [2, -1]
 flanders.free_context(context)
 ```
 
+If you leave out the view vectors and angles, the code will search for the nearest neighbor
+without taking any angles into account:
+
+```python
+indices = flanders.search_neighbor(context,
+                                   coordinates=[(119.2, 59.7), (155.2, 30.2)])
+
+assert indices == [5, 5]
+```
+
 Instead of searching nearest neighbors of coordinates, you can also search by nearest neighbors of the points by their indices:
 
 ```python
