@@ -87,7 +87,7 @@ indices = flanders.search_neighbor(context,
 assert indices == [2, 2, -1, 2, 1, 2]
 ```
 
-For debugging you can employ the naive implementation:
+For debugging you can employ the naive slow implementation:
 
 ```python
 indices = flanders.search_neighbor(context,
