@@ -67,8 +67,6 @@ def search_neighbor(context,
         y_p = ffi.cast("double *", y_np.ctypes.data)
     else:
         num_indices = len(ref_indices)
-        ref_indices_np = np.array(ref_indices)
-        ref_indices_p = ffi.cast("int *", ref_indices_np.ctypes.data)
 
     indices_np = np.zeros(num_indices, dtype=np.int32)
     indices_p = ffi.cast("int *", indices_np.ctypes.data)
@@ -103,7 +101,7 @@ def search_neighbor(context,
         _lib.search_neighbor_index(context,
                                    num_indices,
                                    indices_p,
-                                   ref_indices_p,
+                                   ref_indices,
                                    use_angles,
                                    vx_p,
                                    vy_p,

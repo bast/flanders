@@ -24,7 +24,7 @@ def test_library():
     for batch in range(num_batches):
         i = batch*batch_length
         j = batch*batch_length + batch_length
-        ref_indices = range(i, j)
+        ref_indices = list(range(i, j))
         indices_fast = search_neighbor(context,
                                        ref_indices=ref_indices)
         indices_naive = search_neighbor(context,
@@ -32,11 +32,21 @@ def test_library():
                                         naive=True)
         assert indices_fast == indices_naive
 
+    # compare pointwise vs. batched
+    for batch in range(num_batches):
+        i = batch*batch_length
+        j = batch*batch_length + batch_length
+        ref_indices = list(range(i, j))
+        indices_batch = search_neighbor(context,
+                                        ref_indices=ref_indices)
+        indices_pointwise = [search_neighbor(context, ref_indices=[i])[0] for i in ref_indices]
+        assert indices_batch == indices_pointwise
+
     # verify results with angles
     for batch in range(num_batches):
         i = batch*batch_length
         j = batch*batch_length + batch_length
-        ref_indices = range(i, j)
+        ref_indices = list(range(i, j))
         indices_fast = search_neighbor(context,
                                        ref_indices=ref_indices,
                                        view_vectors=view_vectors[i:j],
