@@ -26,3 +26,4 @@ modules:
     - '%(url_root)modules/default_build_paths.cmake'
     - 'custom/src.cmake'
     - '%(url_root)modules/export_header.cmake'
+    - 'custom/testing.cmake'

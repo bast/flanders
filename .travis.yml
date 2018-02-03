@@ -34,9 +34,7 @@ script:
   - cmake -H. -Bbuild -DENABLE_OPENMP=True -DCMAKE_CXX_COMPILER=$CXX
   - cd build
   - cmake --build .
-# - ctest
-  - cd ..
-  - FLANDERS_BUILD_DIR=$PWD/build py.test -s -vv test.py
+  - ctest
 
 after_success:
   - pip install git+https://github.com/bast/flanders.git
