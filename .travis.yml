@@ -32,9 +32,10 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - ./setup --cxx=$CXX --omp
+  - cmake -H. -Bbuild -DENABLE_OPENMP=True
   - cd build
-  - make
+  - cmake --build .
+# - ctest
   - cd ..
   - FLANDERS_BUILD_DIR=$PWD/build py.test -s -vv test.py
 
