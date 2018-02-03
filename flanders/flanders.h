@@ -1,5 +1,4 @@
-#ifndef CPP_INTERFACE_H_INCLUDED
-#define CPP_INTERFACE_H_INCLUDED
+#pragma once
 
 #ifndef FLANDERS_API
 #include "flanders_export.h"
@@ -52,5 +51,3 @@ void search_neighbor_index(const context_t *context,
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* CPP_INTERFACE_H_INCLUDED */

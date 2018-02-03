@@ -1,7 +1,6 @@
-#ifndef BTREE_H_INCLUDED
-#define BTREE_H_INCLUDED
+#pragma once
 
-#include <vector> /* vector */
+#include <vector>
 
 struct node
 {
@@ -91,5 +90,3 @@ class btree
     void check_that_context_is_initialized() const;
     bool is_initialized = false;
 };
-
-#endif /* BTREE_H_INCLUDED */
