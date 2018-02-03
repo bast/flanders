@@ -32,7 +32,7 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - cmake -H. -Bbuild -DENABLE_OPENMP=True
+  - cmake -H. -Bbuild -DENABLE_OPENMP=True -DCMAKE_CXX_COMPILER=$CXX
   - cd build
   - cmake --build .
 # - ctest
