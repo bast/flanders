@@ -1,7 +1,3 @@
-include_directories(
-    ${PROJECT_BINARY_DIR}/include
-    )
-
 add_library(
     flanders
     SHARED
@@ -22,6 +18,12 @@ add_library(
 target_link_libraries(
     flanders
     stdc++
+    )
+
+target_include_directories(
+    flanders
+    PUBLIC
+    ${PROJECT_BINARY_DIR}/include
     )
 
 install(TARGETS flanders LIBRARY DESTINATION "lib")
