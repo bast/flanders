@@ -61,6 +61,9 @@ points with a certain view vector and view angle. The first reference
 point finds point 2. The second reference point does not find any
 neighbor within the view angle and returns -1.
 
+.. image:: https://github.com/bast/flanders/raw/master/example/flanders.png
+   :width: 300 px
+
 .. code:: python
 
   import flanders
