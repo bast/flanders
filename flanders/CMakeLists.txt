@@ -14,12 +14,6 @@ add_library(
     distance.cpp
     )
 
-# clang seems to need this
-target_link_libraries(
-    flanders
-    stdc++
-    )
-
 target_include_directories(
     flanders
     PUBLIC
