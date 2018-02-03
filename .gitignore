@@ -3,3 +3,4 @@ __pycache__/
 .cache/
 build/
 *.pyc
+.pytest_cache/
