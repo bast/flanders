@@ -1,71 +1,74 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
-import distutils.spawn as _spawn
-import distutils.command.build as _build
-import distutils.dir_util as _dir_util
-import setuptools.command.install as _install
 import os
 import sys
+
+from distutils.core import setup
+from distutils import spawn
+import distutils.command.build as _build
 from distutils.sysconfig import get_python_lib
-from shutil import copy2
 
 
-def run_cmake():
-    """
-    Runs CMake to determine configuration for this build.
-    """
-    if _spawn.find_executable('cmake') is None:
-        print("CMake is required to build this package.")
-        print("Please install/load CMake and re-run setup.")
-        sys.exit(-1)
+def extend_build(package_name):
+    class build(_build.build):
+        def run(self):
+            cwd = os.getcwd()
+            if spawn.find_executable('cmake') is None:
+                sys.stderr.write("CMake is required to build this package.\n")
+                sys.exit(-1)
+            _source_dir = os.path.split(__file__)[0]
+            _build_dir = os.path.join(_source_dir, 'build_setup_py')
+            _prefix = os.path.join(get_python_lib(), package_name)
+            try:
+                spawn.spawn(['cmake',
+                             '-H{0}'.format(_source_dir),
+                             '-B{0}'.format(_build_dir),
+                             '-DENABLE_OPENMP=True',
+                             '-DCMAKE_INSTALL_PREFIX={0}'.format(_prefix),
+                             ])
+                spawn.spawn(['cmake',
+                             '--build', _build_dir,
+                             '--target', 'install'])
+                os.chdir(cwd)
+            except spawn.DistutilsExecError:
+                sys.stderr.write("Error while building with CMake\n")
+                sys.exit(-1)
+            _build.build.run(self)
+    return build
 
-    _build_dir = os.path.join(os.path.split(__file__)[0], 'build')
-    _dir_util.mkpath(_build_dir)
-    os.chdir(_build_dir)
+_here = os.path.abspath(os.path.dirname(__file__))
 
-    try:
-        _spawn.spawn(['cmake', '-DENABLE_OPENMP=True', '..'])
-    except _spawn.DistutilsExecError:
-        print("Error while running CMake")
-        sys.exit(-1)
+if sys.version_info[0] < 3:
+    with open(os.path.join(_here, 'README.rst')) as f:
+        long_description = f.read()
+else:
+    with open(os.path.join(_here, 'README.rst'), encoding='utf-8') as f:
+        long_description = f.read()
 
-
-class build(_build.build):
-
-    def run(self):
-        cwd = os.getcwd()
-        run_cmake()
-
-        try:
-            _spawn.spawn(['make'])
-            os.chdir(cwd)
-        except _spawn.DistutilsExecError:
-            print("Error while running Make")
-            sys.exit(-1)
-
-        _build.build.run(self)
-
-
-class install(_install.install):
-    def run(self):
-        cwd = os.getcwd()
-        _install.install.run(self)
-        _target_path = os.path.join(get_python_lib(), 'flanders')
-
-        for f in [os.path.join('build', 'lib', 'libflanders.so'),
-                  os.path.join('build', 'include', 'flanders_export.h'),
-                  os.path.join('flanders', 'flanders.h')]:
-            copy2(os.path.join(cwd, f), _target_path)
+version = {}
+with open(os.path.join(_here, 'flanders', 'version.py')) as f:
+    exec(f.read(), version)
 
 
-setup(name='flanders',
-      version='0.0.0',
-      description='Fast 2D nearest neighbor search with an angle.',
-      author='Radovan Bast',
-      author_email='radovan.bast@gmail.com',
-      url='https://github.com/bast/flanders',
-      packages=['flanders'],
-      license='MPL-v2.0',
-      install_requires=['cffi', 'numpy'],
-      cmdclass={'install': install, 'build': build})
+setup(
+    name='flanders',
+    version=version['__version__'],
+    description=('Fast 2D nearest neighbor search with an angle.'),
+    long_description=long_description,
+    author='Radovan Bast',
+    author_email='radovan.bast@uit.no',
+    url='https://github.com/bast/flanders',
+    license='MPL-2.0',
+    packages=['flanders'],
+    install_requires=[
+        'cffi',
+        'numpy',
+    ],
+    include_package_data=True,
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Science/Research',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.6'],
+    cmdclass={'build': extend_build('flanders')},
+    )
