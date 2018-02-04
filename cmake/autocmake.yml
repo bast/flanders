@@ -21,6 +21,7 @@ modules:
     - '%(url_root)compilers/Intel.CXX.cmake'
 - plugins:
   - source:
+    - 'custom/cpp-standard.cmake'
     - '%(url_root)modules/omp.cmake'
     - '%(url_root)modules/safeguards.cmake'
     - '%(url_root)modules/default_build_paths.cmake'
