@@ -21,7 +21,8 @@ context_t *new_context(const int num_points,
 FLANDERS_API
 void free_context(context_t *context);
 
-// Returns index of nearest point to the point number ref_index.
+// Returns indices of nearest neighbors either by coordinates
+// or by their index (ref_index).
 // By default, only the distance counts. If use_angles is true,
 // then the view vector and angle are taken into account.
 // In the latter case it is possible that no nearest neighbor exists,
