@@ -50,7 +50,7 @@ Installation using pip
 
 .. code:: shell
 
-  $ pip install git+https://github.com/bast/flanders.git
+  $ pip install flanders
 
 
 Example
