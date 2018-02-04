@@ -6,19 +6,19 @@ import numpy as np
 
 _this_path = os.path.dirname(os.path.realpath(__file__))
 
-_build_dir = os.getenv('FLANDERS_BUILD_DIR')
-if _build_dir is None:
-    _build_dir = _this_path
-else:
-    _build_dir = os.path.join(_build_dir, 'lib')
+_library_dir = os.getenv('FLANDERS_LIBRARY_DIR')
+if _library_dir is None:
+    _library_dir = os.path.join(_this_path, 'lib')
 
-_include_dir = _this_path
+_include_dir = os.getenv('FLANDERS_INCLUDE_DIR')
+if _include_dir is None:
+    _include_dir = os.path.join(_this_path, 'include')
 
 _lib = get_lib_handle(
-    ['-DFLANDERS_API=', '-DCPP_INTERFACE_NOINCLUDE'],
+    ['-DFLANDERS_API='],
     'flanders.h',
     'flanders',
-    _build_dir,
+    _library_dir,
     _include_dir
 )
 
