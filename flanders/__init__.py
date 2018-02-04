@@ -25,8 +25,7 @@ _lib = get_lib_handle(
 
 # outward facing API
 
-def new_context(num_points,
-                points):
+def new_context(*, num_points, points):
 
     x_coordinates, y_coordinates = zip(*points)
 
@@ -49,12 +48,13 @@ def new_context(num_points,
 free_context = _lib.free_context
 
 
-def search_neighbor(context,
-                    ref_indices=None,
-                    coordinates=None,
-                    view_vectors=None,
-                    angles_deg=None,
-                    naive=False):
+def search_neighbors(*,
+                     context,
+                     ref_indices=None,
+                     coordinates=None,
+                     view_vectors=None,
+                     angles_deg=None,
+                     naive=False):
 
     ffi = FFI()
 
@@ -87,25 +87,25 @@ def search_neighbor(context,
         angles_deg_p = ffi.cast("double *", angles_deg_np.ctypes.data)
 
     if ref_indices is None:
-        _lib.search_neighbor_xy(context,
-                                num_indices,
-                                indices_p,
-                                x_p,
-                                y_p,
-                                use_angles,
-                                vx_p,
-                                vy_p,
-                                angles_deg_p,
-                                naive)
+        _lib.search_neighbors_by_coordinates(context,
+                                             num_indices,
+                                             indices_p,
+                                             x_p,
+                                             y_p,
+                                             use_angles,
+                                             vx_p,
+                                             vy_p,
+                                             angles_deg_p,
+                                             naive)
     else:
-        _lib.search_neighbor_index(context,
-                                   num_indices,
-                                   indices_p,
-                                   ref_indices,
-                                   use_angles,
-                                   vx_p,
-                                   vy_p,
-                                   angles_deg_p,
-                                   naive)
+        _lib.search_neighbor_by_indices(context,
+                                        num_indices,
+                                        indices_p,
+                                        ref_indices,
+                                        use_angles,
+                                        vx_p,
+                                        vy_p,
+                                        angles_deg_p,
+                                        naive)
 
     return indices_np.tolist()

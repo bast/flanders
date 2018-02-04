@@ -72,12 +72,13 @@ neighbor within the view angle and returns -1.
 
   num_points = len(points)
 
-  context = flanders.new_context(num_points, points)
+  context = flanders.new_context(num_points=num_points,
+                                 points=points)
 
-  indices = flanders.search_neighbor(context,
-                                     coordinates=[(119.2, 59.7), (155.2, 30.2)],
-                                     view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
-                                     angles_deg=[90.0, 90.0])
+  indices = flanders.search_neighbors(context=context,
+                                      coordinates=[(119.2, 59.7), (155.2, 30.2)],
+                                      view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
+                                      angles_deg=[90.0, 90.0])
 
   assert indices == [2, -1]
 
@@ -88,8 +89,8 @@ the nearest neighbor without taking any angles into account:
 
 .. code:: python
 
-  indices = flanders.search_neighbor(context,
-                                     coordinates=[(119.2, 59.7), (155.2, 30.2)])
+  indices = flanders.search_neighbors(context=context,
+                                      coordinates=[(119.2, 59.7), (155.2, 30.2)])
 
   assert indices == [5, 5]
 
@@ -98,22 +99,24 @@ search by nearest neighbors of the points by their indices:
 
 .. code:: python
 
-  indices = flanders.search_neighbor(context,
-                                     ref_indices=range(num_points),
-                                     view_vectors=[(1.0, 1.0) for _ in range(num_points)],
-                                     angles_deg=[90.0 for _ in range(num_points)])
+  indices = flanders.search_neighbors(context=context,
+                                      ref_indices=list(range(num_points)),
+                                      view_vectors=[(1.0, 1.0) for _ in range(num_points)],
+                                      angles_deg=[90.0 for _ in range(num_points)])
 
-  assert indices == [2, 2, -1, 2, 1, 2]
+  assert indices == [2, -1, 1, 2, -1, 1]
 
 For debugging you can employ the naive slow implementation:
 
 .. code:: python
 
-  indices = flanders.search_neighbor(context,
-                                     coordinates=[(119.2, 59.7), (155.2, 30.2)],
-                                     view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
-                                     angles_deg=[90.0, 90.0],
-                                     naive=True)
+  indices = flanders.search_neighbors(context=context,
+                                      coordinates=[(119.2, 59.7), (155.2, 30.2)],
+                                      view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
+                                      angles_deg=[90.0, 90.0],
+                                      naive=True)
+
+  assert indices == [2, -1]
 
 
 Efficiency considerations

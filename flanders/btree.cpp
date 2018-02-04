@@ -386,30 +386,30 @@ int btree::traverse(node *leaf,
 }
 
 FLANDERS_API
-void search_neighbor_xy(const context_t *context,
-                        const int num_indices,
-                        int indices[],
-                        const double x[],
-                        const double y[],
-                        const bool use_angles,
-                        const double vx[],
-                        const double vy[],
-                        const double angles_deg[],
-                        const bool naive)
+void search_neighbors_by_coordinates(const context_t *context,
+                                     const int num_indices,
+                                     int indices[],
+                                     const double x[],
+                                     const double y[],
+                                     const bool use_angles,
+                                     const double vx[],
+                                     const double vy[],
+                                     const double angles_deg[],
+                                     const bool naive)
 {
     AS_CTYPE(btree, context)
-        ->search_neighbor_xy(
+        ->search_neighbors_by_coordinates(
             num_indices, indices, x, y, use_angles, vx, vy, angles_deg, naive);
 }
-void btree::search_neighbor_xy(const int num_indices,
-                               int indices[],
-                               const double x[],
-                               const double y[],
-                               const bool use_angles,
-                               const double vx[],
-                               const double vy[],
-                               const double angles_deg[],
-                               const bool naive) const
+void btree::search_neighbors_by_coordinates(const int num_indices,
+                                            int indices[],
+                                            const double x[],
+                                            const double y[],
+                                            const bool use_angles,
+                                            const double vx[],
+                                            const double vy[],
+                                            const double angles_deg[],
+                                            const bool naive) const
 {
     check_that_context_is_initialized();
 
@@ -417,7 +417,7 @@ void btree::search_neighbor_xy(const int num_indices,
     int ref_index = -1; // unused
 
 #ifdef HAVE_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (int i = 0; i < num_indices; i++)
     {
@@ -447,41 +447,41 @@ void btree::search_neighbor_xy(const int num_indices,
 }
 
 FLANDERS_API
-void search_neighbor_index(const context_t *context,
-                           const int num_indices,
-                           int indices[],
-                           const int ref_indices[],
-                           const bool use_angles,
-                           const double vx[],
-                           const double vy[],
-                           const double angles_deg[],
-                           const bool naive)
+void search_neighbor_by_indices(const context_t *context,
+                                const int num_indices,
+                                int indices[],
+                                const int ref_indices[],
+                                const bool use_angles,
+                                const double vx[],
+                                const double vy[],
+                                const double angles_deg[],
+                                const bool naive)
 {
     AS_CTYPE(btree, context)
-        ->search_neighbor_index(num_indices,
-                                indices,
-                                ref_indices,
-                                use_angles,
-                                vx,
-                                vy,
-                                angles_deg,
-                                naive);
+        ->search_neighbor_by_indices(num_indices,
+                                     indices,
+                                     ref_indices,
+                                     use_angles,
+                                     vx,
+                                     vy,
+                                     angles_deg,
+                                     naive);
 }
-void btree::search_neighbor_index(const int num_indices,
-                                  int indices[],
-                                  const int ref_indices[],
-                                  const bool use_angles,
-                                  const double vx[],
-                                  const double vy[],
-                                  const double angles_deg[],
-                                  const bool naive) const
+void btree::search_neighbor_by_indices(const int num_indices,
+                                       int indices[],
+                                       const int ref_indices[],
+                                       const bool use_angles,
+                                       const double vx[],
+                                       const double vy[],
+                                       const double angles_deg[],
+                                       const bool naive) const
 {
     check_that_context_is_initialized();
 
     bool skip_ref_index = true;
 
 #ifdef HAVE_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (int i = 0; i < num_indices; i++)
     {

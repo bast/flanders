@@ -18,24 +18,24 @@ class btree
     btree(const int num_points, const double x[], const double y[]);
     ~btree();
 
-    void search_neighbor_xy(const int num_indices,
-                            int indices[],
-                            const double x[],
-                            const double y[],
-                            const bool use_angles,
-                            const double vx[],
-                            const double vy[],
-                            const double angles_deg[],
-                            const bool naive) const;
+    void search_neighbors_by_coordinates(const int num_indices,
+                                         int indices[],
+                                         const double x[],
+                                         const double y[],
+                                         const bool use_angles,
+                                         const double vx[],
+                                         const double vy[],
+                                         const double angles_deg[],
+                                         const bool naive) const;
 
-    void search_neighbor_index(const int num_indices,
-                               int indices[],
-                               const int ref_indices[],
-                               const bool use_angles,
-                               const double vx[],
-                               const double vy[],
-                               const double angles_deg[],
-                               const bool naive) const;
+    void search_neighbor_by_indices(const int num_indices,
+                                    int indices[],
+                                    const int ref_indices[],
+                                    const bool use_angles,
+                                    const double vx[],
+                                    const double vy[],
+                                    const double angles_deg[],
+                                    const bool naive) const;
 
   private:
     btree(const btree &rhs);            // not implemented

@@ -28,27 +28,27 @@ void free_context(context_t *context);
 // In the latter case it is possible that no nearest neighbor exists,
 // and in this case the function returns -1.
 FLANDERS_API
-void search_neighbor_xy(const context_t *context,
-                        const int num_indices,
-                        int indices[],
-                        const double x[],
-                        const double y[],
-                        const bool use_angles,
-                        const double vx[],
-                        const double vy[],
-                        const double angles_deg[],
-                        const bool naive);
+void search_neighbors_by_coordinates(const context_t *context,
+                                     const int num_indices,
+                                     int indices[],
+                                     const double x[],
+                                     const double y[],
+                                     const bool use_angles,
+                                     const double vx[],
+                                     const double vy[],
+                                     const double angles_deg[],
+                                     const bool naive);
 
 FLANDERS_API
-void search_neighbor_index(const context_t *context,
-                           const int num_indices,
-                           int indices[],
-                           const int ref_indices[],
-                           const bool use_angles,
-                           const double vx[],
-                           const double vy[],
-                           const double angles_deg[],
-                           const bool naive);
+void search_neighbor_by_indices(const context_t *context,
+                                const int num_indices,
+                                int indices[],
+                                const int ref_indices[],
+                                const bool use_angles,
+                                const double vx[],
+                                const double vy[],
+                                const double angles_deg[],
+                                const bool naive);
 
 #ifdef __cplusplus
 }
