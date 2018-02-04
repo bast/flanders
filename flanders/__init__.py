@@ -25,7 +25,7 @@ _lib = get_lib_handle(
 
 # outward facing API
 
-def new_context(*, num_points, points):
+def new_context(num_points, points):
 
     x_coordinates, y_coordinates = zip(*points)
 
@@ -48,8 +48,7 @@ def new_context(*, num_points, points):
 free_context = _lib.free_context
 
 
-def search_neighbors(*,
-                     context,
+def search_neighbors(context,
                      ref_indices=None,
                      coordinates=None,
                      view_vectors=None,
