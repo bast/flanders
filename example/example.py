@@ -4,20 +4,21 @@ points = [(60.4, 51.3), (173.9, 143.8), (132.9, 124.9), (19.5, 108.9), (196.5, 9
 
 num_points = len(points)
 
-context = flanders.new_context(num_points, points)
+context = flanders.new_context(num_points=num_points,
+                               points=points)
 
-indices = flanders.search_neighbor(context,
-                                   coordinates=[(119.2, 59.7), (155.2, 30.2)],
-                                   view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
-                                   angles_deg=[90.0, 90.0])
+indices = flanders.search_neighbors(context=context,
+                                    coordinates=[(119.2, 59.7), (155.2, 30.2)],
+                                    view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
+                                    angles_deg=[90.0, 90.0])
 
 assert indices == [2, -1]
 
-indices = flanders.search_neighbor(context,
-                                   ref_indices=range(num_points),
-                                   view_vectors=[(1.0, 1.0) for _ in range(num_points)],
-                                   angles_deg=[90.0 for _ in range(num_points)])
+indices = flanders.search_neighbors(context=context,
+                                    ref_indices=list(range(num_points)),
+                                    view_vectors=[(1.0, 1.0) for _ in range(num_points)],
+                                    angles_deg=[90.0 for _ in range(num_points)])
 
-assert indices == [2, 2, -1, 2, 1, 2]
+assert indices == [2, -1, 1, 2, -1, 1]
 
 flanders.free_context(context)
