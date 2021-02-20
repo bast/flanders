@@ -56,9 +56,9 @@ Installation using pip
 Example
 -------
 
-In this example we have 6 points (numbered 0 to 5) and two reference
-points with a certain view vector and view angle. The first reference
-point finds point 2. The second reference point does not find any
+In this example we have 6 points (numbered 0 to 5) and two observer
+points with a certain view vector and view angle (90 degrees). The first observer
+point finds point 2. The second observer point does not find any
 neighbor within the view angle and returns -1.
 
 .. image:: https://github.com/bast/flanders/raw/master/example/flanders.png
