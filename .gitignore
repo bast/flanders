@@ -6,3 +6,5 @@ build/
 .pytest_cache/
 MANIFEST
 dist/
+Cargo.lock
+target/

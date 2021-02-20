@@ -1,0 +1,9 @@
+[package]
+name = "flanders"
+version = "0.2.0"
+authors = ["Radovan Bast <bast@users.noreply.github.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
