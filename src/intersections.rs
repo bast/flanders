@@ -1,3 +1,4 @@
+#![allow(clippy::many_single_char_names)]
 use crate::vector::Vector;
 
 // rotate vector by angle_deg
@@ -22,11 +23,9 @@ fn get_intersection(u1: &(f64, f64, f64), u2: &(f64, f64, f64)) -> (f64, f64, f6
 #[inline]
 fn sgn(x: f64) -> i32 {
     if x < 0.0 {
-        return -1;
-    } else if x > 0.0 {
-        return 1;
+        -1
     } else {
-        return 0;
+        1
     }
 }
 
@@ -43,22 +42,21 @@ fn line_coeffs_from_two_points(p1: &Vector, p2: &Vector) -> (f64, f64, f64) {
 // This function finds the intersection point u between the ray
 // and a line p1-p2. If an intersection point exists, function returns true.
 fn intersection_point_exists(p1: &Vector, p2: &Vector, observer: &Vector, v: &Vector) -> bool {
-    const TINY: f64 = 1.0e-20;
+    let observer_plus_v = observer.add(&v);
 
-    let r2 = observer.add(&v);
-
-    let ray = line_coeffs_from_two_points(&observer, &r2);
+    let ray = line_coeffs_from_two_points(&observer, &observer_plus_v);
     let line = line_coeffs_from_two_points(&p1, &p2);
 
     let (a, b, c) = get_intersection(&line, &ray);
 
-    if c.abs() < TINY {
+    if c.abs() < f64::EPSILON {
         return false;
     }
 
     let u = Vector { x: a / c, y: b / c };
 
     // check whether intersection is in the direction of the ray
+    // FIXME: is this really needed?
     if sgn(u.x - observer.x) != sgn(v.x) {
         return false;
     }
@@ -67,37 +65,26 @@ fn intersection_point_exists(p1: &Vector, p2: &Vector, observer: &Vector, v: &Ve
     }
 
     // check whether intersection is not outside line bounds
-    // FIXME check this code - when porting to Rust I didn't understand this anymore and converted
-    // in the blind
-    let min_loc = p1.x.min(p2.x);
-    let max_loc = p1.x.max(p2.x);
-    if (max_loc - min_loc).abs() > TINY {
-        if (u.x.min(min_loc) - u.x).abs() > TINY {
-            return false;
-        }
-        if (u.x.max(max_loc) - u.x).abs() > TINY {
-            return false;
-        }
+    if u.x < p1.x.min(p2.x) {
+        return false;
     }
-    let min_loc = p1.y.min(p2.y);
-    let max_loc = p1.y.max(p2.y);
-    if (max_loc - min_loc).abs() > TINY {
-        if (u.y.min(min_loc) - u.y).abs() > TINY {
-            return false;
-        }
-        if (u.y.max(max_loc) - u.y).abs() > TINY {
-            return false;
-        }
+    if u.x > p1.x.max(p2.x) {
+        return false;
+    }
+    if u.y < p1.y.min(p2.y) {
+        return false;
+    }
+    if u.y > p1.y.max(p2.y) {
+        return false;
     }
 
-    // intersection point exists
     true
 }
 
 // Computes number of intersection of two rays starting from view_origin
 // intersecting with line between p1 and p2.
 // Returns 0, 1, or 2.
-fn get_num_intersections(
+pub fn num_intersections(
     p1: &Vector,
     p2: &Vector,
     observer: &Vector,

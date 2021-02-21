@@ -17,7 +17,7 @@ where
     contents.lines().map(|s| s.parse().unwrap()).collect()
 }
 
-fn get_random_points(
+fn _get_random_points(
     num_points: usize,
     x_min: f64,
     x_max: f64,
@@ -38,7 +38,7 @@ fn get_random_points(
 }
 
 #[test]
-fn noddy() {
+fn test() {
     let points: Vec<Vector> = read_vector("tests/reference/points.txt");
     let view_vectors: Vec<Vector> = read_vector("tests/reference/view_vectors.txt");
     let view_angles_deg: Vec<f64> = read_vector("tests/reference/angles.txt");
@@ -61,6 +61,22 @@ fn noddy() {
     for (i, observer) in observers.iter().enumerate() {
         let index = flanders::nearest_index_from_coordinates_noddy(
             &points,
+            &observer,
+            &view_vectors[i],
+            view_angles_deg[i],
+        );
+        assert_eq!(index, indices_from_coordinates[i]);
+    }
+
+    let tree = flanders::build_tree(&points);
+
+    for (i, observer) in observers.iter().enumerate() {
+        let large_number = std::f64::MAX;
+        let (index, _) = flanders::nearest_index_from_coordinates(
+            0,
+            -1,
+            large_number,
+            &tree,
             &observer,
             &view_vectors[i],
             view_angles_deg[i],
