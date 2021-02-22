@@ -17,24 +17,24 @@ where
     contents.lines().map(|s| s.parse().unwrap()).collect()
 }
 
-fn _get_random_points(
-    num_points: usize,
+fn _get_random_vectors(
+    num_vectors: usize,
     x_min: f64,
     x_max: f64,
     y_min: f64,
     y_max: f64,
 ) -> Vec<Vector> {
     let mut rng = rand::thread_rng();
-    let mut points = Vec::new();
+    let mut vectors = Vec::new();
 
-    for _ in 0..num_points {
-        points.push(Vector {
+    for _ in 0..num_vectors {
+        vectors.push(Vector {
             x: rng.gen_range(x_min, x_max),
             y: rng.gen_range(y_min, y_max),
         });
     }
 
-    points
+    vectors
 }
 
 #[test]

@@ -254,67 +254,66 @@ fn node_intersected_by_rays(
     view_vector: &Vector,
     view_angle_deg: f64,
 ) -> bool {
-    // to check this we go around the four corners, clockwise
+    // to check this we go around the four corners
     //  corner2 -----.  corner1 --corner2
     //    |          |    |          |
     //    |          | -> |          | -> ....
     //    |          |    |          |
     //  corner1 -----.    .----------.
 
-    let corner1 = Vector {
-        x: node.bounds[0].min,
-        y: node.bounds[1].min,
-    };
-    let corner2 = Vector {
-        x: node.bounds[0].min,
-        y: node.bounds[1].max,
-    };
-    if intersections::num_intersections(&corner1, &corner2, &observer, &view_vector, view_angle_deg)
-        > 0
+    for (corner1, corner2) in [
+        (
+            Vector {
+                x: node.bounds[0].min,
+                y: node.bounds[1].min,
+            },
+            Vector {
+                x: node.bounds[0].min,
+                y: node.bounds[1].max,
+            },
+        ),
+        (
+            Vector {
+                x: node.bounds[0].min,
+                y: node.bounds[1].max,
+            },
+            Vector {
+                x: node.bounds[0].max,
+                y: node.bounds[1].max,
+            },
+        ),
+        (
+            Vector {
+                x: node.bounds[0].max,
+                y: node.bounds[1].min,
+            },
+            Vector {
+                x: node.bounds[0].max,
+                y: node.bounds[1].max,
+            },
+        ),
+        (
+            Vector {
+                x: node.bounds[0].min,
+                y: node.bounds[1].min,
+            },
+            Vector {
+                x: node.bounds[0].max,
+                y: node.bounds[1].min,
+            },
+        ),
+    ]
+    .iter()
     {
-        return true;
-    }
-
-    let corner1 = Vector {
-        x: node.bounds[0].min,
-        y: node.bounds[1].max,
-    };
-    let corner2 = Vector {
-        x: node.bounds[0].max,
-        y: node.bounds[1].max,
-    };
-    if intersections::num_intersections(&corner1, &corner2, &observer, &view_vector, view_angle_deg)
-        > 0
-    {
-        return true;
-    }
-
-    let corner1 = Vector {
-        x: node.bounds[0].max,
-        y: node.bounds[1].max,
-    };
-    let corner2 = Vector {
-        x: node.bounds[0].max,
-        y: node.bounds[1].min,
-    };
-    if intersections::num_intersections(&corner1, &corner2, &observer, &view_vector, view_angle_deg)
-        > 0
-    {
-        return true;
-    }
-
-    let corner1 = Vector {
-        x: node.bounds[0].max,
-        y: node.bounds[1].min,
-    };
-    let corner2 = Vector {
-        x: node.bounds[0].min,
-        y: node.bounds[1].min,
-    };
-    if intersections::num_intersections(&corner1, &corner2, &observer, &view_vector, view_angle_deg)
-        > 0
-    {
-        return true;
+        if intersections::view_cone_and_line_interect(
+            &corner1,
+            &corner2,
+            &observer,
+            &view_vector,
+            view_angle_deg,
+        ) {
+            return true;
+        }
     }
 
     false
