@@ -1,3 +1,5 @@
+use rayon::prelude::*;
+
 use std::collections::HashMap;
 
 use crate::distance;
@@ -147,22 +149,30 @@ pub fn nearest_indices_from_coordinates(
     view_vectors: &[Vector],
     view_angles_deg: &[f64],
 ) -> Vec<i32> {
-    let large_number = std::f64::MAX;
-    let mut indices = Vec::new();
+    observers
+        .par_iter()
+        .enumerate()
+        .map(|(i, o)| wrap(&tree, &o, &view_vectors[i], view_angles_deg[i]))
+        .collect()
+}
 
-    for i in 0..observers.len() {
-        let (index, _) = nearest_index_from_coordinates(
-            0,
-            -1,
-            large_number,
-            &tree,
-            &observers[i],
-            &view_vectors[i],
-            view_angles_deg[i],
-        );
-        indices.push(index);
-    }
-    indices
+fn wrap(
+    tree: &HashMap<usize, Node>,
+    observer: &Vector,
+    view_vector: &Vector,
+    view_angles_deg: f64,
+) -> i32 {
+    let large_number = std::f64::MAX;
+    let (index, _) = nearest_index_from_coordinates(
+        0,
+        -1,
+        large_number,
+        &tree,
+        &observer,
+        &view_vector,
+        view_angles_deg,
+    );
+    index
 }
 
 fn nearest_index_from_coordinates(
