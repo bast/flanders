@@ -141,7 +141,31 @@ pub fn build_tree(points: &[Vector]) -> HashMap<usize, Node> {
     tree
 }
 
-pub fn nearest_index_from_coordinates(
+pub fn nearest_indices_from_coordinates(
+    tree: &HashMap<usize, Node>,
+    observers: &[Vector],
+    view_vectors: &[Vector],
+    view_angles_deg: &[f64],
+) -> Vec<i32> {
+    let large_number = std::f64::MAX;
+    let mut indices = Vec::new();
+
+    for i in 0..observers.len() {
+        let (index, _) = nearest_index_from_coordinates(
+            0,
+            -1,
+            large_number,
+            &tree,
+            &observers[i],
+            &view_vectors[i],
+            view_angles_deg[i],
+        );
+        indices.push(index);
+    }
+    indices
+}
+
+fn nearest_index_from_coordinates(
     current_index: usize,
     best_index: i32,
     best_distance: f64,
@@ -305,7 +329,7 @@ fn node_intersected_by_rays(
     ]
     .iter()
     {
-        if intersections::view_cone_and_line_interect(
+        if intersections::view_cone_and_line_intersect(
             &corner1,
             &corner2,
             &observer,

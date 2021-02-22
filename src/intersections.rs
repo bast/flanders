@@ -66,7 +66,7 @@ fn ray_and_line_intersect(p1: &Vector, p2: &Vector, observer: &Vector, v: &Vecto
     }
 }
 
-pub fn view_cone_and_line_interect(
+pub fn view_cone_and_line_intersect(
     p1: &Vector,
     p2: &Vector,
     observer: &Vector,
