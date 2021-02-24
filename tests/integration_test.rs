@@ -25,8 +25,8 @@ fn get_random_vectors(n: usize) -> Vec<Vector> {
 
     for _ in 0..n {
         vectors.push(Vector {
-            x: rng.gen_range(-1.0, 1.0),
-            y: rng.gen_range(-1.0, 1.0),
+            x: rng.gen_range(-1.0..1.0),
+            y: rng.gen_range(-1.0..1.0),
         });
     }
 
@@ -38,7 +38,7 @@ fn get_random_angles(n: usize) -> Vec<f64> {
     let mut angles = Vec::new();
 
     for _ in 0..n {
-        angles.push(rng.gen_range(5.0, 90.0));
+        angles.push(rng.gen_range(5.0..90.0));
     }
 
     angles
