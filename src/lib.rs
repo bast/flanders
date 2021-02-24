@@ -11,5 +11,5 @@ pub use crate::vector::Vector;
 pub use crate::tree::build_tree;
 pub use crate::tree::nearest_indices_from_coordinates;
 
-pub use crate::view::nearest_index_from_coordinates_noddy;
-pub use crate::view::nearest_index_from_index_noddy;
+pub use crate::view::nearest_indices_from_coordinates_noddy;
+pub use crate::view::nearest_indices_from_indices_noddy;
