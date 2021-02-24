@@ -1,7 +1,7 @@
-.. image:: https://travis-ci.org/bast/flanders.svg?branch=master
-   :target: https://travis-ci.org/bast/flanders/builds
+.. image:: https://github.com/bast/flanders/workflows/Test/badge.svg
+   :target: https://github.com/bast/flanders/actions
 .. image:: https://img.shields.io/badge/license-%20MPL--v2.0-blue.svg
-   :target: ../master/LICENSE
+   :target: LICENSE
 
 
 Flanders: Fast 2D nearest neighbor search with an angle
