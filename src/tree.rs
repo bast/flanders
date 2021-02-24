@@ -143,6 +143,19 @@ pub fn build_tree(points: &[Vector]) -> HashMap<usize, Node> {
     tree
 }
 
+pub fn nearest_indices_from_indices(
+    tree: &HashMap<usize, Node>,
+    observer_indices: &[usize],
+    view_vectors: &[Vector],
+    view_angles_deg: &[f64],
+) -> Vec<i32> {
+    observer_indices
+        .par_iter()
+        .enumerate()
+        .map(|(i, oi)| wrap_nearest_from_index(&tree, *oi, &view_vectors[i], view_angles_deg[i]))
+        .collect()
+}
+
 pub fn nearest_indices_from_coordinates(
     tree: &HashMap<usize, Node>,
     observer_coordinates: &[Vector],
@@ -152,13 +165,15 @@ pub fn nearest_indices_from_coordinates(
     observer_coordinates
         .par_iter()
         .enumerate()
-        .map(|(i, o)| wrap_nearest_index(&tree, &o, &view_vectors[i], view_angles_deg[i]))
+        .map(|(i, oc)| {
+            wrap_nearest_from_coordinate(&tree, &oc, &view_vectors[i], view_angles_deg[i])
+        })
         .collect()
 }
 
-fn wrap_nearest_index(
+fn wrap_nearest_from_index(
     tree: &HashMap<usize, Node>,
-    observer: &Vector,
+    observer_index: usize,
     view_vector: &Vector,
     view_angles_deg: f64,
 ) -> i32 {
@@ -168,7 +183,28 @@ fn wrap_nearest_index(
         -1,
         large_number,
         &tree,
-        &observer,
+        None,
+        Some(observer_index),
+        &view_vector,
+        view_angles_deg,
+    );
+    index
+}
+
+fn wrap_nearest_from_coordinate(
+    tree: &HashMap<usize, Node>,
+    observer_coordinate: &Vector,
+    view_vector: &Vector,
+    view_angles_deg: f64,
+) -> i32 {
+    let large_number = std::f64::MAX;
+    let (index, _) = nearest_index(
+        0,
+        -1,
+        large_number,
+        &tree,
+        Some(*observer_coordinate),
+        None,
         &view_vector,
         view_angles_deg,
     );
@@ -180,23 +216,45 @@ fn nearest_index(
     best_index: i32,
     best_distance: f64,
     tree: &HashMap<usize, Node>,
-    observer_coordinate: &Vector,
+    observer_coordinate_option: Option<Vector>,
+    observer_index_option: Option<usize>,
     view_vector: &Vector,
     view_angle_deg: f64,
 ) -> (i32, f64) {
     let mut new_best_index = best_index;
     let mut new_best_distance = best_distance;
 
-    let node = tree.get(&current_index).unwrap();
-    let c = Vector {
-        x: node.coordinates[0],
-        y: node.coordinates[1],
+    let observer_coordinate = match (observer_coordinate_option, observer_index_option) {
+        (Some(c), None) => c,
+        (None, Some(i)) => {
+            let n = tree.get(&i).unwrap();
+            Vector {
+                x: n.coordinates[0],
+                y: n.coordinates[1],
+            }
+        }
+        (_, _) => panic!("unexpected combination in nearest_index"),
     };
-    if view::point_within_angle(&c, &observer_coordinate, &view_vector, view_angle_deg) {
-        let d = distance::distance(&observer_coordinate, &c);
-        if d < new_best_distance {
-            new_best_distance = d;
-            new_best_index = current_index as i32;
+
+    let node = tree.get(&current_index).unwrap();
+
+    // if we search by index, we don't want to consider the current index
+    let skip_index = match observer_index_option {
+        Some(i) => i == current_index,
+        None => false,
+    };
+
+    if !skip_index {
+        let c = Vector {
+            x: node.coordinates[0],
+            y: node.coordinates[1],
+        };
+        if view::point_within_angle(&c, &observer_coordinate, &view_vector, view_angle_deg) {
+            let d = distance::distance(&observer_coordinate, &c);
+            if d < new_best_distance {
+                new_best_distance = d;
+                new_best_index = current_index as i32;
+            }
         }
     }
 
@@ -236,7 +294,8 @@ fn nearest_index(
             new_best_index,
             new_best_distance,
             &tree,
-            &observer_coordinate,
+            observer_coordinate_option,
+            observer_index_option,
             &view_vector,
             view_angle_deg,
         );
@@ -252,7 +311,8 @@ fn nearest_index(
             new_best_index,
             new_best_distance,
             &tree,
-            &observer_coordinate,
+            observer_coordinate_option,
+            observer_index_option,
             &view_vector,
             view_angle_deg,
         );

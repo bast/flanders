@@ -110,39 +110,39 @@ fn tree_indices_from_coordinates() {
     assert_eq!(indices, indices_noddy);
 }
 
-// #[test]
-// fn tree_indices_from_indices() {
-//     let n = 5_000;
+#[test]
+fn tree_indices_from_indices() {
+    let n = 5_000;
 
-//     let points = get_random_vectors(n);
-//     let observer_indices: Vec<_> = (0..points.len()).collect();
-//     let view_vectors = get_random_vectors(n);
-//     let view_angles_deg = get_random_angles(n);
+    let points = get_random_vectors(n);
+    let observer_indices: Vec<_> = (0..points.len()).collect();
+    let view_vectors = get_random_vectors(n);
+    let view_angles_deg = get_random_angles(n);
 
-//     let start = Instant::now();
-//     let indices_noddy = flanders::nearest_indices_from_indices_noddy(
-//         &points,
-//         &observer_indices,
-//         &view_vectors,
-//         &view_angles_deg,
-//     );
-//     println!("time elapsed in noddy: {:?}", start.elapsed());
+    let start = Instant::now();
+    let indices_noddy = flanders::nearest_indices_from_indices_noddy(
+        &points,
+        &observer_indices,
+        &view_vectors,
+        &view_angles_deg,
+    );
+    println!("time elapsed in noddy: {:?}", start.elapsed());
 
-//     let start = Instant::now();
-//     let tree = flanders::build_tree(&points);
-//     println!("time elapsed in building tree: {:?}", start.elapsed());
+    let start = Instant::now();
+    let tree = flanders::build_tree(&points);
+    println!("time elapsed in building tree: {:?}", start.elapsed());
 
-//     let start = Instant::now();
-//     let indices = flanders::nearest_indices_from_indices(
-//         &tree,
-//         &observer_indices,
-//         &view_vectors,
-//         &view_angles_deg,
-//     );
-//     println!(
-//         "time elapsed in nearest_indices_from_coordinates: {:?}",
-//         start.elapsed()
-//     );
+    let start = Instant::now();
+    let indices = flanders::nearest_indices_from_indices(
+        &tree,
+        &observer_indices,
+        &view_vectors,
+        &view_angles_deg,
+    );
+    println!(
+        "time elapsed in nearest_indices_from_coordinates: {:?}",
+        start.elapsed()
+    );
 
-//     assert_eq!(indices, indices_noddy);
-// }
+    assert_eq!(indices, indices_noddy);
+}
