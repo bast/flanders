@@ -1,3 +1,5 @@
+use pyo3::prelude::*;
+
 use crate::distance;
 use crate::vector::Vector;
 
@@ -26,6 +28,7 @@ pub fn point_within_angle(
     angle_deg.abs() <= (view_angle_deg / 2.0).abs()
 }
 
+//#[pyfunction]
 pub fn nearest_indices_from_coordinates_noddy(
     points: &[Vector],
     observer_coordinates: &[Vector],

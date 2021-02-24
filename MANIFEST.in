@@ -1,3 +1,0 @@
-include README.rst LICENSE CMakeLists.txt
-recursive-include cmake *
-recursive-include flanders *.cpp *.h CMakeLists.txt
