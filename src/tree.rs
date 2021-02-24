@@ -145,25 +145,25 @@ pub fn build_tree(points: &[Vector]) -> HashMap<usize, Node> {
 
 pub fn nearest_indices_from_coordinates(
     tree: &HashMap<usize, Node>,
-    observers: &[Vector],
+    observer_coordinates: &[Vector],
     view_vectors: &[Vector],
     view_angles_deg: &[f64],
 ) -> Vec<i32> {
-    observers
+    observer_coordinates
         .par_iter()
         .enumerate()
-        .map(|(i, o)| wrap(&tree, &o, &view_vectors[i], view_angles_deg[i]))
+        .map(|(i, o)| wrap_nearest_index(&tree, &o, &view_vectors[i], view_angles_deg[i]))
         .collect()
 }
 
-fn wrap(
+fn wrap_nearest_index(
     tree: &HashMap<usize, Node>,
     observer: &Vector,
     view_vector: &Vector,
     view_angles_deg: f64,
 ) -> i32 {
     let large_number = std::f64::MAX;
-    let (index, _) = nearest_index_from_coordinates(
+    let (index, _) = nearest_index(
         0,
         -1,
         large_number,
@@ -175,12 +175,12 @@ fn wrap(
     index
 }
 
-fn nearest_index_from_coordinates(
+fn nearest_index(
     current_index: usize,
     best_index: i32,
     best_distance: f64,
     tree: &HashMap<usize, Node>,
-    observer: &Vector,
+    observer_coordinate: &Vector,
     view_vector: &Vector,
     view_angle_deg: f64,
 ) -> (i32, f64) {
@@ -192,15 +192,15 @@ fn nearest_index_from_coordinates(
         x: node.coordinates[0],
         y: node.coordinates[1],
     };
-    if view::point_within_angle(&c, &observer, &view_vector, view_angle_deg) {
-        let d = distance::distance(&observer, &c);
+    if view::point_within_angle(&c, &observer_coordinate, &view_vector, view_angle_deg) {
+        let d = distance::distance(&observer_coordinate, &c);
         if d < new_best_distance {
             new_best_distance = d;
             new_best_index = current_index as i32;
         }
     }
 
-    let coordinates = vec![observer.x, observer.y];
+    let coordinates = vec![observer_coordinate.x, observer_coordinate.y];
     let signed_distance_to_split =
         coordinates[node.split_dimension] - node.coordinates[node.split_dimension];
     let distance_to_split = signed_distance_to_split.abs();
@@ -213,7 +213,7 @@ fn nearest_index_from_coordinates(
         if node.child_more.is_some() && distance_to_split < best_distance {
             check_more = node_is_in_view(
                 &tree.get(&node.child_more.unwrap()).unwrap(),
-                &observer,
+                &observer_coordinate,
                 &view_vector,
                 view_angle_deg,
             );
@@ -223,7 +223,7 @@ fn nearest_index_from_coordinates(
         if node.child_less.is_some() && distance_to_split < best_distance {
             check_less = node_is_in_view(
                 &tree.get(&node.child_less.unwrap()).unwrap(),
-                &observer,
+                &observer_coordinate,
                 &view_vector,
                 view_angle_deg,
             );
@@ -231,12 +231,12 @@ fn nearest_index_from_coordinates(
     }
 
     if check_less {
-        let (i, d) = nearest_index_from_coordinates(
+        let (i, d) = nearest_index(
             node.child_less.unwrap(),
             new_best_index,
             new_best_distance,
             &tree,
-            &observer,
+            &observer_coordinate,
             &view_vector,
             view_angle_deg,
         );
@@ -247,12 +247,12 @@ fn nearest_index_from_coordinates(
     }
 
     if check_more {
-        let (i, d) = nearest_index_from_coordinates(
+        let (i, d) = nearest_index(
             node.child_more.unwrap(),
             new_best_index,
             new_best_distance,
             &tree,
-            &observer,
+            &observer_coordinate,
             &view_vector,
             view_angle_deg,
         );
