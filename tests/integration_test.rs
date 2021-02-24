@@ -140,7 +140,7 @@ fn tree_indices_from_indices() {
         &view_angles_deg,
     );
     println!(
-        "time elapsed in nearest_indices_from_coordinates: {:?}",
+        "time elapsed in nearest_indices_from_indices: {:?}",
         start.elapsed()
     );
 
