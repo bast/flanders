@@ -1,5 +1,6 @@
 [![GH Actions badge](https://github.com/bast/flanders/workflows/Test/badge.svg)](https://github.com/bast/flanders/actions)
 [![License](https://img.shields.io/badge/license-%20MPL--v2.0-blue.svg)](LICENSE)
+[![PyPI badge](https://badge.fury.io/py/flanders.svg)](https://badge.fury.io/py/flanders)
 
 
 # Flanders: Fast 2D nearest neighbor search with an angle
