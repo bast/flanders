@@ -63,7 +63,7 @@ points with a certain view vector and view angle (90 degrees). The first observe
 point finds point 2. The second observer point does not find any
 neighbor within the view angle and returns -1.
 
-.. image:: https://github.com/bast/flanders/raw/main/example/flanders.png
+.. image:: https://github.com/bast/flanders/raw/main/img/flanders.png
    :width: 300 px
 
 
