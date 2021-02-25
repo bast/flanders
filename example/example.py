@@ -1,24 +1,34 @@
 import flanders
 
-points = [(60.4, 51.3), (173.9, 143.8), (132.9, 124.9), (19.5, 108.9), (196.5, 9.9), (143.3, 53.3)]
+points = [
+    (60.4, 51.3),
+    (173.9, 143.8),
+    (132.9, 124.9),
+    (19.5, 108.9),
+    (196.5, 9.9),
+    (143.3, 53.3),
+]
 
-num_points = len(points)
+tree = flanders.build_search_tree(points)
 
-context = flanders.new_context(num_points=num_points,
-                               points=points)
 
-indices = flanders.search_neighbors(context=context,
-                                    coordinates=[(119.2, 59.7), (155.2, 30.2)],
-                                    view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
-                                    angles_deg=[90.0, 90.0])
+observer_coordinates = [(119.2, 59.7), (155.2, 30.2)]
+view_vectors = [(0.0, 1.0), (-1.0, -1.0)]
+view_angles_deg = [90.0, 90.0]
+
+indices = flanders.nearest_indices_from_coordinates(
+    tree, observer_coordinates, view_vectors, view_angles_deg
+)
 
 assert indices == [2, -1]
 
-indices = flanders.search_neighbors(context=context,
-                                    ref_indices=list(range(num_points)),
-                                    view_vectors=[(1.0, 1.0) for _ in range(num_points)],
-                                    angles_deg=[90.0 for _ in range(num_points)])
 
-assert indices == [2, -1, 1, 2, -1, 1]
+observer_indices = [0, 1, 2, 3, 4, 5]
+view_vectors = [(1.0, 1.0) for _ in observer_indices]
+view_angles_deg = [90.0 for _ in observer_indices]
 
-flanders.free_context(context)
+indices = flanders.nearest_indices_from_indices(
+    tree, observer_indices, view_vectors, view_angles_deg
+)
+
+assert indices == [5, -1, 1, 2, -1, 1]

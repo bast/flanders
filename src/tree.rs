@@ -1,9 +1,11 @@
+use pyo3::prelude::*;
 use rayon::prelude::*;
 
 use std::collections::HashMap;
 
 use crate::distance;
 use crate::intersections;
+use crate::vector;
 use crate::vector::Vector;
 use crate::view;
 
@@ -13,6 +15,7 @@ struct Range {
     max: f64,
 }
 
+#[pyclass]
 #[derive(Clone, Debug)]
 pub struct Node {
     coordinates: Vec<f64>,
@@ -63,8 +66,11 @@ fn get_bbox(points: &[Vector]) -> (f64, f64, f64, f64) {
 //          8     5 3     2             x
 //                   \   / \
 //                    6 9   7           y
-pub fn build_tree(points: &[Vector]) -> HashMap<usize, Node> {
+#[pyfunction]
+pub fn build_search_tree(points: Vec<(f64, f64)>) -> HashMap<usize, Node> {
     let mut tree = HashMap::new();
+
+    let points = vector::tuples_to_vectors(&points);
 
     let (xmin, xmax, ymin, ymax) = get_bbox(&points);
 
@@ -143,12 +149,15 @@ pub fn build_tree(points: &[Vector]) -> HashMap<usize, Node> {
     tree
 }
 
+#[pyfunction]
 pub fn nearest_indices_from_indices(
-    tree: &HashMap<usize, Node>,
-    observer_indices: &[usize],
-    view_vectors: &[Vector],
-    view_angles_deg: &[f64],
+    tree: HashMap<usize, Node>,
+    observer_indices: Vec<usize>,
+    view_vectors: Vec<(f64, f64)>,
+    view_angles_deg: Vec<f64>,
 ) -> Vec<i32> {
+    let view_vectors = vector::tuples_to_vectors(&view_vectors);
+
     observer_indices
         .par_iter()
         .enumerate()
@@ -156,12 +165,16 @@ pub fn nearest_indices_from_indices(
         .collect()
 }
 
+#[pyfunction]
 pub fn nearest_indices_from_coordinates(
-    tree: &HashMap<usize, Node>,
-    observer_coordinates: &[Vector],
-    view_vectors: &[Vector],
-    view_angles_deg: &[f64],
+    tree: HashMap<usize, Node>,
+    observer_coordinates: Vec<(f64, f64)>,
+    view_vectors: Vec<(f64, f64)>,
+    view_angles_deg: Vec<f64>,
 ) -> Vec<i32> {
+    let observer_coordinates = vector::tuples_to_vectors(&observer_coordinates);
+    let view_vectors = vector::tuples_to_vectors(&view_vectors);
+
     observer_coordinates
         .par_iter()
         .enumerate()

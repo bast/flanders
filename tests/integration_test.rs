@@ -1,5 +1,4 @@
 use flanders;
-use flanders::Vector;
 
 extern crate rand;
 use rand::Rng;
@@ -19,15 +18,30 @@ where
     contents.lines().map(|s| s.parse().unwrap()).collect()
 }
 
-fn get_random_vectors(n: usize) -> Vec<Vector> {
+fn read_tuples(file_name: &str) -> Vec<(f64, f64)> {
+    let error_message = format!("something went wrong reading file {}", file_name);
+    let contents = fs::read_to_string(file_name).expect(&error_message);
+
+    let mut tuples = Vec::new();
+
+    for line in contents.split("\n") {
+        let words: Vec<&str> = line.split_whitespace().collect();
+        if words.len() == 2 {
+            let x = words[0].parse().unwrap();
+            let y = words[1].parse().unwrap();
+            tuples.push((x, y));
+        }
+    }
+
+    tuples
+}
+
+fn get_random_vectors(n: usize) -> Vec<(f64, f64)> {
     let mut rng = rand::thread_rng();
     let mut vectors = Vec::new();
 
     for _ in 0..n {
-        vectors.push(Vector {
-            x: rng.gen_range(-1.0..1.0),
-            y: rng.gen_range(-1.0..1.0),
-        });
+        vectors.push((rng.gen_range(-1.0..1.0), rng.gen_range(-1.0..1.0)));
     }
 
     vectors
@@ -46,8 +60,8 @@ fn get_random_angles(n: usize) -> Vec<f64> {
 
 #[test]
 fn noddy() {
-    let points: Vec<Vector> = read_vector("tests/reference/points.txt");
-    let view_vectors: Vec<Vector> = read_vector("tests/reference/view_vectors.txt");
+    let points: Vec<(f64, f64)> = read_tuples("tests/reference/points.txt");
+    let view_vectors: Vec<(f64, f64)> = read_tuples("tests/reference/view_vectors.txt");
     let view_angles_deg: Vec<f64> = read_vector("tests/reference/angles.txt");
 
     let indices_reference: Vec<i32> =
@@ -61,7 +75,7 @@ fn noddy() {
     );
     assert_eq!(indices_reference, indices_noddy);
 
-    let observer_coordinates: Vec<Vector> = read_vector("tests/reference/observers.txt");
+    let observer_coordinates: Vec<(f64, f64)> = read_tuples("tests/reference/observers.txt");
     let indices_reference: Vec<i32> =
         read_vector("tests/reference/nearest_indices_from_coordinates.txt");
     let indices_noddy = flanders::nearest_indices_from_coordinates_noddy(
@@ -92,15 +106,15 @@ fn tree_indices_from_coordinates() {
     println!("time elapsed in noddy: {:?}", start.elapsed());
 
     let start = Instant::now();
-    let tree = flanders::build_tree(&points);
+    let tree = flanders::build_search_tree(points);
     println!("time elapsed in building tree: {:?}", start.elapsed());
 
     let start = Instant::now();
     let indices = flanders::nearest_indices_from_coordinates(
-        &tree,
-        &observer_coordinates,
-        &view_vectors,
-        &view_angles_deg,
+        tree,
+        observer_coordinates,
+        view_vectors,
+        view_angles_deg,
     );
     println!(
         "time elapsed in nearest_indices_from_coordinates: {:?}",
@@ -129,15 +143,15 @@ fn tree_indices_from_indices() {
     println!("time elapsed in noddy: {:?}", start.elapsed());
 
     let start = Instant::now();
-    let tree = flanders::build_tree(&points);
+    let tree = flanders::build_search_tree(points);
     println!("time elapsed in building tree: {:?}", start.elapsed());
 
     let start = Instant::now();
     let indices = flanders::nearest_indices_from_indices(
-        &tree,
-        &observer_indices,
-        &view_vectors,
-        &view_angles_deg,
+        tree,
+        observer_indices,
+        view_vectors,
+        view_angles_deg,
     );
     println!(
         "time elapsed in nearest_indices_from_indices: {:?}",

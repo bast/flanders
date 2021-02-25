@@ -7,9 +7,7 @@ mod tree;
 mod vector;
 mod view;
 
-pub use crate::vector::Vector;
-
-pub use crate::tree::build_tree;
+pub use crate::tree::build_search_tree;
 
 pub use crate::tree::nearest_indices_from_coordinates;
 pub use crate::tree::nearest_indices_from_indices;

@@ -1,6 +1,5 @@
-use pyo3::prelude::*;
-
 use crate::distance;
+use crate::vector;
 use crate::vector::Vector;
 
 // Check whether point is in view described by observer, view_vector,
@@ -28,21 +27,24 @@ pub fn point_within_angle(
     angle_deg.abs() <= (view_angle_deg / 2.0).abs()
 }
 
-//#[pyfunction]
 pub fn nearest_indices_from_coordinates_noddy(
-    points: &[Vector],
-    observer_coordinates: &[Vector],
-    view_vectors: &[Vector],
+    points: &[(f64, f64)],
+    observer_coordinates: &[(f64, f64)],
+    view_vectors: &[(f64, f64)],
     view_angles_deg: &[f64],
 ) -> Vec<i32> {
     let large_number = std::f64::MAX;
     let mut indices = Vec::new();
 
-    for (j, observer) in observer_coordinates.iter().enumerate() {
+    let points_v = vector::tuples_to_vectors(&points);
+    let observer_coordinates_v = vector::tuples_to_vectors(&observer_coordinates);
+    let view_vectors_v = vector::tuples_to_vectors(&view_vectors);
+
+    for (j, observer) in observer_coordinates_v.iter().enumerate() {
         let mut best_distance = large_number;
         let mut index = -1;
-        for (i, point) in points.iter().enumerate() {
-            if point_within_angle(&point, &observer, &view_vectors[j], view_angles_deg[j]) {
+        for (i, point) in points_v.iter().enumerate() {
+            if point_within_angle(&point, &observer, &view_vectors_v[j], view_angles_deg[j]) {
                 let d = distance::distance(&point, &observer);
                 if d < best_distance {
                     best_distance = d;
@@ -57,26 +59,29 @@ pub fn nearest_indices_from_coordinates_noddy(
 }
 
 pub fn nearest_indices_from_indices_noddy(
-    points: &[Vector],
+    points: &[(f64, f64)],
     observer_indices: &[usize],
-    view_vectors: &[Vector],
+    view_vectors: &[(f64, f64)],
     view_angles_deg: &[f64],
 ) -> Vec<i32> {
     let large_number = std::f64::MAX;
     let mut indices = Vec::new();
 
+    let points_v = vector::tuples_to_vectors(&points);
+    let view_vectors_v = vector::tuples_to_vectors(&view_vectors);
+
     for (j, &observer_index) in observer_indices.iter().enumerate() {
         let mut best_distance = large_number;
         let mut index = -1;
-        for (i, point) in points.iter().enumerate() {
+        for (i, point) in points_v.iter().enumerate() {
             if i != observer_index {
                 if point_within_angle(
                     &point,
-                    &points[observer_index],
-                    &view_vectors[j],
+                    &points_v[observer_index],
+                    &view_vectors_v[j],
                     view_angles_deg[j],
                 ) {
-                    let d = distance::distance(&point, &points[observer_index]);
+                    let d = distance::distance(&point, &points_v[observer_index]);
                     if d < best_distance {
                         best_distance = d;
                         index = i as i32;

@@ -1,6 +1,3 @@
-use std::num::ParseFloatError;
-use std::str::FromStr;
-
 #[derive(Debug, Clone, Copy)]
 pub struct Vector {
     pub x: f64,
@@ -17,23 +14,8 @@ impl Vector {
             y: factor * self.y,
         }
     }
-    pub fn add(&self, v: &Vector) -> Vector {
-        Vector {
-            x: self.x + v.x,
-            y: self.y + v.y,
-        }
-    }
 }
 
-impl FromStr for Vector {
-    type Err = ParseFloatError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let coords: Vec<&str> = s.split_whitespace().collect();
-
-        let x = coords[0].parse()?;
-        let y = coords[1].parse()?;
-
-        Ok(Vector { x, y })
-    }
+pub fn tuples_to_vectors(tuples: &[(f64, f64)]) -> Vec<Vector> {
+    tuples.iter().map(|t| Vector { x: t.0, y: t.1 }).collect()
 }
