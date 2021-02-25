@@ -64,59 +64,56 @@ neighbor within the view angle and returns -1.
 .. image:: https://github.com/bast/flanders/raw/main/example/flanders.png
    :width: 300 px
 
-.. code:: python
 
-  import flanders
-
-  points = [(60.4, 51.3), (173.9, 143.8), (132.9, 124.9), (19.5, 108.9), (196.5, 9.9), (143.3, 53.3)]
-
-  num_points = len(points)
-
-  context = flanders.new_context(num_points=num_points,
-                                 points=points)
-
-  indices = flanders.search_neighbors(context=context,
-                                      coordinates=[(119.2, 59.7), (155.2, 30.2)],
-                                      view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
-                                      angles_deg=[90.0, 90.0])
-
-  assert indices == [2, -1]
-
-  flanders.free_context(context)
-
-If you leave out the view vectors and angles, the code will search for
-the nearest neighbor without taking any angles into account:
+Example code:
 
 .. code:: python
 
-  indices = flanders.search_neighbors(context=context,
-                                      coordinates=[(119.2, 59.7), (155.2, 30.2)])
+   import flanders
 
-  assert indices == [5, 5]
 
-Instead of searching nearest neighbors of coordinates, you can also
-search by nearest neighbors of the points by their indices:
+   # as a first step we build the search tree
+   # we can later reuse the search tree many times
 
-.. code:: python
+   points = [
+       (60.4, 51.3),
+       (173.9, 143.8),
+       (132.9, 124.9),
+       (19.5, 108.9),
+       (196.5, 9.9),
+       (143.3, 53.3),
+   ]
 
-  indices = flanders.search_neighbors(context=context,
-                                      ref_indices=list(range(num_points)),
-                                      view_vectors=[(1.0, 1.0) for _ in range(num_points)],
-                                      angles_deg=[90.0 for _ in range(num_points)])
+   tree = flanders.build_search_tree(points)
 
-  assert indices == [2, -1, 1, 2, -1, 1]
 
-For debugging you can employ the naive slow implementation:
+   # now we will search the indices of nearest neighbor points
+   # for two observer points
 
-.. code:: python
+   observer_coordinates = [(119.2, 59.7), (155.2, 30.2)]
+   view_vectors = [(0.0, 1.0), (-1.0, -1.0)]
+   view_angles_deg = [90.0, 90.0]
 
-  indices = flanders.search_neighbors(context=context,
-                                      coordinates=[(119.2, 59.7), (155.2, 30.2)],
-                                      view_vectors=[(0.0, 1.0), (-1.0, -1.0)],
-                                      angles_deg=[90.0, 90.0],
-                                      naive=True)
+   indices = flanders.nearest_indices_from_coordinates(
+       tree, observer_coordinates, view_vectors, view_angles_deg
+   )
 
-  assert indices == [2, -1]
+   assert indices == [2, -1]
+
+
+   # instead of using observer coordinates, also the original
+   # points themselves can be observers and we can select them
+   # by their index
+
+   observer_indices = [0, 1, 2, 3, 4, 5]
+   view_vectors = [(1.0, 1.0) for _ in observer_indices]
+   view_angles_deg = [90.0 for _ in observer_indices]
+
+   indices = flanders.nearest_indices_from_indices(
+       tree, observer_indices, view_vectors, view_angles_deg
+   )
+
+   assert indices == [5, -1, 1, 2, -1, 1]
 
 
 Efficiency considerations
@@ -126,6 +123,14 @@ If you compute nearest neighbors for many points it is a good idea to
 send in an entire batch of points instead of computing point by point.
 If you send in an entire batch, the code will shared-memory parallelize
 the loop over the points.
+
+The above example is very small and simple but this library starts to shine
+once you have very many points and/or very many observers where a noddy
+implementation would take too long to compute.
+
+Example timing for 1 M points and 10 k observers (on i7-10710U):
+- constructing the search tree: 3.0 s
+- nearest neighbor search: 9.6 s
 
 
 References
