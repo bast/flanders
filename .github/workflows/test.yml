@@ -12,24 +12,24 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-#       python-version: [3.6, 3.7, 3.8, 3.9]
-        os: [ubuntu-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-#   - name: Set up Python ${{ matrix.python-version }}
-#     uses: actions/setup-python@v1
-#     with:
-#       python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
     - name: Build crate
       run: cargo build --verbose
     - name: Test crate
       run: cargo test --verbose
-#   - name: Build and test the Python interface
-#     run: |
-#       python -m venv venv
-#       source venv/bin/activate
-#       pip install -r requirements.txt
-#       maturin develop
-#       pytest tests/test.py
+    - name: Build and test the Python interface
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+        maturin develop
+        python example/example.py
