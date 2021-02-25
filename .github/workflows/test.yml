@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]
 
     steps:
     - name: Checkout
@@ -28,6 +28,8 @@ jobs:
       run: cargo test --verbose
     - name: Build and test the Python interface
       run: |
+        python -m venv venv
+        source venv/bin/activate
         pip install -r requirements.txt
         maturin develop
         python example/example.py
