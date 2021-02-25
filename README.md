@@ -57,7 +57,7 @@ points with a certain view vector and view angle (90 degrees). The first observe
 point finds point 2. The second observer point does not find any
 neighbor within the view angle and returns -1.
 
-[![Example](img/flanders.png)
+![Example](img/flanders.png)
 
 Example code:
 ```python
