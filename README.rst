@@ -7,6 +7,8 @@
 Flanders: Fast 2D nearest neighbor search with an angle
 =======================================================
 
+.. contents:: Table of Contents
+
 ::
 
                                                         `.-:://////:-.`
@@ -124,6 +126,7 @@ once you have very many points and/or very many observers where a noddy
 implementation would take too long to compute.
 
 Example timing for 1 M points and 10 k observers (on i7-10710U):
+
 - constructing the search tree: 3.0 s
 - nearest neighbor search: 9.6 s
 
