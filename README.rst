@@ -119,11 +119,6 @@ Example code:
 Efficiency considerations
 -------------------------
 
-If you compute nearest neighbors for many points it is a good idea to
-send in an entire batch of points instead of computing point by point.
-If you send in an entire batch, the code will shared-memory parallelize
-the loop over the points.
-
 The above example is very small and simple but this library starts to shine
 once you have very many points and/or very many observers where a noddy
 implementation would take too long to compute.
@@ -131,6 +126,11 @@ implementation would take too long to compute.
 Example timing for 1 M points and 10 k observers (on i7-10710U):
 - constructing the search tree: 3.0 s
 - nearest neighbor search: 9.6 s
+
+If you compute nearest neighbors for many observers it is a good idea to send
+in an entire batch of observers instead of computing one by one.  If you send
+in an entire batch, the code will shared-memory parallelize the loop over the
+observers.
 
 
 References
