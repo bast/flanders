@@ -28,8 +28,6 @@ jobs:
       run: cargo test --verbose
     - name: Build and test the Python interface
       run: |
-        python -m venv venv
-        source venv/bin/activate
         pip install -r requirements.txt
         maturin develop
         python example/example.py
