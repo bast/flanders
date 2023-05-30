@@ -9,10 +9,6 @@ readme = "README.md"
 name = "flanders"
 crate-type = ["cdylib", "rlib"]
 
-[package.metadata.maturin]
-requires-python = ">=3.6"
-classifier = ["Programming Language :: Python"]
-
 [dependencies]
 rand = "0.8"
 rayon = "1.7"
