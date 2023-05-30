@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_arguments)]
+
 use pyo3::prelude::*;
 use rayon::prelude::*;
 
@@ -179,7 +181,7 @@ pub fn nearest_indices_from_coordinates(
         .par_iter()
         .enumerate()
         .map(|(i, oc)| {
-            wrap_nearest_from_coordinate(&tree, &oc, &view_vectors[i], view_angles_deg[i])
+            wrap_nearest_from_coordinate(&tree, oc, &view_vectors[i], view_angles_deg[i])
         })
         .collect()
 }
@@ -195,10 +197,10 @@ fn wrap_nearest_from_index(
         0,
         -1,
         large_number,
-        &tree,
+        tree,
         None,
         Some(observer_index),
-        &view_vector,
+        view_vector,
         view_angles_deg,
     );
     index
@@ -215,10 +217,10 @@ fn wrap_nearest_from_coordinate(
         0,
         -1,
         large_number,
-        &tree,
+        tree,
         Some(*observer_coordinate),
         None,
-        &view_vector,
+        view_vector,
         view_angles_deg,
     );
     index
@@ -262,7 +264,7 @@ fn nearest_index(
             x: node.coordinates[0],
             y: node.coordinates[1],
         };
-        if view::point_within_angle(&c, &observer_coordinate, &view_vector, view_angle_deg) {
+        if view::point_within_angle(&c, &observer_coordinate, view_vector, view_angle_deg) {
             let d = distance::distance(&observer_coordinate, &c);
             if d < new_best_distance {
                 new_best_distance = d;
@@ -283,9 +285,9 @@ fn nearest_index(
         check_less = node.child_less.is_some();
         if node.child_more.is_some() && distance_to_split < best_distance {
             check_more = node_is_in_view(
-                &tree.get(&node.child_more.unwrap()).unwrap(),
+                tree.get(&node.child_more.unwrap()).unwrap(),
                 &observer_coordinate,
-                &view_vector,
+                view_vector,
                 view_angle_deg,
             );
         }
@@ -293,9 +295,9 @@ fn nearest_index(
         check_more = node.child_more.is_some();
         if node.child_less.is_some() && distance_to_split < best_distance {
             check_less = node_is_in_view(
-                &tree.get(&node.child_less.unwrap()).unwrap(),
+                tree.get(&node.child_less.unwrap()).unwrap(),
                 &observer_coordinate,
-                &view_vector,
+                view_vector,
                 view_angle_deg,
             );
         }
@@ -306,10 +308,10 @@ fn nearest_index(
             node.child_less.unwrap(),
             new_best_index,
             new_best_distance,
-            &tree,
+            tree,
             observer_coordinate_option,
             observer_index_option,
-            &view_vector,
+            view_vector,
             view_angle_deg,
         );
         if d < new_best_distance {
@@ -323,10 +325,10 @@ fn nearest_index(
             node.child_more.unwrap(),
             new_best_index,
             new_best_distance,
-            &tree,
+            tree,
             observer_coordinate_option,
             observer_index_option,
-            &view_vector,
+            view_vector,
             view_angle_deg,
         );
         if d < new_best_distance {
@@ -350,8 +352,8 @@ fn node_is_in_view(
     // view cone and
     // it is enough to check whether one of the boundary
     // points is in view
-    node_intersected_by_rays(&node, &observer, &view_vector, view_angle_deg)
-        || node_boundary_corner_in_view_cone(&node, &observer, &view_vector, view_angle_deg)
+    node_intersected_by_rays(node, observer, view_vector, view_angle_deg)
+        || node_boundary_corner_in_view_cone(node, observer, view_vector, view_angle_deg)
 }
 
 // check whether at least one ray intersects the bounds of a node
@@ -413,10 +415,10 @@ fn node_intersected_by_rays(
     .iter()
     {
         if intersections::view_cone_and_line_intersect(
-            &corner1,
-            &corner2,
-            &observer,
-            &view_vector,
+            corner1,
+            corner2,
+            observer,
+            view_vector,
             view_angle_deg,
         ) {
             return true;
@@ -437,5 +439,5 @@ fn node_boundary_corner_in_view_cone(
         y: node.bounds[1].min,
     };
 
-    view::point_within_angle(&one_corner, &observer, &view_vector, view_angle_deg)
+    view::point_within_angle(&one_corner, observer, view_vector, view_angle_deg)
 }

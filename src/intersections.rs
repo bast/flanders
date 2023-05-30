@@ -44,7 +44,7 @@ fn ray_and_line_intersect(p1: &Vector, p2: &Vector, observer: &Vector, v: &Vecto
         y: p2.y - p1.y,
     };
 
-    match ray_ray_intersection(&p1, &p1p2, &observer, &v) {
+    match ray_ray_intersection(p1, &p1p2, observer, v) {
         Some(intersection) => {
             // check whether intersection is not outside line bounds
             if intersection.x < p1.x.min(p2.x) {
@@ -75,13 +75,13 @@ pub fn view_cone_and_line_intersect(
 ) -> bool {
     let half_angle = 0.5 * view_angle_deg;
 
-    let v_rotated = rotate(&view_vector, -half_angle);
-    if ray_and_line_intersect(&p1, &p2, &observer, &v_rotated) {
+    let v_rotated = rotate(view_vector, -half_angle);
+    if ray_and_line_intersect(p1, p2, observer, &v_rotated) {
         return true;
     }
 
-    let v_rotated = rotate(&view_vector, half_angle);
-    if ray_and_line_intersect(&p1, &p2, &observer, &v_rotated) {
+    let v_rotated = rotate(view_vector, half_angle);
+    if ray_and_line_intersect(p1, p2, observer, &v_rotated) {
         return true;
     }
 
