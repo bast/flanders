@@ -1,6 +1,5 @@
 use flanders;
 
-extern crate rand;
 use rand::Rng;
 
 use std::fmt::Debug;
