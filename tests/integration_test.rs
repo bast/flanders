@@ -37,22 +37,22 @@ fn read_tuples(file_name: &str) -> Vec<(f64, f64)> {
 }
 
 fn get_random_vectors(n: usize) -> Vec<(f64, f64)> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let mut vectors = Vec::new();
 
     for _ in 0..n {
-        vectors.push((rng.gen_range(-1.0..1.0), rng.gen_range(-1.0..1.0)));
+        vectors.push((rng.random_range(-1.0..1.0), rng.random_range(-1.0..1.0)));
     }
 
     vectors
 }
 
 fn get_random_angles(n: usize) -> Vec<f64> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let mut angles = Vec::new();
 
     for _ in 0..n {
-        angles.push(rng.gen_range(5.0..90.0));
+        angles.push(rng.random_range(5.0..90.0));
     }
 
     angles
