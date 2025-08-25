@@ -28,7 +28,7 @@ pub struct Node {
 }
 
 fn get_bbox(points: &[Vector]) -> (f64, f64, f64, f64) {
-    let large_number = std::f64::MAX;
+    let large_number = f64::MAX;
 
     let mut xmin = large_number;
     let mut xmax = -large_number;
@@ -192,7 +192,7 @@ fn wrap_nearest_from_index(
     view_vector: &Vector,
     view_angles_deg: f64,
 ) -> i32 {
-    let large_number = std::f64::MAX;
+    let large_number = f64::MAX;
     let (index, _) = nearest_index(
         0,
         -1,
@@ -212,7 +212,7 @@ fn wrap_nearest_from_coordinate(
     view_vector: &Vector,
     view_angles_deg: f64,
 ) -> i32 {
-    let large_number = std::f64::MAX;
+    let large_number = f64::MAX;
     let (index, _) = nearest_index(
         0,
         -1,
@@ -273,7 +273,7 @@ fn nearest_index(
         }
     }
 
-    let coordinates = vec![observer_coordinate.x, observer_coordinate.y];
+    let coordinates = [observer_coordinate.x, observer_coordinate.y];
     let signed_distance_to_split =
         coordinates[node.split_dimension] - node.coordinates[node.split_dimension];
     let distance_to_split = signed_distance_to_split.abs();

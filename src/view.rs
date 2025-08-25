@@ -33,7 +33,7 @@ pub fn nearest_indices_from_coordinates_noddy(
     view_vectors: &[(f64, f64)],
     view_angles_deg: &[f64],
 ) -> Vec<i32> {
-    let large_number = std::f64::MAX;
+    let large_number = f64::MAX;
     let mut indices = Vec::new();
 
     let points_v = vector::tuples_to_vectors(points);
@@ -64,7 +64,7 @@ pub fn nearest_indices_from_indices_noddy(
     view_vectors: &[(f64, f64)],
     view_angles_deg: &[f64],
 ) -> Vec<i32> {
-    let large_number = std::f64::MAX;
+    let large_number = f64::MAX;
     let mut indices = Vec::new();
 
     let points_v = vector::tuples_to_vectors(points);
